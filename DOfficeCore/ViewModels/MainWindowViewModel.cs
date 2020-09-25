@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace DOfficeCore.ViewModels
 {
-    class MainWindowViewModel : ViewModelCore
+    internal class MainWindowViewModel : ViewModelCore
     {
         public MainWindowViewModel()
         {
