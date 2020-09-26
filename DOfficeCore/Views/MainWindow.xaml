@@ -7,6 +7,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:DOfficeCore.ViewModels"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     Title="{Binding Path=Title}"
     MinWidth="800"
     MinHeight="450"
@@ -87,14 +88,27 @@
                         Orientation="Horizontal" />
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
+                        <DockPanel LastChildFill="True">
+                            <WrapPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                                <TextBlock Text="Выберите дату:" VerticalAlignment="Center" Margin="10, 0"/>
+                                <DatePicker Name="DiaryDate" IsDropDownOpen="False" SelectedDateFormat="Short" MinWidth="100" VerticalAlignment="Center" SelectedDate="{x:Static sys:DateTime.Now}" />
+                                <CheckBox Name="DiaryTime" Content="Добавить время" Margin="10, 0" />
+                                <materialDesign:TimePicker SelectedTime="10:30" VerticalAlignment="Center" Is24Hours="True" Margin="5, 3, 0, 0"/>
+                            </WrapPanel>
+                            <DataGrid Name="dgTree" DockPanel.Dock="Bottom" Background="White" GridLinesVisibility="Vertical" AlternatingRowBackground="Gray" VerticalGridLinesBrush="LightGray">
+                                
+                            </DataGrid>
+                        </DockPanel>
                         <GridSplitter
                             Grid.Column="0"
-                            Width="4"
-                            HorizontalAlignment="Right" />
-                        <GroupBox Grid.Column="1">
+                            MinWidth="5"
+                            HorizontalAlignment="Right"
+                            ShowsPreview="False"
+                            VerticalAlignment="Stretch"/>
+                        <GroupBox Grid.Column="1" MinWidth="300">
                             <GroupBox.Header>
                                 <UniformGrid Rows="1">
                                     <Button>
@@ -126,7 +140,7 @@
                                             </Canvas>
                                         </Viewbox>
                                     </Button>
-                                    <GridSplitter />
+                                    <GridSplitter IsEnabled="False" />
                                     <Button x:Name="Clear" ToolTip="Очистить поле">
                                         <Viewbox Width="24" Height="24">
                                             <Canvas Width="24" Height="24">
