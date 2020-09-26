@@ -19,7 +19,7 @@
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
     <Window.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Window.DataContext>
     <DockPanel LastChildFill="True">
         <TabControl BorderThickness="0" TabStripPlacement="Left">
@@ -61,11 +61,11 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabItem >
+            <TabItem>
                 <TabItem.Header>
                     <Viewbox Width="48" Height="48">
                         <Canvas Width="24" Height="24">
-                            <Path Fill="Black" Data="M17,4V10L15,8L13,10V4H9V20H19V4H17M3,7V5H5V4C5,2.89 5.9,2 7,2H19C20.05,2 21,2.95 21,4V20C21,21.05 20.05,22 19,22H7C5.95,22 5,21.05 5,20V19H3V17H5V13H3V11H5V7H3M5,5V7H7V5H5M5,19H7V17H5V19M5,13H7V11H5V13Z" />
+                            <Path Data="M17,4V10L15,8L13,10V4H9V20H19V4H17M3,7V5H5V4C5,2.89 5.9,2 7,2H19C20.05,2 21,2.95 21,4V20C21,21.05 20.05,22 19,22H7C5.95,22 5,21.05 5,20V19H3V17H5V13H3V11H5V7H3M5,5V7H7V5H5M5,19H7V17H5V19M5,13H7V11H5V13Z" Fill="Black" />
                         </Canvas>
                     </Viewbox>
                 </TabItem.Header>
@@ -84,8 +84,7 @@
                         Grid.Row="0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        Orientation="Horizontal">
-                    </StackPanel>
+                        Orientation="Horizontal" />
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
@@ -94,50 +93,66 @@
                         <GridSplitter
                             Grid.Column="0"
                             Width="4"
-                            HorizontalAlignment="Right" 
-                            Background="Gray"/>
-                        <TextBox
-                            x:Name="tbDiary"
-                            Grid.Column="1"
-                            AcceptsReturn="True"
-                            IsReadOnly="{Binding EnableTextBox}"
-                            Text="Hallo"
-                            TextWrapping="Wrap"
-                            VerticalScrollBarVisibility="Auto" />
+                            HorizontalAlignment="Right" />
+                        <GroupBox Grid.Column="1">
+                            <GroupBox.Header>
+                                <UniformGrid Rows="1">
+                                    <Button>
+                                        <Viewbox Width="24" Height="32">
+                                            <Canvas Width="24" Height="24">
+                                                <Path Data="M19 5V19H5V5H19M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3M7.5 6C6.7 6 6 6.7 6 7.5S6.7 9 7.5 9 9 8.3 9 7.5 8.3 6 7.5 6M16.5 15C15.7 15 15 15.7 15 16.5C15 17.3 15.7 18 16.5 18C17.3 18 18 17.3 18 16.5C18 15.7 17.3 15 16.5 15M16.5 6C15.7 6 15 6.7 15 7.5S15.7 9 16.5 9C17.3 9 18 8.3 18 7.5S17.3 6 16.5 6M12 10.5C11.2 10.5 10.5 11.2 10.5 12S11.2 13.5 12 13.5 13.5 12.8 13.5 12 12.8 10.5 12 10.5M7.5 15C6.7 15 6 15.7 6 16.5C6 17.3 6.7 18 7.5 18S9 17.3 9 16.5C9 15.7 8.3 15 7.5 15Z" Fill="Black" />
+                                            </Canvas>
+                                        </Viewbox>
+                                    </Button>
+                                    <Button
+                                        x:Name="Copy"
+                                        Command="{Binding CopyTextCommand}"
+                                        CommandParameter="{Binding ElementName=tbDiary, Path=Text}"
+                                        ToolTip="Копировать текст">
+                                        <Viewbox Width="24" Height="24">
+                                            <Canvas Width="24" Height="24">
+                                                <Path Data="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" Fill="Black" />
+                                            </Canvas>
+                                        </Viewbox>
+                                    </Button>
+                                    <Button
+                                        x:Name="Edit"
+                                        Command="{Binding EditTextCommand}"
+                                        CommandTarget="{Binding ElementName=tbDiary}"
+                                        ToolTip="Редактировать текст">
+                                        <Viewbox Width="24" Height="24">
+                                            <Canvas Width="24" Height="24">
+                                                <Path Data="M10 20H6V4H13V9H18V12.1L20 10.1V8L14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H10V20M20.2 13C20.3 13 20.5 13.1 20.6 13.2L21.9 14.5C22.1 14.7 22.1 15.1 21.9 15.3L20.9 16.3L18.8 14.2L19.8 13.2C19.9 13.1 20 13 20.2 13M20.2 16.9L14.1 23H12V20.9L18.1 14.8L20.2 16.9Z" Fill="Black" />
+                                            </Canvas>
+                                        </Viewbox>
+                                    </Button>
+                                    <GridSplitter />
+                                    <Button x:Name="Clear" ToolTip="Очистить поле">
+                                        <Viewbox Width="24" Height="24">
+                                            <Canvas Width="24" Height="24">
+                                                <Path Data="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z" Fill="Black" />
+                                            </Canvas>
+                                        </Viewbox>
+                                    </Button>
+                                </UniformGrid>
+                            </GroupBox.Header>
+                            <TextBox
+                                x:Name="tbDiary"
+                                Grid.Column="1"
+                                AcceptsReturn="True"
+                                IsReadOnly="{Binding EnableTextBox}"
+                                Text="Hallo"
+                                TextWrapping="Wrap"
+                                VerticalScrollBarVisibility="Auto" />
+                        </GroupBox>
                     </Grid>
-                    <UniformGrid
-                        Grid.Row="2"
-                        Margin="0,0,10,10"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Bottom"
-                        Rows="1">
-                        <Button
-                            x:Name="Edit"
-                            Margin="10,0"
-                            Padding="30,3"
-                            Command="{Binding EditTextCommand}"
-                            CommandTarget="{Binding ElementName=tbDiary}"
-                            Content="Редактировать текст" />
-                        <Button
-                            x:Name="Clear"
-                            Margin="10,0"
-                            Padding="30,5"
-                            Content="Очистить поле" />
-                        <Button
-                            x:Name="Copy"
-                            Margin="10,0"
-                            Padding="30,5"
-                            Command="{Binding CopyTextCommand}"
-                            CommandParameter="{Binding ElementName=tbDiary, Path=Text}"
-                            Content="Копировать текст" />
-                    </UniformGrid>
                 </Grid>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
                     <Viewbox Width="48" Height="48">
                         <Canvas Width="24" Height="24">
-                            <Path Fill="Black" Data="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7.07,18.28C7.5,17.38 10.12,16.5 12,16.5C13.88,16.5 16.5,17.38 16.93,18.28C15.57,19.36 13.86,20 12,20C10.14,20 8.43,19.36 7.07,18.28M18.36,16.83C16.93,15.09 13.46,14.5 12,14.5C10.54,14.5 7.07,15.09 5.64,16.83C4.62,15.5 4,13.82 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,13.82 19.38,15.5 18.36,16.83M12,6C10.06,6 8.5,7.56 8.5,9.5C8.5,11.44 10.06,13 12,13C13.94,13 15.5,11.44 15.5,9.5C15.5,7.56 13.94,6 12,6M12,11A1.5,1.5 0 0,1 10.5,9.5A1.5,1.5 0 0,1 12,8A1.5,1.5 0 0,1 13.5,9.5A1.5,1.5 0 0,1 12,11Z" />
+                            <Path Data="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7.07,18.28C7.5,17.38 10.12,16.5 12,16.5C13.88,16.5 16.5,17.38 16.93,18.28C15.57,19.36 13.86,20 12,20C10.14,20 8.43,19.36 7.07,18.28M18.36,16.83C16.93,15.09 13.46,14.5 12,14.5C10.54,14.5 7.07,15.09 5.64,16.83C4.62,15.5 4,13.82 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,13.82 19.38,15.5 18.36,16.83M12,6C10.06,6 8.5,7.56 8.5,9.5C8.5,11.44 10.06,13 12,13C13.94,13 15.5,11.44 15.5,9.5C15.5,7.56 13.94,6 12,6M12,11A1.5,1.5 0 0,1 10.5,9.5A1.5,1.5 0 0,1 12,8A1.5,1.5 0 0,1 13.5,9.5A1.5,1.5 0 0,1 12,11Z" Fill="Black" />
                         </Canvas>
                     </Viewbox>
                 </TabItem.Header>
