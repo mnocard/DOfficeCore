@@ -12,7 +12,7 @@ namespace DOfficeCore.Services
     static class DataProviderService
     {
 
-        public static bool SaveDataToFile(IEnumerable data, string fileName)
+        public static bool SaveDataToFile<T>(IEnumerable<T> data, string fileName)
         {
             bool result = false;
             using (StreamWriter file = File.CreateText(fileName + ".json"))

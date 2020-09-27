@@ -21,9 +21,8 @@ namespace DOfficeCore.ViewModels
             EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
             CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
             SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
+            LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
             #endregion
-
-            Diagnoses = DataProviderService.LoadDataFromFile("file.json");
         }
 
         #region Свойства
@@ -100,7 +99,8 @@ namespace DOfficeCore.ViewModels
         {
             if (p as IEnumerable != null)
             {
-                if(DataProviderService.SaveDataToFile((IEnumerable)p, "file"))
+
+                if(DataProviderService.SaveDataToFile<Diagnosis>((IEnumerable<Diagnosis>)p, "file"))
                 {
                     MessageBox.Show("Файл успешно сохранён.");
                 }
@@ -111,6 +111,17 @@ namespace DOfficeCore.ViewModels
         {
             return true;
         }
+        #endregion
+
+        #region Команда Загрузки данных
+        public ICommand LoadDataCommand { get; }
+
+        private void OnLoadDataCommandExecuted(object parameter)
+        {
+            Diagnoses = DataProviderService.LoadDataFromFile("file.json");
+        }
+
+        private bool CanLoadDataCommandExecute(object parameter) => true;
         #endregion
 
         #endregion
