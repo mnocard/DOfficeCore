@@ -9,18 +9,18 @@ namespace DOfficeCore.Data
 {
     class TestData
     {
-        public static List<string> blockList = Enumerable.Range(1, 20)
+        public static List<string> blockList = Enumerable.Range(1, 1)
             .Select(i => $"Line {i}")
             .ToList();
 
-        public static List<Block> blocks = Enumerable.Range(1, 10)
+        public static List<Block> blocks = Enumerable.Range(1, 1)
             .Select(i => new Block
             {
                 Name = $"Block {i}",
                 Lines = new ObservableCollection<string>(blockList),
             }).ToList();
 
-        public static List<Diagnosis> diag = Enumerable.Range(1, 10)
+        public static List<Diagnosis> diag = Enumerable.Range(1, 1)
             .Select(i => new Diagnosis
             {
                 Code = $"Diagnosis {i}",

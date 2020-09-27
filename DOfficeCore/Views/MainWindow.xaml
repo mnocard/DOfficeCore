@@ -1,15 +1,15 @@
 ﻿<Window
+    x:Class="DOfficeCore.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Models="clr-namespace:DOfficeCore.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="clr-namespace:DOfficeCore.Data"
     xmlns:local="clr-namespace:DOfficeCore"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="clr-namespace:DOfficeCore.ViewModels"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:Models="clr-namespace:DOfficeCore.Models"
-    x:Class="DOfficeCore.MainWindow"
+    xmlns:vm="clr-namespace:DOfficeCore.ViewModels"
     Title="{Binding Title}"
     MinWidth="800"
     MinHeight="450"
@@ -22,7 +22,7 @@
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
     <Window.Resources>
-        <data:TestData x:Key="resourceData"/>
+        <data:TestData x:Key="resourceData" />
     </Window.Resources>
     <Window.DataContext>
         <vm:MainWindowViewModel />
@@ -82,7 +82,7 @@
                         </Style>
                     </Grid.Resources>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="40" />
                         <RowDefinition />
                         <RowDefinition Height="50" />
                     </Grid.RowDefinitions>
@@ -90,55 +90,86 @@
                         Grid.Row="0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        Orientation="Horizontal" />
+                        Background="#FF9E9E9E"
+                        Orientation="Horizontal">
+                        <CheckBox
+                            x:Name="cbDiaryDate"
+                            Margin="10,0"
+                            VerticalAlignment="Center"
+                            Content="Добавить дату" />
+                        <DatePicker
+                            x:Name="DiaryDate"
+                            MinWidth="100"
+                            Margin="5,3,0,0"
+                            VerticalAlignment="Center"
+                            IsDropDownOpen="False"
+                            SelectedDate="{x:Static sys:DateTime.Now}"
+                            SelectedDateFormat="Short" />
+                        <CheckBox
+                            x:Name="cbDiaryTime"
+                            Margin="10,0"
+                            Content="Добавить время" />
+                        <materialDesign:TimePicker
+                            x:Name="DiaryTime"
+                            Margin="5,3,0,0"
+                            VerticalAlignment="Center"
+                            Is24Hours="True"
+                            SelectedTime="10:30" />
+                    </StackPanel>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <DockPanel LastChildFill="True">
-                            <WrapPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                                <TextBlock Text="Выберите дату:" VerticalAlignment="Center" Margin="10, 0"/>
-                                <DatePicker x:Name="DiaryDate" IsDropDownOpen="False" SelectedDateFormat="Short" MinWidth="100" VerticalAlignment="Center" SelectedDate="{x:Static sys:DateTime.Now}" />
-                                <CheckBox x:Name="DiaryTime" Content="Добавить время" Margin="10, 0" />
-                                <materialDesign:TimePicker SelectedTime="10:30" VerticalAlignment="Center" Is24Hours="True" Margin="5, 3, 0, 0"/>
-                            </WrapPanel>
-                            <!--<TreeView Foreground="Black" ItemsSource="{x:Static data:TestData.diagnoses}" >
-                                <TreeView.ItemTemplate>
-                                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Blocks}">
-                                        <TextBlock Text="{Binding Path=Code}"/>
-                                        <HierarchicalDataTemplate.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Path=Name}"></TextBlock>
-                                            </DataTemplate>
-                                        </HierarchicalDataTemplate.ItemTemplate>
-                                    </HierarchicalDataTemplate>
-                                </TreeView.ItemTemplate>
-                            </TreeView>-->
-                            <TreeView Foreground="Black" ItemsSource="{x:Static data:TestData.diagnoses}" >
-                                <TreeView.ItemTemplate>
-                                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Blocks}">
-                                        <TextBlock Text="{Binding Path=Code}"/>
-                                        <HierarchicalDataTemplate.ItemTemplate>
-                                            <HierarchicalDataTemplate ItemsSource="{Binding Path=Lines}">
-                                                <TextBlock Text="{Binding Path=Name}"/>
-                                                <HierarchicalDataTemplate.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock Text="{Binding}" />
-                                                    </DataTemplate>
-                                                </HierarchicalDataTemplate.ItemTemplate>
-                                            </HierarchicalDataTemplate>
-                                        </HierarchicalDataTemplate.ItemTemplate>
-                                    </HierarchicalDataTemplate>
-                                </TreeView.ItemTemplate>
-                            </TreeView>
+                            <GroupBox>
+                                <GroupBox.Header>
+                                    <UniformGrid Rows="1">
+                                        <Button
+                                            x:Name="btnSaveXML"
+                                            Command="{Binding SaveDataToFileCommand}"
+                                            CommandParameter="{Binding Path=Items, ElementName=treeViewData}"
+                                            >
+                                            <Viewbox Width="24" Height="24">
+                                                <Canvas Width="24" Height="24">
+                                                    <Path Fill="Black" Data="M1 7H3V21H17V23H3C1.9 23 1 22.11 1 21V7M19 1H7C5.89 1 5 1.9 5 3V17C5 18.1 5.89 19 7 19H21C22.1 19 23 18.1 23 17V5L19 1M21 17H7V3H18.17L21 5.83V17M14 10C12.34 10 11 11.34 11 13S12.34 16 14 16 17 14.66 17 13 15.66 10 14 10M8 4H17V8H8V4Z" />
+                                                </Canvas>
+                                            </Viewbox>
+                                        </Button>
+                                        <GridSplitter/>
+                                    </UniformGrid>
+                                </GroupBox.Header>
+                                <TreeView
+                                    x:Name="treeViewData"
+                                    FlowDirection="LeftToRight"
+                                    Foreground="Black"
+                                    ItemsSource="{x:Static data:TestData.diagnoses}"
+                                    >
+                                    <TreeView.ItemTemplate>
+                                        <HierarchicalDataTemplate ItemsSource="{Binding Path=Blocks}">
+                                            <TextBlock Text="{Binding Path=Code}" />
+                                            <HierarchicalDataTemplate.ItemTemplate>
+                                                <HierarchicalDataTemplate ItemsSource="{Binding Path=Lines}">
+                                                    <TextBlock Text="{Binding Path=Name}" />
+                                                    <HierarchicalDataTemplate.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding}" />
+                                                        </DataTemplate>
+                                                    </HierarchicalDataTemplate.ItemTemplate>
+                                                </HierarchicalDataTemplate>
+                                            </HierarchicalDataTemplate.ItemTemplate>
+                                        </HierarchicalDataTemplate>
+                                    </TreeView.ItemTemplate>
+                                </TreeView>
+                            </GroupBox>
                         </DockPanel>
                         <GridSplitter
                             Grid.Column="0"
                             MinWidth="5"
                             HorizontalAlignment="Right"
-                            ShowsPreview="False"
-                            VerticalAlignment="Stretch"/>
+                            VerticalAlignment="Stretch"
+                            ShowsPreview="False" 
+                            Opacity="0"/>
                         <GroupBox Grid.Column="1" MinWidth="300">
                             <GroupBox.Header>
                                 <UniformGrid Rows="1">
