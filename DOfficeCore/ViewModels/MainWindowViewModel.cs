@@ -99,8 +99,12 @@ namespace DOfficeCore.ViewModels
         {
             if (p as IEnumerable != null)
             {
-
-                if(DataProviderService.SaveDataToFile<Diagnosis>((IEnumerable<Diagnosis>)p, "file"))
+                ObservableCollection<Diagnosis> col = new ObservableCollection<Diagnosis>();
+                foreach (Diagnosis item in (IEnumerable)p)
+                {
+                    col.Add(item);
+                }
+                if(DataProviderService.SaveDataToFile<Diagnosis>(col, "file"))
                 {
                     MessageBox.Show("Файл успешно сохранён.");
                 }

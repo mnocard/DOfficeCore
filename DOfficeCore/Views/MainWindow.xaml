@@ -93,8 +93,7 @@
                         Grid.Row="0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        Background="#FF9E9E9E"
-                        
+                        Background="#FF686868"
                         Orientation="Horizontal">
                         <CheckBox
                             x:Name="cbDiaryDate"
