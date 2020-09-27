@@ -9,25 +9,32 @@ namespace DOfficeCore.Data
 {
     class TestData
     {
-        public static List<string> blockList = Enumerable.Range(1, 1)
+        private static List<string> blockList = Enumerable.Range(1, 5)
             .Select(i => $"Line {i}")
             .ToList();
 
-        public static List<Block> blocks = Enumerable.Range(1, 1)
+        public static List<string> BlockList { get => blockList; set => blockList = value; }
+
+
+        private static List<Block> blocks = Enumerable.Range(1, 5)
             .Select(i => new Block
             {
                 Name = $"Block {i}",
-                Lines = new ObservableCollection<string>(blockList),
+                Lines = new ObservableCollection<string>(BlockList),
             }).ToList();
 
-        public static List<Diagnosis> diag = Enumerable.Range(1, 1)
+        internal static List<Block> Blocks { get => blocks; set => blocks = value; }
+
+
+        private static List<Diagnosis> diag = Enumerable.Range(1, 5)
             .Select(i => new Diagnosis
             {
                 Code = $"Diagnosis {i}",
-                Blocks = new ObservableCollection<Block>(blocks),
+                Blocks = new ObservableCollection<Block>(Blocks),
             }).ToList();
 
-        public static ObservableCollection<Diagnosis> diagnoses { get; set; } = new ObservableCollection<Diagnosis>(diag);
-        
+        internal static List<Diagnosis> Diag { get => diag; set => diag = value; }
+
+        public static ObservableCollection<Diagnosis> Diagnoses { get; set; } = new ObservableCollection<Diagnosis>(Diag);
     }
 }

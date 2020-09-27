@@ -162,7 +162,9 @@
                                     x:Name="treeViewData"
                                     FlowDirection="LeftToRight"
                                     Foreground="Black"
-                                    ItemsSource="{Binding Diagnoses}">
+                                    ItemsSource="{Binding Diagnoses}"
+                                    MinWidth="300"
+                                    >
                                     <!--Контекстное меню для дерева
                                     <TreeView.ContextMenu x:Uid="cxt">
                                         <ContextMenu Name="ContextMenu">
@@ -245,6 +247,7 @@
                                 IsReadOnly="{Binding EnableTextBox}"
                                 Text="Hallo"
                                 TextWrapping="Wrap"
+                                MinWidth="300"
                                 VerticalScrollBarVisibility="Auto" />
                         </GroupBox>
                     </Grid>
