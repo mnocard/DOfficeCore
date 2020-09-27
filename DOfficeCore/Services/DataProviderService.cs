@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows;
 using System.Windows.Documents;
 
 namespace DOfficeCore.Services
@@ -25,12 +26,19 @@ namespace DOfficeCore.Services
 
         public static ObservableCollection<Diagnosis> LoadDataFromFile(string fileName)
         {
-            ObservableCollection<Diagnosis> result;
+            ObservableCollection<Diagnosis> result = null;
 
-            using (StreamReader file = File.OpenText(fileName))
+            if (!File.Exists(fileName))
             {
-                JsonSerializer serializer = new JsonSerializer();
-                result = (ObservableCollection<Diagnosis>)serializer.Deserialize(file, typeof(ObservableCollection<Diagnosis>));
+                using FileStream fs = File.Create(fileName);
+            }
+            else
+            {
+                using (StreamReader file = File.OpenText(fileName))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    result = (ObservableCollection<Diagnosis>)serializer.Deserialize(file, typeof(ObservableCollection<Diagnosis>));
+                }
             }
 
             return result;
