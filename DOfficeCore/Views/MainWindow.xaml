@@ -21,9 +21,6 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
-    <Window.Resources>
-        <data:TestData x:Key="resourceData" />
-    </Window.Resources>
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
@@ -143,7 +140,7 @@
                                     x:Name="treeViewData"
                                     FlowDirection="LeftToRight"
                                     Foreground="Black"
-                                    ItemsSource="{x:Static data:TestData.diagnoses}"
+                                    ItemsSource="{Binding Diagnoses}"
                                     >
                                     <TreeView.ItemTemplate>
                                         <HierarchicalDataTemplate ItemsSource="{Binding Path=Blocks}">
