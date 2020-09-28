@@ -23,7 +23,7 @@ namespace DOfficeCore.ViewModels
             CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
             SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
-            //GetCellContentCommand = new LambdaCommand(OnGetCellContentCommandExecuted, CanGetCellContentCommandExecute);
+            SelectionChangedCommand = new LambdaCommand(OnSelectionChangedCommandExecuted, CanSelectionChangedCommandExecute);
             #endregion
         }
 
@@ -156,22 +156,34 @@ namespace DOfficeCore.ViewModels
         private bool CanLoadDataCommandExecute(object parameter) => true;
         #endregion
 
-        //#region Команда получения данных из выделенной ячейки
-        ///// <summary>Команда Загрузки данных</summary>
-        //public ICommand GetCellContentCommand { get; }
-        ///// <summary>Команда Загрузки данных</summary>
-        //private void OnGetCellContentCommandExecuted(object parameter)
-        //{
-        //    if (parameter as DataGrid != null)
-        //    {
-        //        Diagnosis dg = (Diagnosis)(parameter as DataGrid).CurrentItem;
-        //        Blocks = dg.Blocks;
-        //    }
-        //}
+        #region Команда получения данных из выделенной ячейки
+        /// <summary>Команда Загрузки данных</summary>
+        public ICommand SelectionChangedCommand { get; }
+        /// <summary>Команда Загрузки данных</summary>
+        private void OnSelectionChangedCommandExecuted(object parameter)
+        {
+            if (parameter as DataGrid != null)
+            {
+                Diagnosis dg = (Diagnosis)(parameter as DataGrid).CurrentItem;
 
-        //private bool CanGetCellContentCommandExecute(object parameter) => true;
+                var a = parameter as DataGrid;
 
-        //#endregion
+
+                var i = (parameter as DataGrid).Columns;
+                
+                var x = (parameter as DataGrid).CurrentCell.Item;
+
+                var y = x as Diagnosis;
+
+                var z = y.Blocks;
+
+                a.ItemsSource = ;
+            }
+        }
+
+        private bool CanSelectionChangedCommandExecute(object parameter) => true;
+
+        #endregion
 
         #endregion
     }
