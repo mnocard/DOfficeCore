@@ -2,11 +2,8 @@
     x:Class="DOfficeCore.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Models="clr-namespace:DOfficeCore.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:data="clr-namespace:DOfficeCore.Data"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:local="clr-namespace:DOfficeCore"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -72,7 +69,10 @@
             </TabControl.Resources>
             <TabItem>
                 <TabItem.Header>
-                    <materialDesign:PackIcon Kind="NotebookOutline" Width="48" Height="48"/>
+                    <materialDesign:PackIcon
+                        Width="48"
+                        Height="48"
+                        Kind="NotebookOutline" />
                 </TabItem.Header>
                 <Grid>
                     <Grid.Resources>
@@ -129,19 +129,28 @@
                                             x:Name="btnAddNode"
                                             DockPanel.Dock="Left"
                                             ToolTip="Добавить новый элемент">
-                                            <materialDesign:PackIcon Kind="PlusBoxOutline" Width="24" Height="24"/>
+                                            <materialDesign:PackIcon
+                                                Width="24"
+                                                Height="24"
+                                                Kind="PlusBoxOutline" />
                                         </Button>
                                         <Button
                                             x:Name="btnSearchNode"
                                             DockPanel.Dock="Left"
                                             ToolTip="Удалить выбранный элемент">
-                                            <materialDesign:PackIcon Kind="Magnify" Width="24" Height="24"/>
+                                            <materialDesign:PackIcon
+                                                Width="24"
+                                                Height="24"
+                                                Kind="Magnify" />
                                         </Button>
                                         <Button
                                             x:Name="btnDeleteNode"
                                             DockPanel.Dock="Left"
                                             ToolTip="Удалить выбранный элемент">
-                                            <materialDesign:PackIcon Kind="TrashCanOutline" Width="24" Height="24"/>
+                                            <materialDesign:PackIcon
+                                                Width="24"
+                                                Height="24"
+                                                Kind="TrashCanOutline" />
                                         </Button>
                                         <Button
                                             x:Name="btnSaveXML"
@@ -149,7 +158,10 @@
                                             CommandParameter="{Binding Path=Items, ElementName=dgDataTree}"
                                             DockPanel.Dock="Right"
                                             ToolTip="Сохранить">
-                                            <materialDesign:PackIcon Kind="ContentSaveAllOutline" Width="24" Height="24"/>
+                                            <materialDesign:PackIcon
+                                                Width="24"
+                                                Height="24"
+                                                Kind="ContentSaveAllOutline" />
                                         </Button>
                                         <TextBox
                                             x:Name="tbElementData"
@@ -164,19 +176,19 @@
                                     AutoGenerateColumns="False"
                                     ItemsSource="{Binding Diagnoses, Mode=TwoWay}"
                                     SelectionMode="Single"
-                                    SelectionUnit="Cell">
+                                    SelectionUnit="Cell"
+                                    IsReadOnly="True">
+                                    <!--<i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDown">
+                                            <i:InvokeCommandAction Command="{Binding GetCellContentCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>-->
                                     <DataGrid.Columns>
                                         <DataGridTextColumn
                                             x:Name="dgcCode"
                                             Binding="{Binding Code}"
-                                            Header="Диагнозы">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="MouseDown">
-                                                    <i:InvokeCommandAction Command="{Binding GetBlocksCommand}"/>
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </DataGridTextColumn>
-                                        <DataGridTextColumn Header="Блоки" />
+                                            Header="Диагнозы" />
+                                        <DataGridTextColumn Header="Блоки" Binding="{Binding Blocks, UpdateSourceTrigger=PropertyChanged}"/>
                                         <DataGridTextColumn Header="Строки" />
                                     </DataGrid.Columns>
                                 </DataGrid>
@@ -193,25 +205,37 @@
                             <GroupBox.Header>
                                 <UniformGrid Rows="1">
                                     <Button>
-                                        <materialDesign:PackIcon Kind="Dice5Outline" Width="24" Height="24"/>
+                                        <materialDesign:PackIcon
+                                            Width="24"
+                                            Height="24"
+                                            Kind="Dice5Outline" />
                                     </Button>
                                     <Button
                                         x:Name="Copy"
                                         Command="{Binding CopyTextCommand}"
                                         CommandParameter="{Binding Text, ElementName=tbDiary}"
                                         ToolTip="Копировать текст">
-                                        <materialDesign:PackIcon Kind="ContentCopy" Width="24" Height="24"/>
+                                        <materialDesign:PackIcon
+                                            Width="24"
+                                            Height="24"
+                                            Kind="ContentCopy" />
                                     </Button>
                                     <Button
                                         x:Name="Edit"
                                         Command="{Binding EditTextCommand}"
                                         CommandTarget="{Binding ElementName=tbDiary}"
                                         ToolTip="Редактировать текст">
-                                        <materialDesign:PackIcon Kind="PencilOutline" Width="24" Height="24"/>
+                                        <materialDesign:PackIcon
+                                            Width="24"
+                                            Height="24"
+                                            Kind="PencilOutline" />
                                     </Button>
                                     <GridSplitter IsEnabled="False" />
                                     <Button x:Name="Clear" ToolTip="Очистить поле">
-                                        <materialDesign:PackIcon Kind="Close" Width="24" Height="24"/>
+                                        <materialDesign:PackIcon
+                                            Width="24"
+                                            Height="24"
+                                            Kind="Close" />
                                     </Button>
                                 </UniformGrid>
                             </GroupBox.Header>
@@ -230,7 +254,10 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <materialDesign:PackIcon Kind="UserOutline" Width="48" Height="48"/>
+                    <materialDesign:PackIcon
+                        Width="48"
+                        Height="48"
+                        Kind="UserOutline" />
                 </TabItem.Header>
             </TabItem>
         </TabControl>
