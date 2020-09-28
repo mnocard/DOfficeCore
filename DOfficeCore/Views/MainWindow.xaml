@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:vm="clr-namespace:DOfficeCore.ViewModels"
+    xmlns:data="clr-namespace:DOfficeCore.Data"
     Title="{Binding Title}"
     MinWidth="800"
     MinHeight="450"
@@ -24,6 +25,9 @@
             <i:InvokeCommandAction Command="{Binding LoadDataCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
+    <Window.Resources>
+        <data:BlockConverter x:Key="myBlockConverter" />
+    </Window.Resources>
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
@@ -188,8 +192,17 @@
                                             x:Name="dgcCode"
                                             Binding="{Binding Code}"
                                             Header="Диагнозы" />
-                                        <DataGridTextColumn Header="Блоки" Binding="{Binding Blocks, UpdateSourceTrigger=PropertyChanged}"/>
-                                        <DataGridTextColumn Header="Строки" />
+                                        <DataGridTextColumn Header="Блоки" Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                                     AncestorType=DataGrid}, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource myBlockConverter}}">
+                                            <!--<DataGridTextColumn.Binding>
+                                                <MultiBinding Converter="{StaticResource myBlockConverter}">
+                                                    <Binding Path="Blocks"/>
+                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}"/>
+                                                </MultiBinding>
+                                            </DataGridTextColumn.Binding>-->
+                                        </DataGridTextColumn> 
+                                        <!--Binding="{Binding Blocks, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource myBlockConverter}, ConverterParameter={Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}}" />-->
+                                        <DataGridTextColumn Header="Строки" Binding="{Binding Blocks[3].Lines[0]}"/>
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </GroupBox>

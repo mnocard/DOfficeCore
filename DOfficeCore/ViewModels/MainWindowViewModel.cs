@@ -23,7 +23,7 @@ namespace DOfficeCore.ViewModels
             CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
             SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
-            GetCellContentCommand = new LambdaCommand(OnGetCellContentCommandExecuted, CanGetCellContentCommandExecute);
+            //GetCellContentCommand = new LambdaCommand(OnGetCellContentCommandExecuted, CanGetCellContentCommandExecute);
             #endregion
         }
 

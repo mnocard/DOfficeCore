@@ -10,7 +10,6 @@ namespace DOfficeCore.Models
 {
     class Diagnosis : ViewModelCore
     {
-
         #region Code : string - Код диагноза
         /// <summary>Код диагноза</summary>
         private string _Code;
@@ -22,7 +21,7 @@ namespace DOfficeCore.Models
         }
         #endregion
 
-        #region UniqueBlocks : ObservableCollection<Blocks> - Уникальные блоки диагноза
+        #region Blocks : ObservableCollection<Blocks> - Уникальные блоки диагноза
         /// <summary>Уникальные блоки диагноза</summary>
         private ObservableCollection<Block> _Blocks;
         /// <summary>Уникальные блоки диагноза</summary>
