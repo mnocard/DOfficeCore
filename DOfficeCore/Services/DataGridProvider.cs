@@ -9,46 +9,48 @@ namespace DOfficeCore.Services
 {
     class DataGridProvider : ViewModelCore
     {
-        public DataGridProvider(string dgDiagnosis, string dgBlock, string dgLines)
-        {
-            this.dgDiagnosis = dgDiagnosis;
-            this.dgBlock = dgBlock;
-            this.dgLines = dgLines;
-        }
-
         #region Свойства
 
-        #region dgDiagnosis : string - Название диагноза
-        /// <summary>Название диагноза</summary>
-        private string _dgDiagnosis;
-        /// <summary>Название диагноза</summary>
-        public string dgDiagnosis
+        #region DiagnosisCode : ObservableCollection<string> - Коллекция кодов диагнозов
+
+        /// <summary>Коллекция кодов диагнозов</summary>
+        private ObservableCollection<string> _DiagnosisCode;
+
+        /// <summary>Коллекция кодов диагнозов</summary>
+        public ObservableCollection<string> DiagnosisCode
         {
-            get => _dgDiagnosis;
-            set => Set(ref _dgDiagnosis, value);
+            get => _DiagnosisCode;
+            set => Set(ref _DiagnosisCode, value);
         }
+
         #endregion
 
-        #region dgBlock : string - Название блока
-        /// <summary>Название блока</summary>
-        private string _dgBlock;
-        /// <summary>Название блока</summary>
-        public string dgBlock
+        #region BlocksNames : ObservableCollection<string> - Коллекция названий блоков
+
+        /// <summary>Коллекция названий блоков</summary>
+        private ObservableCollection<string> _BlocksNames;
+
+        /// <summary>Коллекция названий блоков</summary>
+        public ObservableCollection<string> BlocksNames
         {
-            get => _dgBlock;
-            set => Set(ref _dgBlock, value);
+            get => _BlocksNames;
+            set => Set(ref _BlocksNames, value);
         }
+
         #endregion
 
-        #region dgLines : string - Название строки
-        /// <summary>Название строки</summary>
-        private string _dgLines;
-        /// <summary>Название строки</summary>
-        public string dgLines
+        #region LinesNames : ObservableCollection<string> - Коллекция содержимого строк
+
+        /// <summary>Коллекция содержимого строк</summary>
+        private ObservableCollection<string> _LinesNames;
+
+        /// <summary>Коллекция содержимого строк</summary>
+        public ObservableCollection<string> LinesNames
         {
-            get => _dgLines;
-            set => Set(ref _dgLines, value);
+            get => _LinesNames;
+            set => Set(ref _LinesNames, value);
         }
+
         #endregion
 
         #endregion
@@ -58,44 +60,40 @@ namespace DOfficeCore.Services
         #region Метод обновления коллекции во модели представлении для передачи в датагрид из базы данных
 
         /// <summary>
-        /// Метод обновления коллекции во модели представлении для передачи в датагрид из базы данных
+        /// Метод обновления кодов диагнозов в модели представлении для передачи в датагрид из базы данных
         /// </summary>
         /// <param name="DataCollection">Коллекция базы данных</param>
-        /// <param name="VMCollection">Коллекция модели представления</param>
+        /// <param name="DataGridProvider">Коллекция модели представления</param>
         /// <returns></returns>
-        public static ObservableCollection<DataGridProvider> UpdateDiagnosisOfProvider(IList<Diagnosis> DataCollection, ObservableCollection<DataGridProvider> VMCollection = null)
+        public static DataGridProvider UpdateDiagnosisOfProvider(ObservableCollection<Diagnosis> DataCollection, DataGridProvider Provider = null)
         {
-            if (VMCollection == null)
-            {
-                for (int i = 0; i < DataCollection.Count; i++)
-                {
-                    VMCollection.Add(new DataGridProvider(DataCollection[i].Code, string.Empty, string.Empty));
-                }
-                return VMCollection;
-            }
-            else
-            {
-                ObservableCollection<DataGridProvider> NewCollection = new ObservableCollection<DataGridProvider>();
-                for (int i = 0; i < DataCollection.Count; i++)
-                {
-                    NewCollection.Add(new DataGridProvider(DataCollection[i].Code, VMCollection[i].dgBlock, VMCollection[i].dgLines));
-                }
-                return NewCollection;
-            }
+            //if (Provider == null)
+            //{
+            //    Provider = new DataGridProvider();
+            //    foreach (Diagnosis item in DataCollection)
+            //    {
+            //        Provider.DiagnosisCode.Add(item.Code);
+            //    }
+            //}
+            //else
+            //{
+            //    foreach (Diagnosis item in DataCollection)
+            //    {
+            //        if (!Provider.DiagnosisCode.Contains(item.Code)) Provider.DiagnosisCode.Add(item.Code);
+            //    }
+            //    foreach (string item in Provider.DiagnosisCode)
+            //    {
+                    
+            //    }
+            //}
         }
 
         #endregion
 
-        public static IList<Diagnosis> UpdateDiagnosisOfModel(IList<Diagnosis> DataCollection, ObservableCollection<DataGridProvider> VMCollection)
+        public static ObservableCollection<Diagnosis> UpdateDiagnosisOfModel(IList<Diagnosis> DataCollection, DataGridProvider VMCollection)
         {
-            if (VMCollection.Count == DataCollection.Count)
-            for (int i = 0; i < DataCollection.Count; i++)
-            {
-                if(!Equals(DataCollection[i].Code, VMCollection[i].dgDiagnosis))
-                {
-                    DataCollection[i].Code = VMCollection[i].dgDiagnosis;
-                }
-            }
+            //if (VMCollection.Count == DataCollection.Count)
+            
         }
 
 
@@ -130,11 +128,6 @@ namespace DOfficeCore.Services
 
         //    throw new NotImplementedException();
         //}
-
-        public static ObservableCollection<Diagnosis> UpdateDiagnosisCollection(ObservableCollection<Diagnosis> VMCollection, ObservableCollection<DataGridProvider> DataCollection, int IndexOfDiagnosis, int IndexOfBlock)
-        {
-            throw new NotImplementedException();
-        }
 
         #endregion
     }
