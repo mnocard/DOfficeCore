@@ -61,6 +61,20 @@ namespace DOfficeCore.ViewModels
         }
         #endregion
 
+        #region dgData : ObservableCollection<DataGridProvider> - Данные для датагрида
+
+        /// <summary>Данные для датагрида</summary>
+        private ObservableCollection<DataGridProvider> _dgData;
+
+        /// <summary>Данные для датагрида</summary>
+        public ObservableCollection<DataGridProvider> dgData
+        {
+            get => _dgData;
+            set => Set(ref _dgData, value);
+        }
+
+        #endregion
+
         //#region Текущая ячейка
         ///// <summary>Текущая ячейка</summary>
         //private DataGridCellInfo _cellInfo;
