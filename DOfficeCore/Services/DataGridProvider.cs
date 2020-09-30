@@ -126,7 +126,7 @@ namespace DOfficeCore.Services
             //Provider.LinesNames = null;
             //Provider.LinesNames = new ObservableCollection<string>(TempCollection);
             //return Provider;
-            throw new NotImplementedException()
+            throw new NotImplementedException();
         }
 
         #endregion

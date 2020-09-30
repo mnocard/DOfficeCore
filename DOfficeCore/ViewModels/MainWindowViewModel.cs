@@ -23,7 +23,7 @@ namespace DOfficeCore.ViewModels
             CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
             SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
-            SelectionChangedCommand = new LambdaCommand(OnSelectionChangedCommandExecuted, CanSelectionChangedCommandExecute);
+            //SelectionChangedCommand = new LambdaCommand(OnSelectionChangedCommandExecuted, CanSelectionChangedCommandExecute);
             #endregion
         }
 
@@ -170,34 +170,34 @@ namespace DOfficeCore.ViewModels
         private bool CanLoadDataCommandExecute(object parameter) => true;
         #endregion
 
-        #region Команда получения данных из выделенной ячейки
-        /// <summary>Команда Загрузки данных</summary>
-        public ICommand SelectionChangedCommand { get; }
-        /// <summary>Команда Загрузки данных</summary>
-        private void OnSelectionChangedCommandExecuted(object parameter)
-        {
-            if (parameter as DataGrid != null)
-            {
-                Diagnosis dg = (Diagnosis)(parameter as DataGrid).CurrentItem;
+        //#region Команда получения данных из выделенной ячейки
+        ///// <summary>Команда Загрузки данных</summary>
+        //public ICommand SelectionChangedCommand { get; }
+        ///// <summary>Команда Загрузки данных</summary>
+        //private void OnSelectionChangedCommandExecuted(object parameter)
+        //{
+        //    if (parameter as DataGrid != null)
+        //    {
+        //        Diagnosis dg = (Diagnosis)(parameter as DataGrid).CurrentItem;
 
-                var a = parameter as DataGrid;
+        //        var a = parameter as DataGrid;
 
 
-                var i = (parameter as DataGrid).Columns;
+        //        var i = (parameter as DataGrid).Columns;
                 
-                var x = (parameter as DataGrid).CurrentCell.Item;
+        //        var x = (parameter as DataGrid).CurrentCell.Item;
 
-                var y = x as Diagnosis;
+        //        var y = x as Diagnosis;
 
-                var z = y.Blocks;
+        //        var z = y.Blocks;
 
-                a.ItemsSource = ;
-            }
-        }
+        //        //a.ItemsSource = ;
+        //    }
+        //}
 
-        private bool CanSelectionChangedCommandExecute(object parameter) => true;
+        //private bool CanSelectionChangedCommandExecute(object parameter) => true;
 
-        #endregion
+        //#endregion
 
         #endregion
     }

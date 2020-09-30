@@ -9,6 +9,7 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:vm="clr-namespace:DOfficeCore.ViewModels"
     xmlns:data="clr-namespace:DOfficeCore.Data"
+    xmlns:cmd ="clr-namespace:DOfficeCore.Infrastructure.Commands"
     Title="{Binding Title}"
     MinWidth="800"
     MinHeight="450"
@@ -236,7 +237,10 @@
                                             Kind="PencilOutline" />
                                     </Button>
                                     <GridSplitter IsEnabled="False" />
-                                    <Button x:Name="Clear" ToolTip="Очистить поле">
+                                    <Button x:Name="Clear" ToolTip="Очистить поле" CommandParameter="{Binding ElementName=tbDiary}">
+                                        <Button.Command>
+                                            <cmd:ClearDiaryBoxCommand/>
+                                        </Button.Command>
                                         <materialDesign:PackIcon
                                             Width="24"
                                             Height="24"
