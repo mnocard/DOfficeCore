@@ -3,7 +3,9 @@ using DOfficeCore.ViewModels.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace DOfficeCore.Services
 {
@@ -62,72 +64,72 @@ namespace DOfficeCore.Services
         /// <summary>
         /// Метод обновления кодов диагнозов в модели представлении для передачи в датагрид из базы данных
         /// </summary>
-        /// <param name="DataCollection">Коллекция базы данных</param>
-        /// <param name="DataGridProvider">Коллекция модели представления</param>
+        /// <param name="DataCollection">Коллекция базы данных, из которой получаем данные</param>
+        /// <param name="Provider">Коллекция модели представления, в которой обновляем список диагнозов</param>
         /// <returns></returns>
         public static DataGridProvider UpdateDiagnosisOfProvider(ObservableCollection<Diagnosis> DataCollection, DataGridProvider Provider = null)
         {
-            //if (Provider == null)
-            //{
-            //    Provider = new DataGridProvider();
-            //    foreach (Diagnosis item in DataCollection)
-            //    {
-            //        Provider.DiagnosisCode.Add(item.Code);
-            //    }
-            //}
-            //else
-            //{
-            //    foreach (Diagnosis item in DataCollection)
-            //    {
-            //        if (!Provider.DiagnosisCode.Contains(item.Code)) Provider.DiagnosisCode.Add(item.Code);
-            //    }
-            //    foreach (string item in Provider.DiagnosisCode)
-            //    {
-                    
-            //    }
-            //}
+            if (DataCollection == null) MessageBox.Show("Ошибка загрузки данных");
+            if (Provider == null)
+            {
+                Provider = new DataGridProvider();
+                Provider.DiagnosisCode = (ObservableCollection<string>)DataCollection.Select(t => t.Code);
+                return Provider;
+            }
+            else
+            {
+                var TempCollection = DataCollection.
+                    Where(t => Provider.DiagnosisCode.Contains(t.Code)).
+                    Select(t => t.Code).
+                    Union(Provider.DiagnosisCode);
+                Provider.DiagnosisCode = null;
+                Provider.DiagnosisCode = new ObservableCollection<string>(TempCollection);
+                return Provider;
+            }
+        }
+        #endregion
+
+        #region Метод обновления названий блоков в модели представлении для передачи в датагрид из базы данных
+
+        /// <summary>
+        /// Метод обновления названий блоков в модели представлении для передачи в датагрид из базы данных
+        /// </summary>
+        /// <param name="DataCollection">Коллекция базы данных, из которой получаем данные</param>
+        /// <param name="Provider">Коллекция модели представления, в которой обновляем список имён блоков</param>
+        /// <param name="DiagnosisCode">Код диагноза, по которому ищем нужную коллекцию блоков</param>
+        /// <returns></returns>
+        public static DataGridProvider UpdateBlocksOfProvider(ObservableCollection<Diagnosis> DataCollection, DataGridProvider Provider, string DiagnosisCode)
+        {
+            if (DataCollection == null || Provider == null || DiagnosisCode == null) MessageBox.Show("Ошибка загрузки данных");
+            var TempCollection = DataCollection.
+                Where(t => t.Code.Equals(DiagnosisCode)).
+                Single().Blocks.
+                Select(t => t.Name);
+
+            Provider.BlocksNames = null;
+            Provider.BlocksNames = new ObservableCollection<string>(TempCollection);
+            return Provider;
         }
 
         #endregion
 
-        public static ObservableCollection<Diagnosis> UpdateDiagnosisOfModel(IList<Diagnosis> DataCollection, DataGridProvider VMCollection)
+        #region Метод обновления названий строк в модели представлении для передачи в датагрид из базы данных
+
+        public static DataGridProvider UpdateBlocksOfProvider(ObservableCollection<Diagnosis> DataCollection, DataGridProvider Provider, string DiagnosisCode, string BlocksNames)
         {
-            //if (VMCollection.Count == DataCollection.Count)
-            
+            //if (DataCollection == null || Provider == null || DiagnosisCode == null) MessageBox.Show("Ошибка загрузки данных");
+            //var TempCollection = DataCollection.
+            //    Where(t => t.Code.Equals(DiagnosisCode)).
+            //    Select(t => t).
+
+
+            //Provider.LinesNames = null;
+            //Provider.LinesNames = new ObservableCollection<string>(TempCollection);
+            //return Provider;
+            throw new NotImplementedException()
         }
 
-
-
-        //public static ObservableCollection<Diagnosis> UpdateSelfCollection(IList<Diagnosis> VMCollection, ObservableCollection<DataGridProvider> DataCollection, int IndexOfDiagnosis, int IndexOfBlock)
-        //{
-
-        //    foreach (Diagnosis item in VMCollection)
-        //    {
-        //        DataCollection.Add(new DataGridProvider(item.Code, string.Empty, string.Empty));
-        //    }
-
-        //    if(IndexOfDiagnosis >= 0 && IndexOfDiagnosis < VMCollection.Count)
-        //    {
-        //        IList<Block> TempBlockCollection = VMCollection[IndexOfDiagnosis].Blocks;
-
-        //        for (int i = 0; i < TempBlockCollection.Count; i++)
-        //        {
-        //            DataCollection[i].dgBlock = TempBlockCollection[i].Name;
-        //        }
-
-        //        if (IndexOfBlock >= 0 && IndexOfBlock < VMCollection[IndexOfDiagnosis].Blocks.Count)
-        //        {
-        //            IList<string> TempStringCollection = VMCollection[IndexOfDiagnosis].Blocks[IndexOfBlock].Lines;
-
-        //            for (int i = 0; i < TempStringCollection.Count; i++)
-        //            {
-        //                DataCollection[i].dgLines = TempStringCollection[i];
-        //            }
-        //        }
-        //    }
-
-        //    throw new NotImplementedException();
-        //}
+        #endregion
 
         #endregion
     }
