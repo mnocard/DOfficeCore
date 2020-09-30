@@ -7,6 +7,7 @@ using System.Windows.Controls;
 
 namespace DOfficeCore.Infrastructure.Commands
 {
+    /// <summary>Команда очистки поля дневника</summary>
     class ClearDiaryBoxCommand : CommandCore
     {
         protected override void Execute(object p)
@@ -14,6 +15,7 @@ namespace DOfficeCore.Infrastructure.Commands
             var DiaryBox = p as TextBox;
             if (DiaryBox == null) return;
             DiaryBox.Text = String.Empty;
+            DiaryBox.IsReadOnly = true;
         }
     }
 }

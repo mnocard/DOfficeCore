@@ -7,7 +7,6 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:vm="clr-namespace:DOfficeCore.ViewModels"
     xmlns:data="clr-namespace:DOfficeCore.Data"
     xmlns:cmd ="clr-namespace:DOfficeCore.Infrastructure.Commands"
     Title="{Binding Title}"
@@ -15,12 +14,13 @@
     MinHeight="450"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
-    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadDataCommand}" />
@@ -29,9 +29,6 @@
     <Window.Resources>
         <data:BlockConverter x:Key="myBlockConverter" />
     </Window.Resources>
-    <Window.DataContext>
-        <vm:MainWindowViewModel />
-    </Window.DataContext>
     <DockPanel LastChildFill="True">
         <TabControl BorderThickness="0" TabStripPlacement="Left">
             <TabControl.Resources>
@@ -239,7 +236,7 @@
                                     <GridSplitter IsEnabled="False" />
                                     <Button x:Name="Clear" ToolTip="Очистить поле" CommandParameter="{Binding ElementName=tbDiary}">
                                         <Button.Command>
-                                            <cmd:ClearDiaryBoxCommand/>
+                                            <cmd:ClearDiaryBoxCommand />
                                         </Button.Command>
                                         <materialDesign:PackIcon
                                             Width="24"
