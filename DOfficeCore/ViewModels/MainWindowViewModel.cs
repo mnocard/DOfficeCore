@@ -1,17 +1,27 @@
 ﻿using DOfficeCore.Infrastructure.Commands;
+using DOfficeCore.Models;
+using DOfficeCore.Services;
 using DOfficeCore.ViewModels.Core;
+using Newtonsoft.Json;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
 namespace DOfficeCore.ViewModels
 {
-    class MainWindowViewModel : ViewModelCore
+    internal class MainWindowViewModel : ViewModelCore
     {
         public MainWindowViewModel()
         {
             #region Команды
             EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
             CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
+            SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
+            LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
             #endregion
         }
 
@@ -35,6 +45,17 @@ namespace DOfficeCore.ViewModels
         {
             get => _EnableTextBox;
             set => Set(ref _EnableTextBox, value);
+        }
+        #endregion
+
+        #region Коллекция данных
+        /// <summary>Коллекция данных для отправки в дерево</summary>
+        private ObservableCollection<Diagnosis> _Diagnoses;
+        /// <summary>Коллекция данных для отправки в дерево</summary>
+        public ObservableCollection<Diagnosis> Diagnoses
+        {
+            get => _Diagnoses;
+            set => Set(ref _Diagnoses, value);
         }
         #endregion
 
@@ -69,6 +90,42 @@ namespace DOfficeCore.ViewModels
         }
 
         private bool CanCopyTextCommandExecute(object parameter) => true;
+        #endregion
+
+        #region Команда сохранения данных в файл
+        public ICommand SaveDataToFileCommand { get; }
+
+        private void OnSaveDataToFileCommandExecuted(object p)
+        {
+            if (p as IEnumerable != null)
+            {
+                ObservableCollection<Diagnosis> col = new ObservableCollection<Diagnosis>();
+                foreach (Diagnosis item in (IEnumerable)p)
+                {
+                    col.Add(item);
+                }
+                if(DataProviderService.SaveDataToFile<Diagnosis>(col, "file"))
+                {
+                    MessageBox.Show("Файл успешно сохранён.");
+                }
+            }
+        }
+
+        private bool CanSaveDataToFileCommandExecute(object p)
+        {
+            return true;
+        }
+        #endregion
+
+        #region Команда Загрузки данных
+        public ICommand LoadDataCommand { get; }
+
+        private void OnLoadDataCommandExecuted(object parameter)
+        {
+            Diagnoses = DataProviderService.LoadDataFromFile("file.json");
+        }
+
+        private bool CanLoadDataCommandExecute(object parameter) => true;
         #endregion
 
         #endregion

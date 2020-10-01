@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 namespace DOfficeCore.Models
 {
     /// <summary>Элемент содержащий строки дневника</summary>
-    internal class Block : ViewModelCore
+    class Block : ViewModelCore
     {
         #region Name : string - Название блока
         /// <summary>Название блока</summary>

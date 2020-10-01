@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DOfficeCore.Models
 {
-    internal class Diagnosis : ViewModelCore
+    class Diagnosis : ViewModelCore
     {
 
         #region Code : string - Код диагноза
