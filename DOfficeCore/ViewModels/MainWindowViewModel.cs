@@ -153,10 +153,23 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда изменения данных по щелчку</summary>
         private void OnSelectedDataCommandExecuted(object parameter)
         {
-            throw new NotImplementedException();
+            if ((parameter is DataGrid datagrid) && datagrid.CurrentItem != null)
+            {
+                if(datagrid.Name == "dgCodes")
+                {
+                    CurrentData.CurrentDiagnosis = (string)datagrid.CurrentItem;
+                    CurrentData = _ViewCollectionProvider.BlocksFromDataToView(CurrentData);
+                }
+                else if(datagrid.Name == "dgBlocksNames")
+                {
+                    CurrentData.CurrentBlock = (string)datagrid.CurrentItem;
+                    CurrentData = _ViewCollectionProvider.LinesFromDataToView(CurrentData);
+                }
+                else CurrentData.CurrentLine = (string)datagrid.CurrentItem;
+            }
         }
 
-        private bool CanSelectedDataCommandExecute(object parameter) => true;
+        private bool CanSelectedDataCommandExecute(object parameter) => parameter != null;
 
         #endregion
 

@@ -17,15 +17,15 @@ namespace DOfficeCore.Services
             return viewCollection;
         }
 
-        public ViewCollection BlocksFromDataToView (ViewCollection viewCollection, string code)
+        public ViewCollection BlocksFromDataToView (ViewCollection viewCollection)
         {
             if (viewCollection == null ||
-                code == null) return null;
+                viewCollection.CurrentDiagnosis == null) return null;
 
             viewCollection.BlocksNames = null;
 
             var tempDiagnosis = viewCollection.DataCollection.
-                Single(t => t.Code.Equals(code));
+                Single(t => t.Code.Equals(viewCollection.CurrentDiagnosis));
 
             var tempBlockNames = tempDiagnosis.Blocks.Select(t => t.Name);
 
@@ -34,19 +34,19 @@ namespace DOfficeCore.Services
             return viewCollection;
         }
 
-        public ViewCollection LinesFromDataToView (ViewCollection viewCollection, string code, string block)
+        public ViewCollection LinesFromDataToView (ViewCollection viewCollection)
         {
-            if (viewCollection == null || 
+            if (viewCollection == null ||
                 viewCollection.BlocksNames == null ||
-                code == null ||
-                block == null) return null;
+                viewCollection.CurrentDiagnosis == null ||
+                viewCollection.CurrentBlock == null) return null;
 
             viewCollection.LinesNames = null;
 
             var tempDiagnosis = viewCollection.DataCollection.
-                Single(t => t.Code.Equals(code));
+                Single(t => t.Code.Equals(viewCollection.CurrentDiagnosis));
 
-            var tempBlock = tempDiagnosis.Blocks.Single(t => t.Name.Equals(block));
+            var tempBlock = tempDiagnosis.Blocks.Single(t => t.Name.Equals(viewCollection.CurrentBlock));
 
             viewCollection.LinesNames = new ObservableCollection<string>(tempBlock.Lines);
 

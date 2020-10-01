@@ -8,6 +8,7 @@ namespace DOfficeCore.Models
 {
     class ViewCollection : ViewModelCore
     {
+
         #region Свойства
 
         #region DataCollection : List<Diagnosis> - Коллекция данных из базы данных
@@ -62,6 +63,48 @@ namespace DOfficeCore.Models
         {
             get => _LinesNames;
             set => Set(ref _LinesNames, value);
+        }
+
+        #endregion
+
+        #region CurrentDiagnosis : string - Текущий выбранный диагноз
+
+        /// <summary>Текущий выбранный диагноз</summary>
+        private string _CurrentDiagnosis;
+
+        /// <summary>Текущий выбранный диагноз</summary>
+        public string CurrentDiagnosis
+        {
+            get => _CurrentDiagnosis;
+            set => _CurrentDiagnosis = value;
+        }
+
+        #endregion
+
+        #region CurrentBlock : string - Текущий выбранный блок
+
+        /// <summary>Текущий выбранный блок</summary>
+        private string _CurrentBlock;
+
+        /// <summary>Текущий выбранный блок</summary>
+        public string CurrentBlock
+        {
+            get => _CurrentBlock;
+            set => _CurrentBlock = value;
+        }
+
+        #endregion
+
+        #region CurrentLine : string - Текущая выбранная строка
+
+        /// <summary>Текущая выбранная строка</summary>
+        private string _CurrentLine;
+
+        /// <summary>Текущая выбранная строка</summary>
+        public string CurrentLine
+        {
+            get => _CurrentLine;
+            set => _CurrentLine = value;
         }
 
         #endregion
