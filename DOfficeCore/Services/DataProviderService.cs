@@ -21,9 +21,9 @@ namespace DOfficeCore.Services
             return result;
         }
 
-        public ObservableCollection<Diagnosis> LoadDataFromFile(string fileName)
+        public IEnumerable<Diagnosis> LoadDataFromFile(string fileName)
         {
-            ObservableCollection<Diagnosis> result = null;
+            IEnumerable<Diagnosis> result = null;
 
             if (!File.Exists(fileName))
             {
@@ -34,7 +34,7 @@ namespace DOfficeCore.Services
                 using (StreamReader file = File.OpenText(fileName))
                 {
                     JsonSerializer serializer = new JsonSerializer();
-                    result = (ObservableCollection<Diagnosis>)serializer.Deserialize(file, typeof(ObservableCollection<Diagnosis>));
+                    result = (IEnumerable<Diagnosis>)serializer.Deserialize(file, typeof(IEnumerable<Diagnosis>));
                 }
             }
 

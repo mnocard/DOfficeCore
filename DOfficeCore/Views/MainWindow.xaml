@@ -8,7 +8,6 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:data="clr-namespace:DOfficeCore.Data"
     xmlns:cmd ="clr-namespace:DOfficeCore.Infrastructure.Commands"
     Title="{Binding Title}"
     MinWidth="800"
@@ -27,9 +26,6 @@
             <i:InvokeCommandAction Command="{Binding LoadDataCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Window.Resources>
-        <data:BlockConverter x:Key="myBlockConverter" />
-    </Window.Resources>
     <DockPanel LastChildFill="True" Background="#FF686868">
         <TabControl TabStripPlacement="Left" SelectedIndex="1">
             <TabControl.Resources>
@@ -131,79 +127,6 @@
                         </Grid.ColumnDefinitions>
                         <DockPanel LastChildFill="True">
                             <views:DataGridView/>
-                            <!-- Этот элемент мы заменили на ЮзерКонтрол. Если юзер контрол будет работать лучше, то закомментированное надо будет удалить
-                            <GroupBox>
-                                <GroupBox.Header>
-                                    <DockPanel LastChildFill="True">
-                                        <Button
-                                            x:Name="btnAddNode"
-                                            DockPanel.Dock="Left"
-                                            ToolTip="Добавить новый элемент">
-                                            <materialDesign:PackIcon
-                                                Width="24"
-                                                Height="24"
-                                                Kind="PlusBoxOutline" />
-                                        </Button>
-                                        <Button
-                                            x:Name="btnSearchNode"
-                                            DockPanel.Dock="Left"
-                                            ToolTip="Удалить выбранный элемент">
-                                            <materialDesign:PackIcon
-                                                Width="24"
-                                                Height="24"
-                                                Kind="Magnify" />
-                                        </Button>
-                                        <Button
-                                            x:Name="btnDeleteNode"
-                                            DockPanel.Dock="Left"
-                                            ToolTip="Удалить выбранный элемент">
-                                            <materialDesign:PackIcon
-                                                Width="24"
-                                                Height="24"
-                                                Kind="TrashCanOutline" />
-                                        </Button>
-                                        <Button
-                                            x:Name="btnSaveXML"
-                                            Command="{Binding SaveDataToFileCommand}"
-                                            CommandParameter="{Binding Path=Items, ElementName=dgDataTree}"
-                                            DockPanel.Dock="Right"
-                                            ToolTip="Сохранить">
-                                            <materialDesign:PackIcon
-                                                Width="24"
-                                                Height="24"
-                                                Kind="ContentSaveAllOutline" />
-                                        </Button>
-                                        <TextBox
-                                            x:Name="tbElementData"
-                                            Width="Auto"
-                                            Margin="5,0"
-                                            VerticalContentAlignment="Center"
-                                            Text="Введите текст" />
-                                    </DockPanel>
-                                </GroupBox.Header>
-                                <DataGrid
-                                    x:Name="dgDataTree"
-                                    AutoGenerateColumns="False"
-                                    ItemsSource="{Binding Diagnoses, Mode=TwoWay}"
-                                    SelectionMode="Single"
-                                    SelectionUnit="Cell"
-                                    IsReadOnly="True">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="SelectionChanged">
-                                            <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn
-                                            x:Name="dgcCode"
-                                            Binding="{Binding Code}"
-                                            Header="Диагнозы" />
-                                        <DataGridTextColumn Header="Блоки" Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                                                     AncestorType=DataGrid}, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource myBlockConverter}}" />
-                                        <DataGridTextColumn Header="Строки" Binding="{Binding}"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </GroupBox>-->
                         </DockPanel>
                         <GridSplitter
                             Grid.Column="0"

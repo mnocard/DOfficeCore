@@ -1,5 +1,5 @@
 ﻿using DOfficeCore.ViewModels.Core;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace DOfficeCore.Models
 {
@@ -19,9 +19,9 @@ namespace DOfficeCore.Models
 
         #region Lines : ObservableCollection<string> - Список строк в блоке
         /// <summary>Список строк в блоке</summary>
-        private ObservableCollection<string> _Lines;
+        private List<string> _Lines;
         /// <summary>Список строк в блоке</summary>
-        public ObservableCollection<string> Lines
+        public List<string> Lines
         {
             get => _Lines;
             set => Set(ref _Lines, value);

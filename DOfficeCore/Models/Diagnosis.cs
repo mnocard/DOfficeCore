@@ -1,10 +1,5 @@
 ﻿using DOfficeCore.ViewModels.Core;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DOfficeCore.Models
 {
@@ -23,9 +18,9 @@ namespace DOfficeCore.Models
 
         #region Blocks : ObservableCollection<Blocks> - Уникальные блоки диагноза
         /// <summary>Уникальные блоки диагноза</summary>
-        private ObservableCollection<Block> _Blocks;
+        private List<Block> _Blocks;
         /// <summary>Уникальные блоки диагноза</summary>
-        public ObservableCollection<Block> Blocks
+        public List<Block> Blocks
         {
             get => _Blocks;
             set => Set(ref _Blocks, value);

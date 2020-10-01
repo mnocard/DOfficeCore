@@ -53,7 +53,5 @@ namespace DOfficeCore.Models
         #endregion
 
         #endregion
-
-
     }
 }

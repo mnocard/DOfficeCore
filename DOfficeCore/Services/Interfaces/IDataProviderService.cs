@@ -8,6 +8,6 @@ namespace DOfficeCore.Services
     {
         bool SaveDataToFile<T>(IEnumerable<T> data, string fileName);
 
-        ObservableCollection<Diagnosis> LoadDataFromFile(string fileName);
+        IEnumerable<Diagnosis> LoadDataFromFile(string fileName);
     }
 }
