@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:DOfficeCore.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -69,14 +70,17 @@
                 x:Name="dgCodes"
                 Grid.Column="0"
                 Margin="0,0,5,0"
-                AutoGenerateColumns="False"
                 Background="#FF9E9E9E"
-                ItemsSource="{Binding Diagnoses}"
-                >
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding CurrentData.DiagnosisCode}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Code}">
+                    <DataGridTextColumn Binding="{Binding}">
                         <DataGridTextColumn.Header>
-                            <TextBlock Text="Шифр" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Foreground="Black"
+                                Text="Шифр" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
@@ -93,11 +97,15 @@
                 Margin="0,0,5,0"
                 AutoGenerateColumns="False"
                 Background="#FF9E9E9E"
-                >
+                ItemsSource="{Binding CurrentData.BlocksNames}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding}">
                         <DataGridTextColumn.Header>
-                            <TextBlock Text="Раздел" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Foreground="Black"
+                                Text="Раздел" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
@@ -112,11 +120,16 @@
                 x:Name="dgLinesContent"
                 Grid.Column="2"
                 AutoGenerateColumns="False"
-                Background="#FF9E9E9E" >
+                Background="#FF9E9E9E"
+                ItemsSource="{Binding CurrentData.LinesNames}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding}">
                         <DataGridTextColumn.Header>
-                            <TextBlock Text="Элемент" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Foreground="Black"
+                                Text="Элемент" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                 </DataGrid.Columns>

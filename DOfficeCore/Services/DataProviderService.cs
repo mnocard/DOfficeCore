@@ -1,7 +1,6 @@
 ﻿using DOfficeCore.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 
 namespace DOfficeCore.Services
@@ -21,9 +20,9 @@ namespace DOfficeCore.Services
             return result;
         }
 
-        public IEnumerable<Diagnosis> LoadDataFromFile(string fileName)
+        public List<Diagnosis> LoadDataFromFile(string fileName)
         {
-            IEnumerable<Diagnosis> result = null;
+            List<Diagnosis> result = null;
 
             if (!File.Exists(fileName))
             {
@@ -31,11 +30,9 @@ namespace DOfficeCore.Services
             }
             else
             {
-                using (StreamReader file = File.OpenText(fileName))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    result = (IEnumerable<Diagnosis>)serializer.Deserialize(file, typeof(IEnumerable<Diagnosis>));
-                }
+                using StreamReader file = File.OpenText(fileName);
+                JsonSerializer serializer = new JsonSerializer();
+                result = (List<Diagnosis>)serializer.Deserialize(file, typeof(List<Diagnosis>));
             }
 
             return result;

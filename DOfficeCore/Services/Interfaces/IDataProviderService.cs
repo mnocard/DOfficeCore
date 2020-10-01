@@ -1,6 +1,5 @@
 ﻿using DOfficeCore.Models;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace DOfficeCore.Services
 {
@@ -8,6 +7,6 @@ namespace DOfficeCore.Services
     {
         bool SaveDataToFile<T>(IEnumerable<T> data, string fileName);
 
-        IEnumerable<Diagnosis> LoadDataFromFile(string fileName);
+        List<Diagnosis> LoadDataFromFile(string fileName);
     }
 }

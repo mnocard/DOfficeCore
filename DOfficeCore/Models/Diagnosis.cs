@@ -16,7 +16,7 @@ namespace DOfficeCore.Models
         }
         #endregion
 
-        #region Blocks : ObservableCollection<Blocks> - Уникальные блоки диагноза
+        #region Blocks : List<Blocks> - Уникальные блоки диагноза
         /// <summary>Уникальные блоки диагноза</summary>
         private List<Block> _Blocks;
         /// <summary>Уникальные блоки диагноза</summary>

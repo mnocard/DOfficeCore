@@ -12,8 +12,7 @@ namespace DOfficeCore.Infrastructure.Commands
     {
         protected override void Execute(object p)
         {
-            var DiaryBox = p as TextBox;
-            if (DiaryBox == null) return;
+            if (!(p is TextBox DiaryBox)) return;
             DiaryBox.Text = String.Empty;
             DiaryBox.IsReadOnly = true;
         }

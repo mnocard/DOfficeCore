@@ -17,7 +17,7 @@ namespace DOfficeCore.Models
         }
         #endregion
 
-        #region Lines : ObservableCollection<string> - Список строк в блоке
+        #region Lines : List<string> - Список строк в блоке
         /// <summary>Список строк в блоке</summary>
         private List<string> _Lines;
         /// <summary>Список строк в блоке</summary>

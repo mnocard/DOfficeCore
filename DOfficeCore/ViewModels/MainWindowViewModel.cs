@@ -16,15 +16,20 @@ namespace DOfficeCore.ViewModels
 {
     internal class MainWindowViewModel : ViewModelCore
     {
-        public MainWindowViewModel(IDataProviderService DataProviderService)
+        public MainWindowViewModel(IDataProviderService DataProviderService, IViewCollectionProvider ViewCollectionProvider)
         {
             _DataProviderService = DataProviderService;
+            _ViewCollectionProvider = ViewCollectionProvider;
+            CurrentData = new ViewCollection();
 
             #region Команды
+
             EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
             CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
             SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
+            SelectedDataCommand = new LambdaCommand(OnSelectedDataCommandExecuted, CanSelectedDataCommandExecute);
+
             #endregion
         }
 
@@ -32,6 +37,10 @@ namespace DOfficeCore.ViewModels
 
         #region Сервис работы с файлами
         private readonly IDataProviderService _DataProviderService;
+        #endregion
+
+        #region Сервис работы с данными
+        private readonly IViewCollectionProvider _ViewCollectionProvider;
         #endregion
 
         #region Заголовок окна
@@ -56,7 +65,7 @@ namespace DOfficeCore.ViewModels
         }
         #endregion
 
-        #region Коллекция данных
+        #region Активная коллекция данных
         /// <summary>Коллекция данных для отправки в дерево</summary>
         private ViewCollection _CurrentData;
         /// <summary>Коллекция данных для отправки в дерево</summary>
@@ -92,8 +101,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда копирования текста</summary>
         private void OnCopyTextCommandExecuted(object parameter)
         {
-            string temp = parameter as string;
-            if (temp != null && temp != string.Empty && temp != "")
+            if (parameter is string temp && temp != string.Empty && temp != "")
             {
                 Clipboard.SetText(temp);
                 EnableTextBox = true;
@@ -102,8 +110,7 @@ namespace DOfficeCore.ViewModels
 
         private bool CanCopyTextCommandExecute(object parameter)
         {
-            string temp = parameter as string;
-            if (temp != null && temp != string.Empty && temp != "")
+            if (parameter is string temp && temp != string.Empty && temp != "")
             {
                 return true;
             }
@@ -126,16 +133,31 @@ namespace DOfficeCore.ViewModels
         }
         #endregion
 
-        #region Команда Загрузки данных (доработать)
+        #region Команда загрузки данных
         /// <summary>Команда Загрузки данных</summary>
         public ICommand LoadDataCommand { get; }
         /// <summary>Команда Загрузки данных</summary>
         private void OnLoadDataCommandExecuted(object parameter)
         {
-            //CurrentData = _DataProviderService.LoadDataFromFile("file.json");
+            CurrentData.DataCollection = _DataProviderService.LoadDataFromFile("file.json");
+            CurrentData = _ViewCollectionProvider.DiagnosisFromDataToView(CurrentData);
         }
 
         private bool CanLoadDataCommandExecute(object parameter) => true;
+        #endregion
+
+
+        #region Команда изменения данных по щелчку
+        /// <summary>Команда изменения данных по щелчку</summary>
+        public ICommand SelectedDataCommand { get; }
+        /// <summary>Команда изменения данных по щелчку</summary>
+        private void OnSelectedDataCommandExecuted(object parameter)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CanSelectedDataCommandExecute(object parameter) => true;
+
         #endregion
 
         #endregion

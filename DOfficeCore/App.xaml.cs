@@ -37,6 +37,7 @@ namespace DOfficeCore
         {
             services.AddSingleton<MainWindowViewModel>();
             services.AddTransient<IDataProviderService, DataProviderService>();
+            services.AddSingleton<IViewCollectionProvider, ViewCollectionProvider>();
         }
     }
 }
