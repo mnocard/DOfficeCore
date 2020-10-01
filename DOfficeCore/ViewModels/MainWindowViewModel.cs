@@ -16,8 +16,10 @@ namespace DOfficeCore.ViewModels
 {
     internal class MainWindowViewModel : ViewModelCore
     {
-        public MainWindowViewModel()
+        public MainWindowViewModel(IDataProviderService DataProviderService)
         {
+            _DataProviderService = DataProviderService;
+
             #region Команды
             EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
             CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
@@ -28,6 +30,11 @@ namespace DOfficeCore.ViewModels
         }
 
         #region Свойства
+
+        #region Сервис работы с файлами
+        private readonly IDataProviderService _DataProviderService;
+        #endregion
+
         #region Заголовок окна
         /// <summary>Заголовок окна</summary>
         private string _Title = "Кабинет врача";
@@ -145,7 +152,7 @@ namespace DOfficeCore.ViewModels
                 {
                     col.Add(item);
                 }
-                if(DataProviderService.SaveDataToFile<Diagnosis>(col, "file"))
+                if(_DataProviderService.SaveDataToFile<Diagnosis>(col, "file"))
                 {
                     MessageBox.Show("Файл успешно сохранён.");
                 }
@@ -164,7 +171,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда Загрузки данных</summary>
         private void OnLoadDataCommandExecuted(object parameter)
         {
-            Diagnoses = DataProviderService.LoadDataFromFile("file.json");
+            Diagnoses = _DataProviderService.LoadDataFromFile("file.json");
         }
 
         private bool CanLoadDataCommandExecute(object parameter) => true;

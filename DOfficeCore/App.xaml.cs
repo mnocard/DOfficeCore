@@ -1,4 +1,5 @@
-﻿using DOfficeCore.ViewModels;
+﻿using DOfficeCore.Services;
+using DOfficeCore.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -23,6 +24,9 @@ namespace DOfficeCore
             {
                 if (_Hosting != null) return _Hosting;
                 var host_builder = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs());
+
+                host_builder.ConfigureServices(ConfigureServices);
+
                 return _Hosting = host_builder.Build();
             }
         }
@@ -32,6 +36,7 @@ namespace DOfficeCore
         private static void ConfigureServices (HostBuilderContext host, IServiceCollection services)
         {
             services.AddSingleton<MainWindowViewModel>();
+            services.AddTransient<IDataProviderService, DataProviderService>();
         }
     }
 }

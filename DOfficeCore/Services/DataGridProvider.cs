@@ -72,8 +72,10 @@ namespace DOfficeCore.Services
             if (DataCollection == null) MessageBox.Show("Ошибка загрузки данных");
             if (Provider == null)
             {
-                Provider = new DataGridProvider();
-                Provider.DiagnosisCode = (ObservableCollection<string>)DataCollection.Select(t => t.Code);
+                Provider = new DataGridProvider
+                {
+                    DiagnosisCode = (ObservableCollection<string>)DataCollection.Select(t => t.Code)
+                };
                 return Provider;
             }
             else

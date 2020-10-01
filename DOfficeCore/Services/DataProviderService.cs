@@ -1,19 +1,15 @@
 ﻿using DOfficeCore.Models;
 using Newtonsoft.Json;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows;
-using System.Windows.Documents;
 
 namespace DOfficeCore.Services
 {
     /// <summary>Класс, реализующий сохранение данных в файл и загрузки данных из файла</summary>
-    static class DataProviderService
+    internal class DataProviderService : IDataProviderService
     {
-
-        public static bool SaveDataToFile<T>(IEnumerable<T> data, string fileName)
+        public bool SaveDataToFile<T>(IEnumerable<T> data, string fileName)
         {
             bool result = false;
             using (StreamWriter file = File.CreateText(fileName + ".json"))
@@ -25,7 +21,7 @@ namespace DOfficeCore.Services
             return result;
         }
 
-        public static ObservableCollection<Diagnosis> LoadDataFromFile(string fileName)
+        public ObservableCollection<Diagnosis> LoadDataFromFile(string fileName)
         {
             ObservableCollection<Diagnosis> result = null;
 
