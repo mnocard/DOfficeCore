@@ -9,6 +9,7 @@ using System.Windows.Documents;
 
 namespace DOfficeCore.Services
 {
+    /// <summary>Класс, реализующий сохранение данных в файл и загрузки данных из файла</summary>
     static class DataProviderService
     {
 

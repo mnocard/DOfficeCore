@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace DOfficeCore.ViewModels
@@ -22,6 +23,7 @@ namespace DOfficeCore.ViewModels
             CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
             SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
+            //SelectionChangedCommand = new LambdaCommand(OnSelectionChangedCommandExecuted, CanSelectionChangedCommandExecute);
             #endregion
         }
 
@@ -59,13 +61,50 @@ namespace DOfficeCore.ViewModels
         }
         #endregion
 
+        #region dgData : ObservableCollection<DataGridProvider> - Данные для датагрида
+
+        /// <summary>Данные для датагрида</summary>
+        private ObservableCollection<DataGridProvider> _dgData;
+
+        /// <summary>Данные для датагрида</summary>
+        public ObservableCollection<DataGridProvider> dgData
+        {
+            get => _dgData;
+            set => Set(ref _dgData, value);
+        }
+
+        #endregion
+
+        //#region Текущая ячейка
+        ///// <summary>Текущая ячейка</summary>
+        //private DataGridCellInfo _cellInfo;
+        ///// <summary>Текущая ячейка</summary>
+        //public DataGridCellInfo CellInfo
+        //{
+        //    get => _cellInfo;
+        //    set => _cellInfo = value;
+        //}
+        //#endregion
+
+        //#region Blocks : ObservableCollection<Block> - Коллекция блоков
+        ///// <summary>Коллекция блоков</summary>
+        //private ObservableCollection<Block> _Blocks;
+        ///// <summary>Коллекция блоков</summary>
+        //public ObservableCollection<Block> Blocks
+        //{
+        //    get => _Blocks;
+        //    set => Set(ref _Blocks, value);
+        //}
+        //#endregion
+
         #endregion
 
         #region Команды
 
         #region Команда редактирования текста
+        /// <summary>Команда редактирования текста</summary>
         public ICommand EditTextCommand { get; }
-
+        /// <summary>Команда редактирования текста</summary>
         private void OnEditTextCommandExecuted(object p)
         {
             if (EnableTextBox) EnableTextBox = false;
@@ -78,8 +117,9 @@ namespace DOfficeCore.ViewModels
         #endregion
 
         #region Команда копирования текста
+        /// <summary>Команда копирования текста</summary>
         public ICommand CopyTextCommand { get; }
-
+        /// <summary>Команда копирования текста</summary>
         private void OnCopyTextCommandExecuted(object parameter)
         {
             if (parameter as string != null)
@@ -93,8 +133,9 @@ namespace DOfficeCore.ViewModels
         #endregion
 
         #region Команда сохранения данных в файл
+        /// <summary>Команда сохранения данных в файл</summary>
         public ICommand SaveDataToFileCommand { get; }
-
+        /// <summary>Команда сохранения данных в файл</summary>
         private void OnSaveDataToFileCommandExecuted(object p)
         {
             if (p as IEnumerable != null)
@@ -118,8 +159,9 @@ namespace DOfficeCore.ViewModels
         #endregion
 
         #region Команда Загрузки данных
+        /// <summary>Команда Загрузки данных</summary>
         public ICommand LoadDataCommand { get; }
-
+        /// <summary>Команда Загрузки данных</summary>
         private void OnLoadDataCommandExecuted(object parameter)
         {
             Diagnoses = DataProviderService.LoadDataFromFile("file.json");
@@ -127,6 +169,35 @@ namespace DOfficeCore.ViewModels
 
         private bool CanLoadDataCommandExecute(object parameter) => true;
         #endregion
+
+        //#region Команда получения данных из выделенной ячейки
+        ///// <summary>Команда Загрузки данных</summary>
+        //public ICommand SelectionChangedCommand { get; }
+        ///// <summary>Команда Загрузки данных</summary>
+        //private void OnSelectionChangedCommandExecuted(object parameter)
+        //{
+        //    if (parameter as DataGrid != null)
+        //    {
+        //        Diagnosis dg = (Diagnosis)(parameter as DataGrid).CurrentItem;
+
+        //        var a = parameter as DataGrid;
+
+
+        //        var i = (parameter as DataGrid).Columns;
+                
+        //        var x = (parameter as DataGrid).CurrentCell.Item;
+
+        //        var y = x as Diagnosis;
+
+        //        var z = y.Blocks;
+
+        //        //a.ItemsSource = ;
+        //    }
+        //}
+
+        //private bool CanSelectionChangedCommandExecute(object parameter) => true;
+
+        //#endregion
 
         #endregion
     }
