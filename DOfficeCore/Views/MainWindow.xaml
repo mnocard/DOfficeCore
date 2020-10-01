@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:views="clr-namespace:DOfficeCore.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -29,11 +30,11 @@
     <Window.Resources>
         <data:BlockConverter x:Key="myBlockConverter" />
     </Window.Resources>
-    <DockPanel LastChildFill="True">
-        <TabControl BorderThickness="0" TabStripPlacement="Left">
+    <DockPanel LastChildFill="True" Background="#FF686868">
+        <TabControl TabStripPlacement="Left" SelectedIndex="1">
             <TabControl.Resources>
                 <Style TargetType="{x:Type Grid}">
-                    <Setter Property="Background" Value="#20232A" />
+                    <Setter Property="Background" Value="#FF686868" />
                 </Style>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Template">
@@ -42,7 +43,7 @@
                                 <Border
                                     x:Name="Border"
                                     Margin="5,5,0,0"
-                                    BorderBrush="Black"
+                                    BorderBrush="#FF686868"
                                     BorderThickness="1,1,0,1"
                                     CornerRadius="10,0,0,10">
                                     <ContentPresenter
@@ -54,10 +55,10 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="White" />
+                                        <Setter TargetName="Border" Property="Background" Value="#FFC2C0C0" />
                                         <Setter TargetName="Border" Property="Margin" Value="5,5,-1,0" />
-                                        <Setter TargetName="Border" Property="Background" Value="White" />
-                                        <Setter TargetName="Border" Property="BorderBrush" Value="White" />
+                                        <Setter TargetName="Border" Property="Background" Value="#FFC2C0C0" />
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#FFC2C0C0" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="False">
                                         <Setter TargetName="Border" Property="Background" Value="Gray" />
@@ -69,17 +70,22 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
+            <TabItem Visibility="Hidden" Height="33"/>
             <TabItem>
                 <TabItem.Header>
                     <materialDesign:PackIcon
                         Width="48"
                         Height="48"
-                        Kind="NotebookOutline" />
+                        Kind="NotebookOutline" >
+                        <materialDesign:PackIcon.Background>
+                            <ImageBrush/>
+                        </materialDesign:PackIcon.Background>
+                    </materialDesign:PackIcon>
                 </TabItem.Header>
-                <Grid>
+                <Grid Margin="-3">
                     <Grid.Resources>
                         <Style TargetType="{x:Type Grid}">
-                            <Setter Property="Background" Value="White" />
+                            <Setter Property="Background" Value="#FFD9D7D7" />
                         </Style>
                     </Grid.Resources>
                     <Grid.RowDefinitions>
@@ -124,6 +130,8 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <DockPanel LastChildFill="True">
+                            <views:DataGridView/>
+                            <!-- Этот элемент мы заменили на ЮзерКонтрол. Если юзер контрол будет работать лучше, то закомментированное надо будет удалить
                             <GroupBox>
                                 <GroupBox.Header>
                                     <DockPanel LastChildFill="True">
@@ -195,7 +203,7 @@
                                         <DataGridTextColumn Header="Строки" Binding="{Binding}"/>
                                     </DataGrid.Columns>
                                 </DataGrid>
-                            </GroupBox>
+                            </GroupBox>-->
                         </DockPanel>
                         <GridSplitter
                             Grid.Column="0"
@@ -207,7 +215,7 @@
                         <GroupBox Grid.Column="1" MinWidth="300">
                             <GroupBox.Header>
                                 <UniformGrid Rows="1">
-                                    <Button>
+                                    <Button Background="#FFC2C0C0">
                                         <materialDesign:PackIcon
                                             Width="24"
                                             Height="24"
@@ -265,6 +273,7 @@
                         Height="48"
                         Kind="UserOutline" />
                 </TabItem.Header>
+                <Grid Background="#FFD9D7D7" Margin="-3"/>
             </TabItem>
         </TabControl>
     </DockPanel>
