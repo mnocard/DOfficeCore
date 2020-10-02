@@ -52,5 +52,6 @@ namespace DOfficeCore.Services
 
             return viewCollection;
         }
+
     }
 }
