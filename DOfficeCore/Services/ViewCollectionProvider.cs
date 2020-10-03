@@ -48,5 +48,6 @@ namespace DOfficeCore.Services
             viewCollection.LinesNames = new ObservableCollection<string>(tempBlock.Lines);
         }
 
+
     }
 }

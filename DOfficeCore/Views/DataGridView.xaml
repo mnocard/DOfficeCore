@@ -47,7 +47,8 @@
                 <Button
                     x:Name="btnDeleteNode"
                     DockPanel.Dock="Left"
-                    ToolTip="Удалить выбранный элемент">
+                    ToolTip="Удалить выбранный элемент"
+                    Command="{Binding RemoveElementCommand}">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
