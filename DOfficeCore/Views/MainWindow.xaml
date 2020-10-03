@@ -87,7 +87,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40" />
                         <RowDefinition />
-                        <RowDefinition Height="50" />
+                        <RowDefinition Height="0" />
                     </Grid.RowDefinitions>
                     <StackPanel
                         Grid.Row="0"
@@ -122,8 +122,8 @@
                     </StackPanel>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="2*" MinWidth="500"/>
+                            <ColumnDefinition Width="*" MinWidth="300"/>
                         </Grid.ColumnDefinitions>
                         <DockPanel LastChildFill="True">
                             <views:DataGridView />
@@ -185,7 +185,7 @@
                                 MinWidth="300"
                                 AcceptsReturn="True"
                                 IsReadOnly="{Binding EnableTextBox}"
-                                Text="Hallo"
+                                materialDesign:HintAssist.Hint="Введите текст"
                                 TextWrapping="Wrap"
                                 VerticalScrollBarVisibility="Auto" />
                         </GroupBox>

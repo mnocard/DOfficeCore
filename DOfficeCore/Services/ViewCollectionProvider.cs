@@ -8,19 +8,18 @@ namespace DOfficeCore.Services
     class ViewCollectionProvider : IViewCollectionProvider
     {
 
-        public ViewCollection DiagnosisFromDataToView (ViewCollection viewCollection)
+        public void DiagnosisFromDataToView (ViewCollection viewCollection)
         {
-            if (viewCollection == null) return null;
+            if (viewCollection == null) return;
 
             viewCollection.DiagnosisCode = new ObservableCollection<string>(viewCollection.DataCollection.
                 Select(t => t.Code));
-            return viewCollection;
         }
 
-        public ViewCollection BlocksFromDataToView (ViewCollection viewCollection)
+        public void BlocksFromDataToView (ViewCollection viewCollection)
         {
             if (viewCollection == null ||
-                viewCollection.CurrentDiagnosis == null) return null;
+                viewCollection.CurrentDiagnosis == null) return;
 
             viewCollection.BlocksNames = null;
 
@@ -30,16 +29,14 @@ namespace DOfficeCore.Services
             var tempBlockNames = tempDiagnosis.Blocks.Select(t => t.Name);
 
             viewCollection.BlocksNames = new ObservableCollection<string>(tempBlockNames);
-
-            return viewCollection;
         }
 
-        public ViewCollection LinesFromDataToView (ViewCollection viewCollection)
+        public void LinesFromDataToView (ViewCollection viewCollection)
         {
             if (viewCollection == null ||
                 viewCollection.BlocksNames == null ||
                 viewCollection.CurrentDiagnosis == null ||
-                viewCollection.CurrentBlock == null) return null;
+                viewCollection.CurrentBlock == null) return;
 
             viewCollection.LinesNames = null;
 
@@ -49,8 +46,6 @@ namespace DOfficeCore.Services
             var tempBlock = tempDiagnosis.Blocks.Single(t => t.Name.Equals(viewCollection.CurrentBlock));
 
             viewCollection.LinesNames = new ObservableCollection<string>(tempBlock.Lines);
-
-            return viewCollection;
         }
 
     }

@@ -22,8 +22,8 @@
                         Width="24"
                         Height="24"
                         Kind="PlusBoxOutline" />
-                </Button>
-                <Button
+                    </Button>
+                    <Button
                     x:Name="btnEditNode"
                     Command="{Binding EditElementCommand}"
                     CommandTarget="{Binding ElementName=tbMultiBox, Path=Text}"
@@ -35,6 +35,8 @@
                 </Button>
                 <Button
                     x:Name="btnSearchNode"
+                    Command="{Binding SearchElementCommand}"
+                    Cursor="Hand"
                     DockPanel.Dock="Left"
                     ToolTip="Найти элемент">
                     <materialDesign:PackIcon
@@ -66,14 +68,15 @@
                     Width="Auto"
                     Margin="5,0"
                     VerticalContentAlignment="Center"
+                    materialDesign:HintAssist.Hint="Введите текст"
                     Text="{Binding MultiBox}" />
             </DockPanel>
         </GroupBox.Header>
         <Grid ShowGridLines="False">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" MinWidth="100"/>
+                <ColumnDefinition Width="Auto" MinWidth="100"/>
+                <ColumnDefinition Width="*" MinWidth="100"/>
             </Grid.ColumnDefinitions>
             <DataGrid
                 x:Name="dgCodes"
@@ -96,11 +99,11 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=.}">
                         <DataGridTextColumn.Header>
-                            <TextBlock
+                            <Button
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Foreground="Black"
-                                Text="Шифр" />
+                                Content="Шифр" BorderBrush="{x:Null}" Style="{DynamicResource MaterialDesignOutlinedButton}"/>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
@@ -132,11 +135,11 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=.}">
                         <DataGridTextColumn.Header>
-                            <TextBlock
+                            <Button
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Foreground="Black"
-                                Text="Раздел" />
+                                Content="Раздел" BorderBrush="{x:Null}" Style="{DynamicResource MaterialDesignOutlinedButton}"/>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
@@ -167,11 +170,11 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=.}">
                         <DataGridTextColumn.Header>
-                            <TextBlock
+                            <Button
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Foreground="Black"
-                                Text="Элемент" />
+                                Content="Элемент" BorderBrush="{x:Null}" Style="{DynamicResource MaterialDesignOutlinedButton}"/>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                 </DataGrid.Columns>

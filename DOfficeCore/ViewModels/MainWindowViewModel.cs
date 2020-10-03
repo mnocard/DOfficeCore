@@ -97,7 +97,7 @@ namespace DOfficeCore.ViewModels
         #region MultiBox : string - Содержимое мультибокса
 
         /// <summary>Содержимое мультибокса</summary>
-        private string _MultiBox = "Введите текст";
+        private string _MultiBox;
 
         /// <summary>Содержимое мультибокса</summary>
         public string MultiBox
@@ -172,7 +172,7 @@ namespace DOfficeCore.ViewModels
         private void OnLoadDataCommandExecuted(object parameter)
         {
             CurrentData.DataCollection = _DataProviderService.LoadDataFromFile("file.json");
-            CurrentData = _ViewCollectionProvider.DiagnosisFromDataToView(CurrentData);
+            _ViewCollectionProvider.DiagnosisFromDataToView(CurrentData);
         }
 
         private bool CanLoadDataCommandExecute(object parameter) => true;
@@ -189,12 +189,12 @@ namespace DOfficeCore.ViewModels
                 if (datagrid.Name == "dgCodes")
                 {
                     CurrentData.CurrentDiagnosis = (string)datagrid.CurrentItem;
-                    CurrentData = _ViewCollectionProvider.BlocksFromDataToView(CurrentData);
+                    _ViewCollectionProvider.BlocksFromDataToView(CurrentData);
                 }
                 else if (datagrid.Name == "dgBlocksNames")
                 {
                     CurrentData.CurrentBlock = (string)datagrid.CurrentItem;
-                    CurrentData = _ViewCollectionProvider.LinesFromDataToView(CurrentData);
+                    _ViewCollectionProvider.LinesFromDataToView(CurrentData);
                 }
                 else if (datagrid.Name == "dgLinesContent")
                 {
@@ -219,13 +219,13 @@ namespace DOfficeCore.ViewModels
                 if (FocusedDataGrid == "dgCodes" && !MultiBox.Equals(CurrentData.CurrentDiagnosis))
                 {
                     CurrentData.DataCollection.Find(t => t.Code.Equals(CurrentData.CurrentDiagnosis)).Code = MultiBox;
-                    CurrentData = _ViewCollectionProvider.DiagnosisFromDataToView(CurrentData);
+                    _ViewCollectionProvider.DiagnosisFromDataToView(CurrentData);
                 }
                 if (FocusedDataGrid == "dgBlocksNames" && !MultiBox.Equals(CurrentData.CurrentBlock))
                 {
                     CurrentData.DataCollection.Find(t => t.Code.Equals(CurrentData.CurrentDiagnosis)).
                         Blocks.Find(i => i.Name.Equals(CurrentData.CurrentBlock)).Name = MultiBox;
-                    CurrentData = _ViewCollectionProvider.BlocksFromDataToView(CurrentData);
+                    _ViewCollectionProvider.BlocksFromDataToView(CurrentData);
                 }
                 if (FocusedDataGrid == "dgLinesContent" && !MultiBox.Equals(CurrentData.CurrentLine))
                 {
@@ -237,7 +237,7 @@ namespace DOfficeCore.ViewModels
                         Blocks.Find(i => i.Name.Equals(CurrentData.CurrentBlock)).
                         Lines.Add(MultiBox);
 
-                    CurrentData = _ViewCollectionProvider.LinesFromDataToView(CurrentData);
+                    _ViewCollectionProvider.LinesFromDataToView(CurrentData);
                 }
 
             }
@@ -270,16 +270,30 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда поиска элементов</summary>
         private void OnSearchElementCommandExecuted(object parameter)
         {
-            if (MultiBox != string.Empty && MultiBox != "")
+            if (MultiBox != string.Empty)
             {
-
+                CurrentData.LinesNames = null;
+                CurrentData.LinesNames = new ObservableCollection<string>();
+                foreach (var line in from Diagnosis diagnosis in CurrentData.DataCollection
+                                     from Block block in diagnosis.Blocks
+                                     from string line in block.Lines
+                                     where line.Contains(MultiBox)
+                                     select line)
+                {
+                    CurrentData.LinesNames.Add(line);
+                }
+            }
+            else if (MultiBox != null)
+            {
+                _ViewCollectionProvider.DiagnosisFromDataToView(CurrentData);
+                _ViewCollectionProvider.BlocksFromDataToView(CurrentData);
+                _ViewCollectionProvider.LinesFromDataToView(CurrentData);
             }
         }
 
         private bool CanSearchElementCommandExecute(object parameter) => true;
 
         #endregion
-
 
         #endregion
     }

@@ -4,8 +4,8 @@ namespace DOfficeCore.Services
 {
      interface IViewCollectionProvider
     {
-        ViewCollection DiagnosisFromDataToView(ViewCollection viewCollection);
-        ViewCollection BlocksFromDataToView(ViewCollection viewCollection);
-        ViewCollection LinesFromDataToView(ViewCollection viewCollection);
+        void DiagnosisFromDataToView(ViewCollection viewCollection);
+        void BlocksFromDataToView(ViewCollection viewCollection);
+        void LinesFromDataToView(ViewCollection viewCollection);
     }
 }
