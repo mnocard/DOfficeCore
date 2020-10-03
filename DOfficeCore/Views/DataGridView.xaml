@@ -17,7 +17,8 @@
                 <Button
                     x:Name="btnAddNode"
                     DockPanel.Dock="Left"
-                    ToolTip="Добавить новый элемент">
+                    ToolTip="Добавить новый элемент"
+                    Command="{Binding AddElementCommand}">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
@@ -25,7 +26,7 @@
                 </Button>
                 <Button
                     x:Name="btnEditNode"
-                    Command="{Binding EditElementCommand}"
+                    Command="{Binding EditElementCommand, UpdateSourceTrigger=PropertyChanged}"
                     CommandTarget="{Binding ElementName=tbMultiBox, Path=Text}"
                     ToolTip="Редактировать выбранный элемент">
                     <materialDesign:PackIcon
@@ -35,7 +36,7 @@
                 </Button>
                 <Button
                     x:Name="btnSearchNode"
-                    Command="{Binding SearchElementCommand}"
+                    Command="{Binding SearchElementCommand, UpdateSourceTrigger=PropertyChanged}"
                     Cursor="Hand"
                     DockPanel.Dock="Left"
                     ToolTip="Найти элемент">
@@ -46,7 +47,7 @@
                 </Button>
                 <Button
                     x:Name="btnDeleteNode"
-                    Command="{Binding RemoveElementCommand}"
+                    Command="{Binding RemoveElementCommand, UpdateSourceTrigger=PropertyChanged}"
                     DockPanel.Dock="Left"
                     ToolTip="Удалить выбранный элемент">
                     <materialDesign:PackIcon
@@ -56,7 +57,7 @@
                 </Button>
                 <Button
                     x:Name="btnSaveXML"
-                    Command="{Binding SaveDataToFileCommand}"
+                    Command="{Binding SaveDataToFileCommand, UpdateSourceTrigger=PropertyChanged}"
                     DockPanel.Dock="Right"
                     ToolTip="Сохранить коллекцию">
                     <materialDesign:PackIcon

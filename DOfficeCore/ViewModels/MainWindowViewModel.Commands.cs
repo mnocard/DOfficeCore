@@ -1,11 +1,6 @@
-﻿using System;
-using DOfficeCore.Models;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using DOfficeCore.Infrastructure.Commands;
 
 namespace DOfficeCore.ViewModels
 {
@@ -41,14 +36,7 @@ namespace DOfficeCore.ViewModels
             }
         }
 
-        private bool CanCopyTextCommandExecute(object parameter)
-        {
-            if (parameter is string temp && temp != string.Empty && temp != "")
-            {
-                return true;
-            }
-            return false;
-        }
+        private bool CanCopyTextCommandExecute(object parameter) => parameter is string temp && temp != string.Empty && temp != "";
         #endregion
 
         #region Команда сохранения данных в файл
@@ -57,13 +45,11 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда сохранения данных в файл</summary>
         private void OnSaveDataToFileCommandExecuted(object p)
         {
-            if (_ViewCollection.DataCollection != null) _DataProviderService.SaveDataToFile(_ViewCollection.DataCollection, "file1");
+            if (_ViewCollection.DataCollection != null) 
+                _DataProviderService.SaveDataToFile(_ViewCollection.DataCollection, "file1");
         }
 
-        private bool CanSaveDataToFileCommandExecute(object p)
-        {
-            return true;
-        }
+        private bool CanSaveDataToFileCommandExecute(object p) => true;
         #endregion
 
         #region Команда загрузки данных
@@ -87,21 +73,8 @@ namespace DOfficeCore.ViewModels
         {
             if ((parameter is DataGrid datagrid) && datagrid.CurrentItem != null)
             {
-                if (datagrid.Name == "dgCodes")
-                {
-                    _ViewCollection.CurrentDiagnosis = (string)datagrid.CurrentItem;
-                    _ViewCollectionProvider.BlocksFromDataToView();
-                }
-                else if (datagrid.Name == "dgBlocksNames")
-                {
-                    _ViewCollection.CurrentBlock = (string)datagrid.CurrentItem;
-                    _ViewCollectionProvider.LinesFromDataToView();
-                }
-                else if (datagrid.Name == "dgLinesContent")
-                {
-                    _ViewCollection.CurrentLine = (string)datagrid.CurrentItem;
-                }
                 FocusedDataGrid = datagrid.Name;
+                _ViewCollectionProvider.SelectedData(FocusedDataGrid, (string)datagrid.CurrentItem);
             }
         }
 
@@ -115,42 +88,17 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда редактирования выбранного элемента</summary>
         private void OnEditElementCommandExecuted(object parameter)
         {
-            if (FocusedDataGrid != null)
-            {
-                if (FocusedDataGrid == "dgCodes" && !MultiBox.Equals(_ViewCollection.CurrentDiagnosis))
-                {
-                    _ViewCollection.DataCollection.Find(t => t.Code.Equals(_ViewCollection.CurrentDiagnosis)).Code = MultiBox;
-                    _ViewCollectionProvider.DiagnosisFromDataToView();
-                }
-                if (FocusedDataGrid == "dgBlocksNames" && !MultiBox.Equals(_ViewCollection.CurrentBlock))
-                {
-                    _ViewCollection.DataCollection.Find(t => t.Code.Equals(_ViewCollection.CurrentDiagnosis)).
-                        Blocks.Find(i => i.Name.Equals(_ViewCollection.CurrentBlock)).Name = MultiBox;
-                    _ViewCollectionProvider.BlocksFromDataToView();
-                }
-                if (FocusedDataGrid == "dgLinesContent" && !MultiBox.Equals(_ViewCollection.CurrentLine))
-                {
-                    _ViewCollection.DataCollection.Find(t => t.Code.Equals(_ViewCollection.CurrentDiagnosis)).
-                        Blocks.Find(i => i.Name.Equals(_ViewCollection.CurrentBlock)).
-                        Lines.Remove(_ViewCollection.CurrentLine);
-
-                    _ViewCollection.DataCollection.Find(t => t.Code.Equals(_ViewCollection.CurrentDiagnosis)).
-                        Blocks.Find(i => i.Name.Equals(_ViewCollection.CurrentBlock)).
-                        Lines.Add(MultiBox);
-
-                    _ViewCollectionProvider.LinesFromDataToView();
-                }
-            }
+            if (FocusedDataGrid != null) _ViewCollectionProvider.EditElement(FocusedDataGrid, MultiBox);
         }
 
         private bool CanEditElementCommandExecute(object parameter) => true;
 
         #endregion
 
-        #region Команда отправки элемента из датагрид в текстблок
-        /// <summary>Команда отправки элемента из датагрид в текстблок</summary>
+        #region Команда отправки элемента из датагрид в мультибокс
+        /// <summary>Команда отправки элемента из датагрид в мультибокс</summary>
         public ICommand StringTransferCommand { get; }
-        /// <summary>Команда отправки элемента из датагрид в текстблок</summary>
+        /// <summary>Команда отправки элемента из датагрид в мультибокс</summary>
         private void OnStringTransferCommandExecuted(object parameter)
         {
             if ((parameter is DataGrid datagrid) && datagrid.CurrentItem != null)
@@ -170,24 +118,10 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда поиска элементов</summary>
         private void OnSearchElementCommandExecuted(object parameter)
         {
-            if (MultiBox != string.Empty)
+            if (MultiBox != null && MultiBox != string.Empty && MultiBox.Length > 3)
             {
-                _ViewCollection.LinesNames = null;
-                _ViewCollection.LinesNames = new ObservableCollection<string>();
-                foreach (var line in from Diagnosis diagnosis in _ViewCollection.DataCollection
-                                     from Block block in diagnosis.Blocks
-                                     from string line in block.Lines
-                                     where line.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase)
-                                     select line)
-                {
-                    _ViewCollection.LinesNames.Add(line);
-                }
-            }
-            else if (MultiBox != null)
-            {
-                _ViewCollectionProvider.DiagnosisFromDataToView();
-                _ViewCollectionProvider.BlocksFromDataToView();
-                _ViewCollectionProvider.LinesFromDataToView();
+                _ViewCollectionProvider.SearchElement(MultiBox);
+                FocusedDataGrid = null;
             }
         }
 
@@ -201,75 +135,26 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда удаления элементов из списка</summary>
         private void OnRemoveElementCommandExecuted(object parameter)
         {
-            if (FocusedDataGrid != null && MultiBox != null)
-            {
-                if (FocusedDataGrid == "dgCodes" && MultiBox.Equals(_ViewCollection.CurrentDiagnosis))
-                {
-                    for (int i = 0; i < _ViewCollection.DataCollection.Count; i++)
-                    {
-                        if (_ViewCollection.DataCollection[i].Code.Equals(MultiBox))
-                        {
-                            MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
-                            if (result == MessageBoxResult.Yes)
-                            {
-                                _ViewCollection.DataCollection.RemoveAt(i);
-                                _ViewCollectionProvider.DiagnosisFromDataToView();
-                                _ViewCollection.BlocksNames = null;
-                                _ViewCollection.LinesNames = null;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (FocusedDataGrid == "dgBlocksNames" && MultiBox.Equals(_ViewCollection.CurrentBlock))
-                {
-                    foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
-                    {
-                        for (int i = 0; i < diagnosis.Blocks.Count; i++)
-                        {
-                            if (diagnosis.Blocks[i].Name.Equals(MultiBox))
-                            {
-                                MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
-                                if (result == MessageBoxResult.Yes)
-                                {
-                                    diagnosis.Blocks.RemoveAt(i);
-                                    _ViewCollectionProvider.BlocksFromDataToView();
-                                    _ViewCollection.LinesNames = null;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                if (FocusedDataGrid == "dgLinesContent" && MultiBox.Equals(_ViewCollection.CurrentLine))
-                {
-                    foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
-                    {
-                        foreach (Block block in diagnosis.Blocks)
-                        {
-                            for (int i = 0; i < block.Lines.Count; i++)
-                            {
-                                if(block.Lines[i].Equals(MultiBox))
-                                {
-                                    MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
-                                    if (result == MessageBoxResult.Yes)
-                                    {
-                                        block.Lines.RemoveAt(i);
-                                        _ViewCollectionProvider.LinesFromDataToView();
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            _ViewCollectionProvider.RemoveElement(FocusedDataGrid, MultiBox);
         }
 
-        private bool CanRemoveElementCommandExecute(object parameter) => true;
-        
+        private bool CanRemoveElementCommandExecute(object parameter) => FocusedDataGrid != null && MultiBox != null;
+
         #endregion
 
+        #region Команда добавления элемента
+        /// <summary>Команда добавления элемента</summary>
+        public ICommand AddElementCommand { get; }
+        /// <summary>Команда добавления элемента</summary>
+        private void OnAddElementCommandExecuted(object parameter)
+        {
+            
+        }
+
+        private bool CanAddElementCommandExecute(object parameter) => true;
+
+
+        #endregion
         #endregion
     }
 }
