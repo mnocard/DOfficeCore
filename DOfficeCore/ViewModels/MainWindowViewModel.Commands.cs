@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using DOfficeCore.Infrastructure.Commands;
 
 namespace DOfficeCore.ViewModels
 {
@@ -56,7 +57,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда сохранения данных в файл</summary>
         private void OnSaveDataToFileCommandExecuted(object p)
         {
-            if (CurrentData.DataCollection != null) _DataProviderService.SaveDataToFile(CurrentData.DataCollection, "file1");
+            if (_ViewCollection.DataCollection != null) _DataProviderService.SaveDataToFile(_ViewCollection.DataCollection, "file1");
         }
 
         private bool CanSaveDataToFileCommandExecute(object p)
@@ -71,8 +72,8 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда Загрузки данных</summary>
         private void OnLoadDataCommandExecuted(object parameter)
         {
-            CurrentData.DataCollection = _DataProviderService.LoadDataFromFile("file.json");
-            _ViewCollectionProvider.DiagnosisFromDataToView(CurrentData);
+            _ViewCollection.DataCollection = _DataProviderService.LoadDataFromFile("file.json");
+            _ViewCollectionProvider.DiagnosisFromDataToView();
         }
 
         private bool CanLoadDataCommandExecute(object parameter) => true;
@@ -88,17 +89,17 @@ namespace DOfficeCore.ViewModels
             {
                 if (datagrid.Name == "dgCodes")
                 {
-                    CurrentData.CurrentDiagnosis = (string)datagrid.CurrentItem;
-                    _ViewCollectionProvider.BlocksFromDataToView(CurrentData);
+                    _ViewCollection.CurrentDiagnosis = (string)datagrid.CurrentItem;
+                    _ViewCollectionProvider.BlocksFromDataToView();
                 }
                 else if (datagrid.Name == "dgBlocksNames")
                 {
-                    CurrentData.CurrentBlock = (string)datagrid.CurrentItem;
-                    _ViewCollectionProvider.LinesFromDataToView(CurrentData);
+                    _ViewCollection.CurrentBlock = (string)datagrid.CurrentItem;
+                    _ViewCollectionProvider.LinesFromDataToView();
                 }
                 else if (datagrid.Name == "dgLinesContent")
                 {
-                    CurrentData.CurrentLine = (string)datagrid.CurrentItem;
+                    _ViewCollection.CurrentLine = (string)datagrid.CurrentItem;
                 }
                 FocusedDataGrid = datagrid.Name;
             }
@@ -116,30 +117,29 @@ namespace DOfficeCore.ViewModels
         {
             if (FocusedDataGrid != null)
             {
-                if (FocusedDataGrid == "dgCodes" && !MultiBox.Equals(CurrentData.CurrentDiagnosis))
+                if (FocusedDataGrid == "dgCodes" && !MultiBox.Equals(_ViewCollection.CurrentDiagnosis))
                 {
-                    CurrentData.DataCollection.Find(t => t.Code.Equals(CurrentData.CurrentDiagnosis)).Code = MultiBox;
-                    _ViewCollectionProvider.DiagnosisFromDataToView(CurrentData);
+                    _ViewCollection.DataCollection.Find(t => t.Code.Equals(_ViewCollection.CurrentDiagnosis)).Code = MultiBox;
+                    _ViewCollectionProvider.DiagnosisFromDataToView();
                 }
-                if (FocusedDataGrid == "dgBlocksNames" && !MultiBox.Equals(CurrentData.CurrentBlock))
+                if (FocusedDataGrid == "dgBlocksNames" && !MultiBox.Equals(_ViewCollection.CurrentBlock))
                 {
-                    CurrentData.DataCollection.Find(t => t.Code.Equals(CurrentData.CurrentDiagnosis)).
-                        Blocks.Find(i => i.Name.Equals(CurrentData.CurrentBlock)).Name = MultiBox;
-                    _ViewCollectionProvider.BlocksFromDataToView(CurrentData);
+                    _ViewCollection.DataCollection.Find(t => t.Code.Equals(_ViewCollection.CurrentDiagnosis)).
+                        Blocks.Find(i => i.Name.Equals(_ViewCollection.CurrentBlock)).Name = MultiBox;
+                    _ViewCollectionProvider.BlocksFromDataToView();
                 }
-                if (FocusedDataGrid == "dgLinesContent" && !MultiBox.Equals(CurrentData.CurrentLine))
+                if (FocusedDataGrid == "dgLinesContent" && !MultiBox.Equals(_ViewCollection.CurrentLine))
                 {
-                    CurrentData.DataCollection.Find(t => t.Code.Equals(CurrentData.CurrentDiagnosis)).
-                        Blocks.Find(i => i.Name.Equals(CurrentData.CurrentBlock)).
-                        Lines.Remove(CurrentData.CurrentLine);
+                    _ViewCollection.DataCollection.Find(t => t.Code.Equals(_ViewCollection.CurrentDiagnosis)).
+                        Blocks.Find(i => i.Name.Equals(_ViewCollection.CurrentBlock)).
+                        Lines.Remove(_ViewCollection.CurrentLine);
 
-                    CurrentData.DataCollection.Find(t => t.Code.Equals(CurrentData.CurrentDiagnosis)).
-                        Blocks.Find(i => i.Name.Equals(CurrentData.CurrentBlock)).
+                    _ViewCollection.DataCollection.Find(t => t.Code.Equals(_ViewCollection.CurrentDiagnosis)).
+                        Blocks.Find(i => i.Name.Equals(_ViewCollection.CurrentBlock)).
                         Lines.Add(MultiBox);
 
-                    _ViewCollectionProvider.LinesFromDataToView(CurrentData);
+                    _ViewCollectionProvider.LinesFromDataToView();
                 }
-
             }
         }
 
@@ -172,22 +172,22 @@ namespace DOfficeCore.ViewModels
         {
             if (MultiBox != string.Empty)
             {
-                CurrentData.LinesNames = null;
-                CurrentData.LinesNames = new ObservableCollection<string>();
-                foreach (var line in from Diagnosis diagnosis in CurrentData.DataCollection
+                _ViewCollection.LinesNames = null;
+                _ViewCollection.LinesNames = new ObservableCollection<string>();
+                foreach (var line in from Diagnosis diagnosis in _ViewCollection.DataCollection
                                      from Block block in diagnosis.Blocks
                                      from string line in block.Lines
                                      where line.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase)
                                      select line)
                 {
-                    CurrentData.LinesNames.Add(line);
+                    _ViewCollection.LinesNames.Add(line);
                 }
             }
             else if (MultiBox != null)
             {
-                _ViewCollectionProvider.DiagnosisFromDataToView(CurrentData);
-                _ViewCollectionProvider.BlocksFromDataToView(CurrentData);
-                _ViewCollectionProvider.LinesFromDataToView(CurrentData);
+                _ViewCollectionProvider.DiagnosisFromDataToView();
+                _ViewCollectionProvider.BlocksFromDataToView();
+                _ViewCollectionProvider.LinesFromDataToView();
             }
         }
 
@@ -203,27 +203,27 @@ namespace DOfficeCore.ViewModels
         {
             if (FocusedDataGrid != null && MultiBox != null)
             {
-                if (FocusedDataGrid == "dgCodes" && MultiBox.Equals(CurrentData.CurrentDiagnosis))
+                if (FocusedDataGrid == "dgCodes" && MultiBox.Equals(_ViewCollection.CurrentDiagnosis))
                 {
-                    for (int i = 0; i < CurrentData.DataCollection.Count; i++)
+                    for (int i = 0; i < _ViewCollection.DataCollection.Count; i++)
                     {
-                        if (CurrentData.DataCollection[i].Code.Equals(MultiBox))
+                        if (_ViewCollection.DataCollection[i].Code.Equals(MultiBox))
                         {
                             MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
                             if (result == MessageBoxResult.Yes)
                             {
-                                CurrentData.DataCollection.RemoveAt(i);
-                                _ViewCollectionProvider.DiagnosisFromDataToView(CurrentData);
-                                CurrentData.BlocksNames = null;
-                                CurrentData.LinesNames = null;
+                                _ViewCollection.DataCollection.RemoveAt(i);
+                                _ViewCollectionProvider.DiagnosisFromDataToView();
+                                _ViewCollection.BlocksNames = null;
+                                _ViewCollection.LinesNames = null;
                                 break;
                             }
                         }
                     }
                 }
-                if (FocusedDataGrid == "dgBlocksNames" && MultiBox.Equals(CurrentData.CurrentBlock))
+                if (FocusedDataGrid == "dgBlocksNames" && MultiBox.Equals(_ViewCollection.CurrentBlock))
                 {
-                    foreach (Diagnosis diagnosis in CurrentData.DataCollection)
+                    foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
                     {
                         for (int i = 0; i < diagnosis.Blocks.Count; i++)
                         {
@@ -233,17 +233,17 @@ namespace DOfficeCore.ViewModels
                                 if (result == MessageBoxResult.Yes)
                                 {
                                     diagnosis.Blocks.RemoveAt(i);
-                                    _ViewCollectionProvider.BlocksFromDataToView(CurrentData);
-                                    CurrentData.LinesNames = null;
+                                    _ViewCollectionProvider.BlocksFromDataToView();
+                                    _ViewCollection.LinesNames = null;
                                     break;
                                 }
                             }
                         }
                     }
                 }
-                if (FocusedDataGrid == "dgLinesContent" && MultiBox.Equals(CurrentData.CurrentLine))
+                if (FocusedDataGrid == "dgLinesContent" && MultiBox.Equals(_ViewCollection.CurrentLine))
                 {
-                    foreach (Diagnosis diagnosis in CurrentData.DataCollection)
+                    foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
                     {
                         foreach (Block block in diagnosis.Blocks)
                         {
@@ -255,7 +255,7 @@ namespace DOfficeCore.ViewModels
                                     if (result == MessageBoxResult.Yes)
                                     {
                                         block.Lines.RemoveAt(i);
-                                        _ViewCollectionProvider.LinesFromDataToView(CurrentData);
+                                        _ViewCollectionProvider.LinesFromDataToView();
                                         break;
                                     }
                                 }
@@ -263,7 +263,6 @@ namespace DOfficeCore.ViewModels
                         }
                     }
                 }
-
             }
         }
 

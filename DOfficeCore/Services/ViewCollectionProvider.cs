@@ -7,45 +7,49 @@ namespace DOfficeCore.Services
     /// <summary>Класс для обеспечения взаимодействия между ViewCollection и коллекцией диагнозов</summary>
     class ViewCollectionProvider : IViewCollectionProvider
     {
-
-        public void DiagnosisFromDataToView (ViewCollection viewCollection)
+        public ViewCollectionProvider(IViewCollection ViewCollection)
         {
-            if (viewCollection == null) return;
+            _ViewCollection = ViewCollection;
+        }
 
-            viewCollection.DiagnosisCode = new ObservableCollection<string>(viewCollection.DataCollection.
+        #region Коллекция данных
+        private readonly IViewCollection _ViewCollection;
+        #endregion
+
+        public void DiagnosisFromDataToView ()
+        {
+            _ViewCollection.DiagnosisCode = new ObservableCollection<string>(_ViewCollection.DataCollection.
                 Select(t => t.Code));
         }
 
-        public void BlocksFromDataToView (ViewCollection viewCollection)
+        public void BlocksFromDataToView ()
         {
-            if (viewCollection == null ||
-                viewCollection.CurrentDiagnosis == null) return;
+            if (_ViewCollection.CurrentDiagnosis == null) return;
 
-            viewCollection.BlocksNames = null;
+            _ViewCollection.BlocksNames = null;
 
-            var tempDiagnosis = viewCollection.DataCollection.
-                Single(t => t.Code.Equals(viewCollection.CurrentDiagnosis));
+            var tempDiagnosis = _ViewCollection.DataCollection.
+                Single(t => t.Code.Equals(_ViewCollection.CurrentDiagnosis));
 
             var tempBlockNames = tempDiagnosis.Blocks.Select(t => t.Name);
 
-            viewCollection.BlocksNames = new ObservableCollection<string>(tempBlockNames);
+            _ViewCollection.BlocksNames = new ObservableCollection<string>(tempBlockNames);
         }
 
-        public void LinesFromDataToView (ViewCollection viewCollection)
+        public void LinesFromDataToView ()
         {
-            if (viewCollection == null ||
-                viewCollection.BlocksNames == null ||
-                viewCollection.CurrentDiagnosis == null ||
-                viewCollection.CurrentBlock == null) return;
+            if (_ViewCollection.BlocksNames == null ||
+                _ViewCollection.CurrentDiagnosis == null ||
+                _ViewCollection.CurrentBlock == null) return;
 
-            viewCollection.LinesNames = null;
+            _ViewCollection.LinesNames = null;
 
-            var tempDiagnosis = viewCollection.DataCollection.
-                Single(t => t.Code.Equals(viewCollection.CurrentDiagnosis));
+            var tempDiagnosis = _ViewCollection.DataCollection.
+                Single(t => t.Code.Equals(_ViewCollection.CurrentDiagnosis));
 
-            var tempBlock = tempDiagnosis.Blocks.Single(t => t.Name.Equals(viewCollection.CurrentBlock));
+            var tempBlock = tempDiagnosis.Blocks.Single(t => t.Name.Equals(_ViewCollection.CurrentBlock));
 
-            viewCollection.LinesNames = new ObservableCollection<string>(tempBlock.Lines);
+            _ViewCollection.LinesNames = new ObservableCollection<string>(tempBlock.Lines);
         }
 
 

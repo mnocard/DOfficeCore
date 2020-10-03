@@ -7,12 +7,14 @@ namespace DOfficeCore.ViewModels
 {
     internal partial class MainWindowViewModel : ViewModelCore
     {
-        public MainWindowViewModel(IDataProviderService DataProviderService, IViewCollectionProvider ViewCollectionProvider)
+        public MainWindowViewModel(IDataProviderService DataProviderService, 
+                                    IViewCollectionProvider ViewCollectionProvider, 
+                                    IViewCollection ViewCollection)
         {
             _DataProviderService = DataProviderService;
             _ViewCollectionProvider = ViewCollectionProvider;
-            CurrentData = new ViewCollection();
-
+            _ViewCollection = ViewCollection;
+            
             #region Команды
 
             EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
@@ -38,6 +40,11 @@ namespace DOfficeCore.ViewModels
         private readonly IViewCollectionProvider _ViewCollectionProvider;
         #endregion
 
+        #region Коллекция данных
+        private readonly IViewCollection _ViewCollection;
+        public IViewCollection ViewCollection { get => _ViewCollection; }
+        #endregion
+
         #region Заголовок окна
         /// <summary>Заголовок окна</summary>
         private string _Title = "Кабинет врача";
@@ -57,17 +64,6 @@ namespace DOfficeCore.ViewModels
         {
             get => _EnableTextBox;
             set => Set(ref _EnableTextBox, value);
-        }
-        #endregion
-
-        #region Активная коллекция данных
-        /// <summary>Коллекция данных для отправки в дерево</summary>
-        private ViewCollection _CurrentData;
-        /// <summary>Коллекция данных для отправки в дерево</summary>
-        public ViewCollection CurrentData
-        {
-            get => _CurrentData;
-            set => Set(ref _CurrentData, value);
         }
         #endregion
 

@@ -1,1 +1,3 @@
 ﻿Связи во ViewCollection через сеттер
+
+убрать везде CurrentData

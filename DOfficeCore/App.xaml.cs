@@ -1,4 +1,5 @@
-﻿using DOfficeCore.Services;
+﻿using DOfficeCore.Models;
+using DOfficeCore.Services;
 using DOfficeCore.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,6 +39,7 @@ namespace DOfficeCore
             services.AddSingleton<MainWindowViewModel>();
             services.AddTransient<IDataProviderService, DataProviderService>();
             services.AddSingleton<IViewCollectionProvider, ViewCollectionProvider>();
+            services.AddSingleton<IViewCollection, ViewCollection>();
         }
     }
 }

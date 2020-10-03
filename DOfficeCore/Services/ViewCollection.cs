@@ -1,14 +1,11 @@
 ﻿using DOfficeCore.ViewModels.Core;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 
 namespace DOfficeCore.Models
 {
-    class ViewCollection : ViewModelCore
+    class ViewCollection : ViewModelCore, IViewCollection
     {
-
         #region Свойства
 
         #region DataCollection : List<Diagnosis> - Коллекция данных из базы данных

@@ -22,8 +22,8 @@
                         Width="24"
                         Height="24"
                         Kind="PlusBoxOutline" />
-                    </Button>
-                    <Button
+                </Button>
+                <Button
                     x:Name="btnEditNode"
                     Command="{Binding EditElementCommand}"
                     CommandTarget="{Binding ElementName=tbMultiBox, Path=Text}"
@@ -46,9 +46,9 @@
                 </Button>
                 <Button
                     x:Name="btnDeleteNode"
+                    Command="{Binding RemoveElementCommand}"
                     DockPanel.Dock="Left"
-                    ToolTip="Удалить выбранный элемент"
-                    Command="{Binding RemoveElementCommand}">
+                    ToolTip="Удалить выбранный элемент">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
@@ -75,9 +75,9 @@
         </GroupBox.Header>
         <Grid ShowGridLines="False">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="100"/>
-                <ColumnDefinition Width="Auto" MinWidth="100"/>
-                <ColumnDefinition Width="*" MinWidth="100"/>
+                <ColumnDefinition Width="Auto" MinWidth="100" />
+                <ColumnDefinition Width="Auto" MinWidth="100" />
+                <ColumnDefinition Width="*" MinWidth="100" />
             </Grid.ColumnDefinitions>
             <DataGrid
                 x:Name="dgCodes"
@@ -86,7 +86,7 @@
                 AutoGenerateColumns="False"
                 Background="#FF9E9E9E"
                 IsReadOnly="True"
-                ItemsSource="{Binding CurrentData.DiagnosisCode}"
+                ItemsSource="{Binding ViewCollection.DiagnosisCode}"
                 SelectionMode="Single"
                 SelectionUnit="Cell">
                 <i:Interaction.Triggers>
@@ -103,8 +103,10 @@
                             <Button
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
+                                BorderBrush="{x:Null}"
+                                Content="Шифр"
                                 Foreground="Black"
-                                Content="Шифр" BorderBrush="{x:Null}" Style="{DynamicResource MaterialDesignOutlinedButton}"/>
+                                Style="{DynamicResource MaterialDesignOutlinedButton}" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
@@ -122,7 +124,7 @@
                 AutoGenerateColumns="False"
                 Background="#FF9E9E9E"
                 IsReadOnly="True"
-                ItemsSource="{Binding CurrentData.BlocksNames}"
+                ItemsSource="{Binding ViewCollection.BlocksNames}"
                 SelectionMode="Single"
                 SelectionUnit="Cell">
                 <i:Interaction.Triggers>
@@ -139,8 +141,10 @@
                             <Button
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
+                                BorderBrush="{x:Null}"
+                                Content="Раздел"
                                 Foreground="Black"
-                                Content="Раздел" BorderBrush="{x:Null}" Style="{DynamicResource MaterialDesignOutlinedButton}"/>
+                                Style="{DynamicResource MaterialDesignOutlinedButton}" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
@@ -157,7 +161,7 @@
                 AutoGenerateColumns="False"
                 Background="#FF9E9E9E"
                 IsReadOnly="True"
-                ItemsSource="{Binding CurrentData.LinesNames}"
+                ItemsSource="{Binding ViewCollection.LinesNames}"
                 SelectionMode="Single"
                 SelectionUnit="Cell">
                 <i:Interaction.Triggers>
@@ -174,8 +178,10 @@
                             <Button
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
+                                BorderBrush="{x:Null}"
+                                Content="Элемент"
                                 Foreground="Black"
-                                Content="Элемент" BorderBrush="{x:Null}" Style="{DynamicResource MaterialDesignOutlinedButton}"/>
+                                Style="{DynamicResource MaterialDesignOutlinedButton}" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
