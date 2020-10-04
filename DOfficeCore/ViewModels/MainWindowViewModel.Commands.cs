@@ -88,7 +88,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда редактирования выбранного элемента</summary>
         private void OnEditElementCommandExecuted(object parameter)
         {
-            if (FocusedDataGrid != null) _ViewCollectionProvider.EditElement(FocusedDataGrid, MultiBox);
+            if (FocusedDataGrid != null && MultiBox.Length > 3) _ViewCollectionProvider.EditElement(FocusedDataGrid, MultiBox);
         }
 
         private bool CanEditElementCommandExecute(object parameter) => true;

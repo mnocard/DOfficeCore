@@ -70,8 +70,9 @@
                     Width="Auto"
                     Margin="5,0"
                     VerticalContentAlignment="Center"
-                    materialDesign:HintAssist.Hint="Введите текст"
-                    Text="{Binding MultiBox}" />
+                    materialDesign:HintAssist.Hint="Введите не менее 3х символов"
+                    Text="{Binding MultiBox}" 
+                    CaretBrush="Black"/>
             </DockPanel>
         </GroupBox.Header>
         <Grid ShowGridLines="False">

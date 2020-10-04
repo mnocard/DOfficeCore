@@ -75,7 +75,7 @@ namespace DOfficeCore.Services
         /// <summary>Метод для удаления элемента из базы данных</summary>
         /// <param name="FocusedDataGrid">Имя выбранного датагрида</param>
         /// <param name="MultiBox">Содержимое мультибокса</param>
-        public void RemoveElement(string FocusedDataGrid, string MultiBox)
+        public void RemoveElement(string FocusedDataGrid,string MultiBox)
         {
             MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
@@ -133,22 +133,43 @@ namespace DOfficeCore.Services
         /// <param name="MultiBox">Содержимое мультибокса</param>
         public void SearchElement(string MultiBox)
         {
-            DiagnosisFromDataToView();
+            _ViewCollection.DiagnosisCode = null;
+            _ViewCollection.DiagnosisCode = new ObservableCollection<string>();
+            _ViewCollection.BlocksNames = null;
+            _ViewCollection.BlocksNames = new ObservableCollection<string>();
             _ViewCollection.LinesNames = null;
             _ViewCollection.LinesNames = new ObservableCollection<string>();
+
             foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
             {
-                foreach (Block block in diagnosis.Blocks)
+                if (diagnosis.Code.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase))
                 {
-                    foreach (string line in block.Lines)
+                    _ViewCollection.DiagnosisCode.Add(diagnosis.Code);
+                }
+                else
+                {
+                    foreach (Block block in diagnosis.Blocks)
                     {
-                        if (line.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase))
+                        if (block.Name.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase))
                         {
-                            _ViewCollection.LinesNames.Add(line);
+                            _ViewCollection.BlocksNames.Add(block.Name);
+                        }
+                        else
+                        {
+                            foreach (string line in block.Lines)
+                            {
+                                if (line.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase))
+                                {
+                                    _ViewCollection.LinesNames.Add(line);
+                                }
+                            }
                         }
                     }
                 }
             }
+            if (_ViewCollection.DiagnosisCode.Count == 0) DiagnosisFromDataToView();
+            if (_ViewCollection.BlocksNames.Count == 0) BlocksFromDataToView();
+            if (_ViewCollection.LinesNames.Count == 0) LinesFromDataToView();
         }
 
         /// <summary>Метод для редактирования элемента базы данных</summary>
@@ -156,6 +177,43 @@ namespace DOfficeCore.Services
         /// <param name="MultiBox">Содержимое мультибокса</param>
         public void EditElement(string FocusedDataGrid, string MultiBox)
         {
+            foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
+            {
+                if (FocusedDataGrid.Equals("dgCodes"))
+                {
+                    if (diagnosis.Code.Equals(MultiBox))
+                    {
+                        MessageBox.Show("Элемент с таким названием уже существует.");
+                        return;
+                    }
+                }
+                else
+                {
+                    foreach (Block block in diagnosis.Blocks)
+                    {
+                        if (FocusedDataGrid.Equals("dgBlocksNames"))
+                        {
+                            if (block.Name.Equals(MultiBox))
+                            {
+                                MessageBox.Show("Элемент с таким названием уже существует.");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            foreach (string line in block.Lines)
+                            {
+                                if (line.Equals(MultiBox))
+                                {
+                                    MessageBox.Show("Элемент с таким названием уже существует.");
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
             {
                 if (FocusedDataGrid == "dgCodes")
