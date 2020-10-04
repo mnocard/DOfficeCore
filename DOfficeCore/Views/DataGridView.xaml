@@ -1,0 +1,193 @@
+﻿<UserControl
+    x:Class="DOfficeCore.Views.DataGridView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:DOfficeCore.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
+    mc:Ignorable="d">
+    <GroupBox>
+        <GroupBox.Header>
+            <DockPanel LastChildFill="True">
+                <Button
+                    x:Name="btnAddNode"
+                    DockPanel.Dock="Left"
+                    ToolTip="Добавить новый элемент"
+                    Command="{Binding AddElementCommand}">
+                    <materialDesign:PackIcon
+                        Width="24"
+                        Height="24"
+                        Kind="PlusBoxOutline" />
+                </Button>
+                <Button
+                    x:Name="btnEditNode"
+                    Command="{Binding EditElementCommand, UpdateSourceTrigger=PropertyChanged}"
+                    CommandTarget="{Binding ElementName=tbMultiBox, Path=Text}"
+                    ToolTip="Редактировать выбранный элемент">
+                    <materialDesign:PackIcon
+                        Width="24"
+                        Height="24"
+                        Kind="PencilOutline" />
+                </Button>
+                <Button
+                    x:Name="btnSearchNode"
+                    Command="{Binding SearchElementCommand, UpdateSourceTrigger=PropertyChanged}"
+                    Cursor="Hand"
+                    DockPanel.Dock="Left"
+                    ToolTip="Найти элемент">
+                    <materialDesign:PackIcon
+                        Width="24"
+                        Height="24"
+                        Kind="Magnify" />
+                </Button>
+                <Button
+                    x:Name="btnDeleteNode"
+                    Command="{Binding RemoveElementCommand, UpdateSourceTrigger=PropertyChanged}"
+                    DockPanel.Dock="Left"
+                    ToolTip="Удалить выбранный элемент">
+                    <materialDesign:PackIcon
+                        Width="24"
+                        Height="24"
+                        Kind="TrashCanOutline" />
+                </Button>
+                <Button
+                    x:Name="btnSaveXML"
+                    Command="{Binding SaveDataToFileCommand, UpdateSourceTrigger=PropertyChanged}"
+                    DockPanel.Dock="Right"
+                    ToolTip="Сохранить коллекцию">
+                    <materialDesign:PackIcon
+                        Width="24"
+                        Height="24"
+                        Kind="ContentSaveAllOutline" />
+                </Button>
+                <TextBox
+                    x:Name="tbMultiBox"
+                    Width="Auto"
+                    Margin="5,0"
+                    VerticalContentAlignment="Center"
+                    materialDesign:HintAssist.Hint="Введите не менее 3х символов"
+                    Text="{Binding MultiBox}" 
+                    CaretBrush="Black"/>
+            </DockPanel>
+        </GroupBox.Header>
+        <Grid ShowGridLines="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="100" />
+                <ColumnDefinition Width="Auto" MinWidth="100" />
+                <ColumnDefinition Width="*" MinWidth="100" />
+            </Grid.ColumnDefinitions>
+            <DataGrid
+                x:Name="dgCodes"
+                Grid.Column="0"
+                Margin="0,0,5,0"
+                AutoGenerateColumns="False"
+                Background="#FF9E9E9E"
+                IsReadOnly="True"
+                ItemsSource="{Binding ViewCollection.DiagnosisCode}"
+                SelectionMode="Single"
+                SelectionUnit="Cell">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedCellsChanged">
+                        <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding StringTransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=.}">
+                        <DataGridTextColumn.Header>
+                            <Button
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                BorderBrush="{x:Null}"
+                                Content="Шифр"
+                                Foreground="Black"
+                                Style="{DynamicResource MaterialDesignOutlinedButton}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <GridSplitter
+                Grid.Column="0"
+                MinWidth="5"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Stretch"
+                Opacity="0" />
+            <DataGrid
+                x:Name="dgBlocksNames"
+                Grid.Column="1"
+                Margin="0,0,5,0"
+                AutoGenerateColumns="False"
+                Background="#FF9E9E9E"
+                IsReadOnly="True"
+                ItemsSource="{Binding ViewCollection.BlocksNames}"
+                SelectionMode="Single"
+                SelectionUnit="Cell">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedCellsChanged">
+                        <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding StringTransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=.}">
+                        <DataGridTextColumn.Header>
+                            <Button
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                BorderBrush="{x:Null}"
+                                Content="Раздел"
+                                Foreground="Black"
+                                Style="{DynamicResource MaterialDesignOutlinedButton}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <GridSplitter
+                Grid.Column="1"
+                MinWidth="5"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Stretch"
+                Opacity="0" />
+            <DataGrid
+                x:Name="dgLinesContent"
+                Grid.Column="2"
+                AutoGenerateColumns="False"
+                Background="#FF9E9E9E"
+                IsReadOnly="True"
+                ItemsSource="{Binding ViewCollection.LinesNames}"
+                SelectionMode="Single"
+                SelectionUnit="Cell">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedCellsChanged">
+                        <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding StringTransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=.}">
+                        <DataGridTextColumn.Header>
+                            <Button
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                BorderBrush="{x:Null}"
+                                Content="Элемент"
+                                Foreground="Black"
+                                Style="{DynamicResource MaterialDesignOutlinedButton}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </GroupBox>
+</UserControl>

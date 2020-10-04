@@ -20,7 +20,7 @@ namespace DOfficeCore.Data
             .Select(i => new Block
             {
                 Name = $"Block {i}",
-                Lines = new ObservableCollection<string>(BlockList),
+                Lines = new List<string>(BlockList),
             }).ToList();
 
         internal static List<Block> Blocks { get => blocks; set => blocks = value; }
@@ -30,7 +30,7 @@ namespace DOfficeCore.Data
             .Select(i => new Diagnosis
             {
                 Code = $"Diagnosis {i}",
-                Blocks = new ObservableCollection<Block>(Blocks),
+                Blocks = new List<Block>(Blocks),
             }).ToList();
 
         internal static List<Diagnosis> Diag { get => diag; set => diag = value; }

@@ -14,8 +14,11 @@ namespace DOfficeCore.Infrastructure.Commands
             canExecute = CanExecute;
         }
 
-        public override bool CanExecute(object parameter) => canExecute?.Invoke(parameter) ?? true;
+        protected override bool CanExecute(object parameter) => canExecute?.Invoke(parameter) ?? true;
 
-        public override void Execute(object parameter) => execute(parameter);
+        protected override void Execute(object parameter)
+        {
+            if(CanExecute(parameter)) execute(parameter);
+        }
     }
 }

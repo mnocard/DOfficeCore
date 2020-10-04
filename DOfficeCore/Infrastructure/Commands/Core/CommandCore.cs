@@ -11,8 +11,9 @@ namespace DOfficeCore.Infrastructure.Commands.Core
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public abstract bool CanExecute(object parameter);
-
-        public abstract void Execute(object parameter);
+        bool ICommand.CanExecute(object p) => CanExecute(p);
+        void ICommand.Execute(object p) => Execute(p);
+        protected virtual bool CanExecute(object p) => true;
+        protected abstract void Execute(object p);
     }
 }

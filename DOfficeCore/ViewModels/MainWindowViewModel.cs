@@ -2,30 +2,50 @@
 using DOfficeCore.Models;
 using DOfficeCore.Services;
 using DOfficeCore.ViewModels.Core;
-using Newtonsoft.Json;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows;
-using System.Windows.Input;
 
 namespace DOfficeCore.ViewModels
 {
-    internal class MainWindowViewModel : ViewModelCore
+    internal partial class MainWindowViewModel : ViewModelCore
     {
-        public MainWindowViewModel()
+        public MainWindowViewModel(IDataProviderService DataProviderService, 
+                                    IViewCollectionProvider ViewCollectionProvider, 
+                                    IViewCollection ViewCollection)
         {
+            _DataProviderService = DataProviderService;
+            _ViewCollectionProvider = ViewCollectionProvider;
+            _ViewCollection = ViewCollection;
+            
             #region Команды
+
             EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
             CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
             SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
+            SelectedDataCommand = new LambdaCommand(OnSelectedDataCommandExecuted, CanSelectedDataCommandExecute);
+            EditElementCommand = new LambdaCommand(OnEditElementCommandExecuted, CanEditElementCommandExecute);
+            StringTransferCommand = new LambdaCommand(OnStringTransferCommandExecuted, CanStringTransferCommandExecute);
+            SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted, CanSearchElementCommandExecute);
+            RemoveElementCommand = new LambdaCommand(OnRemoveElementCommandExecuted, CanRemoveElementCommandExecute);
+            AddElementCommand = new LambdaCommand(OnAddElementCommandExecuted, CanAddElementCommandExecute);
+
             #endregion
         }
 
         #region Свойства
+
+        #region Сервис работы с файлами
+        private readonly IDataProviderService _DataProviderService;
+        #endregion
+
+        #region Сервис работы с данными
+        private readonly IViewCollectionProvider _ViewCollectionProvider;
+        #endregion
+
+        #region Коллекция данных
+        private readonly IViewCollection _ViewCollection;
+        public IViewCollection ViewCollection { get => _ViewCollection; }
+        #endregion
+
         #region Заголовок окна
         /// <summary>Заголовок окна</summary>
         private string _Title = "Кабинет врача";
@@ -37,7 +57,7 @@ namespace DOfficeCore.ViewModels
         }
         #endregion
 
-        #region Редактирование текста
+        #region Состояние возможности редактирования текстового окна
         /// <summary>Состояние возможности редактирования текстового окна</summary>
         private bool _EnableTextBox = true;
         /// <summary>Состояние возможности редактирования текстового окна</summary>
@@ -48,86 +68,36 @@ namespace DOfficeCore.ViewModels
         }
         #endregion
 
-        #region Коллекция данных
-        /// <summary>Коллекция данных для отправки в дерево</summary>
-        private ObservableCollection<Diagnosis> _Diagnoses;
-        /// <summary>Коллекция данных для отправки в дерево</summary>
-        public ObservableCollection<Diagnosis> Diagnoses
+        #region FocusedDataGrid : DataGrid - Имя датагрида, который сейчас находится в фокусе
+
+        /// <summary>Имя датагрида, который сейчас находится в фокусе</summary>
+        private string _FocusedDataGrid;
+
+        /// <summary>Имя датагрида, который сейчас находится в фокусе</summary>
+        public string FocusedDataGrid
         {
-            get => _Diagnoses;
-            set => Set(ref _Diagnoses, value);
+            get => _FocusedDataGrid;
+            set => Set(ref _FocusedDataGrid, value);
         }
+
+        #endregion
+
+        #region MultiBox : string - Содержимое мультибокса
+
+        /// <summary>Содержимое мультибокса</summary>
+        private string _MultiBox;
+
+        /// <summary>Содержимое мультибокса</summary>
+        public string MultiBox
+        {
+            get => _MultiBox;
+            set => Set(ref _MultiBox, value);
+        }
+
         #endregion
 
         #endregion
 
-        #region Команды
-
-        #region Команда редактирования текста
-        public ICommand EditTextCommand { get; }
-
-        private void OnEditTextCommandExecuted(object p)
-        {
-            if (EnableTextBox) EnableTextBox = false;
-        }
-
-        private bool CanEditTextCommandExecute(object p)
-        {
-            return EnableTextBox;
-        }
-        #endregion
-
-        #region Команда копирования текста
-        public ICommand CopyTextCommand { get; }
-
-        private void OnCopyTextCommandExecuted(object parameter)
-        {
-            if (parameter as string != null)
-            {
-                Clipboard.SetText(parameter as string);
-                EnableTextBox = true;
-            }
-        }
-
-        private bool CanCopyTextCommandExecute(object parameter) => true;
-        #endregion
-
-        #region Команда сохранения данных в файл
-        public ICommand SaveDataToFileCommand { get; }
-
-        private void OnSaveDataToFileCommandExecuted(object p)
-        {
-            if (p as IEnumerable != null)
-            {
-                ObservableCollection<Diagnosis> col = new ObservableCollection<Diagnosis>();
-                foreach (Diagnosis item in (IEnumerable)p)
-                {
-                    col.Add(item);
-                }
-                if(DataProviderService.SaveDataToFile<Diagnosis>(col, "file"))
-                {
-                    MessageBox.Show("Файл успешно сохранён.");
-                }
-            }
-        }
-
-        private bool CanSaveDataToFileCommandExecute(object p)
-        {
-            return true;
-        }
-        #endregion
-
-        #region Команда Загрузки данных
-        public ICommand LoadDataCommand { get; }
-
-        private void OnLoadDataCommandExecuted(object parameter)
-        {
-            Diagnoses = DataProviderService.LoadDataFromFile("file.json");
-        }
-
-        private bool CanLoadDataCommandExecute(object parameter) => true;
-        #endregion
-
-        #endregion
+        
     }
 }
