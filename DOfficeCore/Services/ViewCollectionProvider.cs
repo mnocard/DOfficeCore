@@ -1,5 +1,6 @@
 ﻿using DOfficeCore.Models;
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -76,60 +77,50 @@ namespace DOfficeCore.Services
         /// <param name="MultiBox">Содержимое мультибокса</param>
         public void RemoveElement(string FocusedDataGrid, string MultiBox)
         {
-            if (FocusedDataGrid == "dgCodes" && MultiBox.Equals(_ViewCollection.CurrentDiagnosis))
+            MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
             {
                 foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
                 {
-                    if (diagnosis.Code.Equals(MultiBox))
+                    if (FocusedDataGrid.Equals("dgCodes"))
                     {
-                        MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
-                        if (result == MessageBoxResult.Yes)
+                        if (MultiBox.Equals(_ViewCollection.CurrentDiagnosis) &&
+                            MultiBox.Equals(diagnosis.Code))
                         {
                             _ViewCollection.DataCollection.Remove(diagnosis);
                             DiagnosisFromDataToView();
                             _ViewCollection.BlocksNames = null;
                             _ViewCollection.LinesNames = null;
-                            break;
+                            return;
                         }
                     }
-                }
-            }
-            if (FocusedDataGrid == "dgBlocksNames" && MultiBox.Equals(_ViewCollection.CurrentBlock))
-            {
-                foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
-                {
-                    foreach (Block block in diagnosis.Blocks)
+                    else 
                     {
-                        if (block.Name.Equals(MultiBox))
+                        foreach (Block block in diagnosis.Blocks)
                         {
-                            MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
-                            if (result == MessageBoxResult.Yes)
+                            if (FocusedDataGrid.Equals("dgBlocksNames") )
                             {
-                                diagnosis.Blocks.Remove(block);
-                                BlocksFromDataToView();
-                                _ViewCollection.LinesNames = null;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            if (FocusedDataGrid == "dgLinesContent" && MultiBox.Equals(_ViewCollection.CurrentLine))
-            {
-                foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
-                {
-                    foreach (Block block in diagnosis.Blocks)
-                    {
-                        foreach (string line in block.Lines)
-                        {
-                            if (line.Equals(MultiBox))
-                            {
-                                MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
-                                if (result == MessageBoxResult.Yes)
+                                if (MultiBox.Equals(_ViewCollection.CurrentBlock) &&
+                                    MultiBox.Equals(block.Name))
                                 {
-                                    block.Lines.Remove(line);
-                                    LinesFromDataToView();
-                                    break;
+                                    diagnosis.Blocks.Remove(block);
+                                    BlocksFromDataToView();
+                                    _ViewCollection.LinesNames = null;
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                foreach (string line in block.Lines)
+                                {
+                                    if(FocusedDataGrid.Equals("dgLinesContent") &&
+                                        line.Equals(MultiBox) &&
+                                        line.Equals(_ViewCollection.CurrentLine))
+                                    {
+                                        block.Lines.Remove(line);
+                                        LinesFromDataToView();
+                                        return;
+                                    }
                                 }
                             }
                         }
@@ -165,7 +156,6 @@ namespace DOfficeCore.Services
         /// <param name="MultiBox">Содержимое мультибокса</param>
         public void EditElement(string FocusedDataGrid, string MultiBox)
         {
-            ///Адаптировать этот код
             foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
             {
                 if (FocusedDataGrid == "dgCodes")
@@ -238,6 +228,7 @@ namespace DOfficeCore.Services
             }
         }
         #endregion
+
 
     }
 }
