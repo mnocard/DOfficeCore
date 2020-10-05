@@ -1,6 +1,7 @@
 ﻿using DOfficeCore.Models;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -177,42 +178,8 @@ namespace DOfficeCore.Services
         /// <param name="MultiBox">Содержимое мультибокса</param>
         public void EditElement(string FocusedDataGrid, string MultiBox)
         {
-            foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
-            {
-                if (FocusedDataGrid.Equals("dgCodes"))
-                {
-                    if (diagnosis.Code.Equals(MultiBox))
-                    {
-                        MessageBox.Show("Элемент с таким названием уже существует.");
-                        return;
-                    }
-                }
-                else
-                {
-                    foreach (Block block in diagnosis.Blocks)
-                    {
-                        if (FocusedDataGrid.Equals("dgBlocksNames"))
-                        {
-                            if (block.Name.Equals(MultiBox))
-                            {
-                                MessageBox.Show("Элемент с таким названием уже существует.");
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            foreach (string line in block.Lines)
-                            {
-                                if (line.Equals(MultiBox))
-                                {
-                                    MessageBox.Show("Элемент с таким названием уже существует.");
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+
+            if (CheckForDoubles(FocusedDataGrid, MultiBox)) return;
 
             foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
             {
@@ -287,6 +254,94 @@ namespace DOfficeCore.Services
         }
         #endregion
 
+        /// <summary>Метод для добавления нового элемента</summary>
+        /// <param name="FocusedDataGrid">Датагрида, в который добавляется элемент</param>
+        /// <param name="MultiBox">Элемент, который нужно добавить</param>
+        public void AddELement(string FocusedDataGrid, string MultiBox)
+        {
+            if (CheckForDoubles(FocusedDataGrid, MultiBox)) return;
+
+            if(FocusedDataGrid.Equals("dgCodes"))
+            {
+                _ViewCollection.DataCollection.Add(new Diagnosis { Code = MultiBox, Blocks = new List<Block>() });
+                DiagnosisFromDataToView();
+                return;
+            }
+            else
+            {
+                foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
+                {
+                    if(FocusedDataGrid.Equals("dgBlocksNames"))
+                    {
+                        if (diagnosis.Code.Equals(_ViewCollection.CurrentDiagnosis))
+                        {
+                            diagnosis.Blocks.Add(new Block { Name = MultiBox, Lines = new List<string>() });
+                            BlocksFromDataToView();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        foreach (Block block in diagnosis.Blocks)
+                        {
+                            if (block.Name.Equals(_ViewCollection.CurrentBlock))
+                            {
+                                block.Lines.Add(MultiBox);
+                                LinesFromDataToView();
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Метод для поиска двойника
+        /// </summary>
+        /// <param name="FocusedDataGrid">Выбранны датагрид, в котором осуществляется поиск</param>
+        /// <param name="MultiBox">Выбранный для поиска элемент</param>
+        /// <returns>True, если элемент найден</returns>
+        private bool CheckForDoubles(string FocusedDataGrid, string MultiBox)
+        {
+            foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
+            {
+                if (FocusedDataGrid.Equals("dgCodes"))
+                {
+                    if (diagnosis.Code.Equals(MultiBox))
+                    {
+                        MessageBox.Show("Элемент с таким названием уже существует.");
+                        return true;
+                    }
+                }
+                else
+                {
+                    foreach (Block block in diagnosis.Blocks)
+                    {
+                        if (FocusedDataGrid.Equals("dgBlocksNames"))
+                        {
+                            if (block.Name.Equals(MultiBox))
+                            {
+                                MessageBox.Show("Элемент с таким названием уже существует.");
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            foreach (string line in block.Lines)
+                            {
+                                if (line.Equals(MultiBox))
+                                {
+                                    MessageBox.Show("Элемент с таким названием уже существует.");
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
 
     }
 }

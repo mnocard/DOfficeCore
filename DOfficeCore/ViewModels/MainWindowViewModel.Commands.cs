@@ -135,10 +135,10 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда удаления элементов из списка</summary>
         private void OnRemoveElementCommandExecuted(object parameter)
         {
-            _ViewCollectionProvider.RemoveElement(FocusedDataGrid, MultiBox);
+            if(FocusedDataGrid != null && MultiBox != null) _ViewCollectionProvider.RemoveElement(FocusedDataGrid, MultiBox);
         }
 
-        private bool CanRemoveElementCommandExecute(object parameter) => FocusedDataGrid != null && MultiBox != null;
+        private bool CanRemoveElementCommandExecute(object parameter) => true;
 
         #endregion
 
@@ -148,13 +148,19 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда добавления элемента</summary>
         private void OnAddElementCommandExecuted(object parameter)
         {
-            
+            if (parameter != null && MultiBox != null)
+            {
+                FocusedDataGrid = parameter as string;
+                _ViewCollectionProvider.AddELement(FocusedDataGrid, MultiBox);
+            }
         }
 
         private bool CanAddElementCommandExecute(object parameter) => true;
 
 
         #endregion
+
+
         #endregion
     }
 }
