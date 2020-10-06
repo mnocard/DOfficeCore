@@ -1,5 +1,6 @@
 ﻿using DOfficeCore.Models;
 using DOfficeCore.Services;
+using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -40,6 +41,7 @@ namespace DOfficeCore
             services.AddTransient<IDataProviderService, DataProviderService>();
             services.AddSingleton<IViewCollectionProvider, ViewCollectionProvider>();
             services.AddSingleton<IViewCollection, ViewCollection>();
+            services.AddSingleton<IDiaryBoxProvider, DiaryBoxProvider>();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System;
 
 namespace DOfficeCore.ViewModels
 {
@@ -105,6 +106,11 @@ namespace DOfficeCore.ViewModels
             {
                 MultiBox = (string)datagrid.CurrentItem;
                 FocusedDataGrid = datagrid.Name;
+                if (FocusedDataGrid.Equals("dgLinesContent"))
+                {
+                    DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, MultiBox);
+                }
+                EnableTextBox = true;
             }
         }
 
@@ -157,6 +163,47 @@ namespace DOfficeCore.ViewModels
 
         private bool CanAddElementCommandExecute(object parameter) => true;
 
+
+        #endregion
+
+        #region Команда добавления времени в дневник
+        /// <summary>Команда добавления времени в дневник</summary>
+        public ICommand AddTimeCommand { get; }
+        /// <summary>Команда добавления времени в дневник</summary>
+        private void OnAddTimeCommandExecuted(object parameter)
+        {
+            DiaryBox = _DiaryBoxProvider.TimeToDiaryBox(DiaryBox, ChoosenDate);
+        }
+
+        private bool CanAddTimeCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Команда добавления даты
+        /// <summary>Команда добавления даты</summary>
+        public ICommand AddDateCommand { get; }
+        /// <summary>Команда добавления даты</summary>
+        private void OnAddDateCommandExecuted(object parameter)
+        {
+            DiaryBox = _DiaryBoxProvider.DateToDiaryBox(DiaryBox, ChoosenDate);
+        }
+
+        private bool CanAddDateCommandExecute(object parameter) => true;
+
+
+        #endregion
+
+        #region Команда очистки дневника
+        /// <summary>Команда очистки дневника</summary>
+        public ICommand ClearDiaryBoxCommand { get; }
+        /// <summary>Команда очистки дневника</summary>
+        private void OnClearDiaryBoxCommandExecuted(object parameter)
+        {
+            DiaryBox = null;
+            EnableTextBox = true;
+        }
+
+        private bool CanClearDiaryBoxCommandExecute(object parameter) => true;
 
         #endregion
 

@@ -1,7 +1,9 @@
 ﻿using DOfficeCore.Infrastructure.Commands;
 using DOfficeCore.Models;
 using DOfficeCore.Services;
+using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels.Core;
+using System;
 
 namespace DOfficeCore.ViewModels
 {
@@ -9,12 +11,14 @@ namespace DOfficeCore.ViewModels
     {
         public MainWindowViewModel(IDataProviderService DataProviderService, 
                                     IViewCollectionProvider ViewCollectionProvider, 
-                                    IViewCollection ViewCollection)
+                                    IViewCollection ViewCollection,
+                                    IDiaryBoxProvider DiaryBoxProvider)
         {
             _DataProviderService = DataProviderService;
             _ViewCollectionProvider = ViewCollectionProvider;
             _ViewCollection = ViewCollection;
-            
+            _DiaryBoxProvider = DiaryBoxProvider;
+
             #region Команды
 
             EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
@@ -27,6 +31,9 @@ namespace DOfficeCore.ViewModels
             SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted, CanSearchElementCommandExecute);
             RemoveElementCommand = new LambdaCommand(OnRemoveElementCommandExecuted, CanRemoveElementCommandExecute);
             AddElementCommand = new LambdaCommand(OnAddElementCommandExecuted, CanAddElementCommandExecute);
+            AddTimeCommand = new LambdaCommand(OnAddTimeCommandExecuted, CanAddTimeCommandExecute);
+            AddDateCommand = new LambdaCommand(OnAddDateCommandExecuted, CanAddDateCommandExecute);
+            ClearDiaryBoxCommand = new LambdaCommand(OnClearDiaryBoxCommandExecuted, CanClearDiaryBoxCommandExecute);
 
             #endregion
         }
@@ -39,6 +46,10 @@ namespace DOfficeCore.ViewModels
 
         #region Сервис работы с данными
         private readonly IViewCollectionProvider _ViewCollectionProvider;
+        #endregion
+
+        #region Сервис работы с дневником
+        private readonly IDiaryBoxProvider _DiaryBoxProvider;
         #endregion
 
         #region Коллекция данных
@@ -57,7 +68,7 @@ namespace DOfficeCore.ViewModels
         }
         #endregion
 
-        #region Состояние возможности редактирования текстового окна
+        #region EnableTextBox : bool - Состояние возможности редактирования текстового окна
         /// <summary>Состояние возможности редактирования текстового окна</summary>
         private bool _EnableTextBox = true;
         /// <summary>Состояние возможности редактирования текстового окна</summary>
@@ -96,8 +107,36 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
+        #region DiaryBox : string - Содержимое дневника
+
+        /// <summary>Содержимое дневника</summary>
+        private string _DiaryBox;
+
+        /// <summary>Содержимое дневника</summary>
+        public string DiaryBox
+        {
+            get => _DiaryBox;
+            set => Set(ref _DiaryBox, value);
+        }
+
         #endregion
 
-        
+        #region ChoosenDate : Datetime - Выбранная дата
+
+        /// <summary>Выбранная дата</summary>
+        private DateTime _ChoosenDate = DateTime.Now;
+
+        /// <summary>Выбранная дата</summary>
+        public DateTime ChoosenDate
+        {
+            get => _ChoosenDate;
+            set => Set(ref _ChoosenDate, value);
+        }
+
+        #endregion
+
+        #endregion
+
+
     }
 }

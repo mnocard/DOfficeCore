@@ -87,7 +87,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40" />
                         <RowDefinition />
-                        <RowDefinition Height="0" />
+                        <RowDefinition Height="100" />
                     </Grid.RowDefinitions>
                     <StackPanel
                         Grid.Row="0"
@@ -95,30 +95,34 @@
                         VerticalAlignment="Stretch"
                         Background="#FF686868"
                         Orientation="Horizontal">
-                        <CheckBox
+                        <Button
                             x:Name="cbDiaryDate"
                             Margin="10,0"
                             VerticalAlignment="Center"
-                            Content="Добавить дату" />
+                            Content="Добавить дату" 
+                            Command="{Binding AddDateCommand}"/>
                         <DatePicker
                             x:Name="DiaryDate"
                             MinWidth="100"
                             Margin="5,3,0,0"
                             VerticalAlignment="Center"
                             IsDropDownOpen="False"
-                            SelectedDate="{x:Static sys:DateTime.Now}"
-                            SelectedDateFormat="Short" />
-                        <CheckBox
+                            SelectedDate="{Binding ChoosenDate}"
+                            SelectedDateFormat="Short" 
+                            materialDesign:HintAssist.Hint="Выберите дату"/>
+                        <Button
                             x:Name="cbDiaryTime"
                             Margin="10,0"
-                            Content="Добавить время" />
+                            Content="Добавить время" 
+                            Command="{Binding AddTimeCommand}"/>
                         <materialDesign:TimePicker
                             x:Name="DiaryTime"
                             Margin="5,3,0,0"
                             VerticalAlignment="Center"
                             Background="Transparent"
                             Is24Hours="True"
-                            SelectedTime="10:30" />
+                            SelectedTime="{Binding ChoosenDate}" 
+                            materialDesign:HintAssist.Hint="Выберите время"/>
                     </StackPanel>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
@@ -168,10 +172,8 @@
                                     <Button
                                         x:Name="Clear"
                                         CommandParameter="{Binding ElementName=tbDiary}"
-                                        ToolTip="Очистить поле">
-                                        <Button.Command>
-                                            <cmd:ClearDiaryBoxCommand />
-                                        </Button.Command>
+                                        ToolTip="Очистить поле"
+                                        Command="{Binding ClearDiaryBoxCommand}">
                                         <materialDesign:PackIcon
                                             Width="24"
                                             Height="24"
@@ -187,12 +189,15 @@
                                 AcceptsReturn="True"
                                 IsReadOnly="{Binding EnableTextBox}"
                                 TextWrapping="Wrap"
-                                VerticalScrollBarVisibility="Auto" />
+                                VerticalScrollBarVisibility="Auto"
+                                Text="{Binding DiaryBox}" />
                         </GroupBox>
                     </Grid>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" >
+                    </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem>
+            <TabItem Visibility="Hidden">
                 <TabItem.Header>
                     <materialDesign:PackIcon
                         Width="48"
