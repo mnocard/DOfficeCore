@@ -2,12 +2,125 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System;
+using System.Collections.ObjectModel;
 
 namespace DOfficeCore.ViewModels
 {
     partial class MainWindowViewModel
     {
         #region Команды
+
+        #region Команда редактирования выбранной в комбобоксе должности
+        /// <summary>Команда редактирования выбранной в комбобоксе должности</summary>
+        public ICommand EditPositionCommand { get; }
+        /// <summary>Команда редактирования выбранной в комбобоксе должности</summary>
+        private void OnEditPositionCommandExecuted(object parameter)
+        {
+            if (parameter is string positionName 
+                && Position.Contains(positionName) 
+                && CurrentPosition != null 
+                && CurrentPosition != String.Empty)
+            {
+                Position.Remove(positionName);
+                Position.Add(CurrentPosition);
+                CurrentPosition = null;
+            }
+        }
+
+        private bool CanEditPositionCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Команда удаления должности
+        /// <summary>Команда удаления должности</summary>
+        public ICommand DeletePositionCommand { get; }
+        /// <summary>Команда удаления должности</summary>
+        private void OnDeletePositionCommandExecuted(object parameter)
+        {
+            if (parameter is string positionName && Position.Contains(positionName))
+            {
+                Position.Remove(positionName);
+                CurrentPosition = null;
+            }
+        }
+
+        private bool CanDeletePositionCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Команда добавление должности
+        /// <summary>Команда добавление должности</summary>
+        public ICommand AddPositionCommand { get; }
+        /// <summary>Команда добавление должности</summary>
+        private void OnAddPositionCommandExecuted(object parameter)
+        {
+            if (Position == null) Position = new ObservableCollection<string>();
+            if (CurrentPosition != null && CurrentPosition != String.Empty)
+            {
+                Position.Add(CurrentPosition);
+                CurrentPosition = null; 
+            }
+        }
+
+        private bool CanAddPositionCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Команда переименования доктора
+        /// <summary>Команда переименования доктора</summary>
+        public ICommand EditDoctorCommand { get; }
+        /// <summary>Команда переименования доктора</summary>
+        private void OnEditDoctorCommandExecuted(object parameter)
+        {
+            if (parameter is string doctorsName 
+                && Doctors.Contains(doctorsName)
+                && CurrentDoctor != null 
+                && CurrentDoctor != String.Empty)
+            {
+                Doctors.Remove(doctorsName);
+                Doctors.Add(CurrentDoctor);
+                CurrentDoctor = null;
+            }
+        }
+
+        private bool CanEditDoctorCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Команда удаления из списка выбранного в комбобоксе доктора
+        /// <summary>Команда удаления из списка выбранного в комбобоксе доктора</summary>
+        public ICommand DeleteDoctorCommand { get; }
+        /// <summary>Команда удаления из списка выбранного в комбобоксе доктора</summary>
+        private void OnDeleteDoctorCommandExecuted(object parameter)
+        {
+            if (parameter is string doctorsName && Doctors.Contains(doctorsName))
+            {
+                Doctors.Remove(doctorsName);
+                CurrentDoctor = null;
+            }
+        }
+
+        private bool CanDeleteDoctorCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Команда добавления нового доктора в список
+        /// <summary>Команда добавления нового доктора в список</summary>
+        public ICommand AddDoctorCommand { get; }
+        /// <summary>Команда добавления нового доктора в список</summary>
+        private void OnAddDoctorCommandExecuted(object parameter)
+        {
+            if (Doctors == null) Doctors = new ObservableCollection<string>();
+            if (CurrentDoctor != null && CurrentDoctor != String.Empty)
+            {
+                Doctors.Add(CurrentDoctor);
+                CurrentDoctor = null;
+            }
+        }
+
+        private bool CanAddDoctorCommandExecute(object parameter) => true;
+
+        #endregion
 
         #region Команда редактирования текста в окне дневника
         /// <summary>Команда редактирования текста в окне дневника</summary>

@@ -35,6 +35,12 @@ namespace DOfficeCore.ViewModels
             AddTimeCommand = new LambdaCommand(OnAddTimeCommandExecuted, CanAddTimeCommandExecute);
             AddDateCommand = new LambdaCommand(OnAddDateCommandExecuted, CanAddDateCommandExecute);
             ClearDiaryBoxCommand = new LambdaCommand(OnClearDiaryBoxCommandExecuted, CanClearDiaryBoxCommandExecute);
+            AddDoctorCommand = new LambdaCommand(OnAddDoctorCommandExecuted, CanAddDoctorCommandExecute);
+            DeleteDoctorCommand = new LambdaCommand(OnDeleteDoctorCommandExecuted, CanDeleteDoctorCommandExecute);
+            EditDoctorCommand = new LambdaCommand(OnEditDoctorCommandExecuted, CanEditDoctorCommandExecute);
+            AddPositionCommand = new LambdaCommand(OnAddPositionCommandExecuted, CanAddPositionCommandExecute);
+            DeletePositionCommand = new LambdaCommand(OnDeletePositionCommandExecuted, CanDeletePositionCommandExecute);
+            EditPositionCommand = new LambdaCommand(OnEditPositionCommandExecuted, CanEditPositionCommandExecute);
 
             #endregion
         }
@@ -139,7 +145,7 @@ namespace DOfficeCore.ViewModels
         #region Doctors : ObservableCollection<string> - Список докторов
 
         /// <summary>Список докторов</summary>
-        private ObservableCollection<string> _Doctors = new ObservableCollection<string>();
+        private ObservableCollection<string> _Doctors;
 
         /// <summary>Список докторов</summary>
         public ObservableCollection<string> Doctors
@@ -153,13 +159,41 @@ namespace DOfficeCore.ViewModels
         #region Position : ObservableCollection<string> - Должность
 
         /// <summary>DESCRIPTION</summary>
-        private ObservableCollection<string> _Position = new ObservableCollection<string>();
+        private ObservableCollection<string> _Position;
 
         /// <summary>DESCRIPTION</summary>
         public ObservableCollection<string> Position
         {
             get => _Position;
             set => Set(ref _Position, value);
+        }
+
+        #endregion
+
+        #region CurrentPosition : string - Поле ввода для должностей
+
+        /// <summary>Поле ввода для должностей</summary>
+        private string _CurrentPosition;
+
+        /// <summary>Поле ввода для должностей</summary>
+        public string CurrentPosition
+        {
+            get => _CurrentPosition;
+            set => Set(ref _CurrentPosition, value);
+        }
+
+        #endregion
+
+        #region CurrentDoctor : string - Поле ввода для докторов
+
+        /// <summary>Поле ввода для докторов</summary>
+        private string _CurrentDoctor;
+
+        /// <summary>Поле ввода для докторов</summary>
+        public string CurrentDoctor
+        {
+            get => _CurrentDoctor;
+            set => Set(ref _CurrentDoctor, value);
         }
 
         #endregion

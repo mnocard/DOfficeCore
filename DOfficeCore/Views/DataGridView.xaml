@@ -85,7 +85,7 @@
                         Height="24"
                         Kind="ContentSaveAllOutline" />
                 </Button>
-                <TextBox
+                <TextBox FontSize="16"
                     x:Name="tbMultiBox"
                     Width="Auto"
                     Margin="5,0"
