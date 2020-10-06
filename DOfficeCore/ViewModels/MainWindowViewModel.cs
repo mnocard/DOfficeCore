@@ -4,6 +4,7 @@ using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels.Core;
 using System;
+using System.Collections.ObjectModel;
 
 namespace DOfficeCore.ViewModels
 {
@@ -52,11 +53,6 @@ namespace DOfficeCore.ViewModels
         private readonly IDiaryBoxProvider _DiaryBoxProvider;
         #endregion
 
-        #region Коллекция данных
-        private readonly IViewCollection _ViewCollection;
-        public IViewCollection ViewCollection { get => _ViewCollection; }
-        #endregion
-
         #region Заголовок окна
         /// <summary>Заголовок окна</summary>
         private string _Title = "Кабинет врача";
@@ -66,6 +62,11 @@ namespace DOfficeCore.ViewModels
             get => _Title;
             set => Set(ref _Title, value);
         }
+        #endregion
+        
+        #region ViewCollection : IViewCollection - Коллекция данных
+        private readonly IViewCollection _ViewCollection;
+        public IViewCollection ViewCollection { get => _ViewCollection; }
         #endregion
 
         #region EnableTextBox : bool - Состояние возможности редактирования текстового окна
@@ -135,8 +136,34 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
+        #region Doctors : ObservableCollection<string> - Список докторов
+
+        /// <summary>Список докторов</summary>
+        private ObservableCollection<string> _Doctors = new ObservableCollection<string>();
+
+        /// <summary>Список докторов</summary>
+        public ObservableCollection<string> Doctors
+        {
+            get => _Doctors;
+            set => Set(ref _Doctors, value);
+        }
+
         #endregion
 
+        #region Position : ObservableCollection<string> - Должность
 
+        /// <summary>DESCRIPTION</summary>
+        private ObservableCollection<string> _Position = new ObservableCollection<string>();
+
+        /// <summary>DESCRIPTION</summary>
+        public ObservableCollection<string> Position
+        {
+            get => _Position;
+            set => Set(ref _Position, value);
+        }
+
+        #endregion
+
+        #endregion
     }
 }

@@ -207,7 +207,6 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
-
         #endregion
     }
 }

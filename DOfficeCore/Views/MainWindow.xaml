@@ -2,12 +2,10 @@
     x:Class="DOfficeCore.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:cmd="clr-namespace:DOfficeCore.Infrastructure.Commands"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:views="clr-namespace:DOfficeCore.Views"
     Title="{Binding Title}"
     MinWidth="800"
@@ -86,8 +84,8 @@
                     </Grid.Resources>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
                         <RowDefinition />
-                        <RowDefinition Height="100" />
                     </Grid.RowDefinitions>
                     <StackPanel
                         Grid.Row="0"
@@ -99,32 +97,89 @@
                             x:Name="cbDiaryDate"
                             Margin="10,0"
                             VerticalAlignment="Center"
-                            Content="Добавить дату" 
-                            Command="{Binding AddDateCommand}"/>
+                            Command="{Binding AddDateCommand}"
+                            Content="Добавить дату" />
                         <DatePicker
                             x:Name="DiaryDate"
                             MinWidth="100"
                             Margin="5,3,0,0"
                             VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Выберите дату"
                             IsDropDownOpen="False"
                             SelectedDate="{Binding ChoosenDate}"
-                            SelectedDateFormat="Short" 
-                            materialDesign:HintAssist.Hint="Выберите дату"/>
+                            SelectedDateFormat="Short" />
                         <Button
                             x:Name="cbDiaryTime"
                             Margin="10,0"
-                            Content="Добавить время" 
-                            Command="{Binding AddTimeCommand}"/>
+                            Command="{Binding AddTimeCommand}"
+                            Content="Добавить время" />
                         <materialDesign:TimePicker
                             x:Name="DiaryTime"
+                            Width="70"
                             Margin="5,3,0,0"
                             VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Выберите время"
                             Background="Transparent"
                             Is24Hours="True"
-                            SelectedTime="{Binding ChoosenDate}" 
-                            materialDesign:HintAssist.Hint="Выберите время"/>
+                            SelectedTime="{Binding ChoosenDate}" />
                     </StackPanel>
-                    <Grid Grid.Row="1">
+                    <StackPanel
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Background="#FF9E9E9E"
+                        Orientation="Horizontal">
+                        <Button Margin="10,0" Content="Добавить подпись" />
+                        <ComboBox
+                            Width="175"
+                            Margin="10,0"
+                            HorizontalContentAlignment="Center"
+                            ItemsSource="{Binding Position}" />
+                        <materialDesign:PopupBox
+                            PlacementMode="BottomAndAlignLeftEdges"
+                            StaysOpen="True"
+                            ToolTip="Изменить список докторов">
+                            <StackPanel>
+                                <TextBox
+                                    x:Name="tbPosition"
+                                    Margin="10,5"
+                                    materialDesign:HintAssist.Hint="Введите должность" />
+                                <Button Content="Добавить должность" />
+                                <Button Content="Удалить должность"/>
+                                <Button Content="Изменить выбранную должность"/>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                        <ComboBox
+                            x:Name="cbDoctorsList"
+                            Width="175"
+                            Margin="10,0"
+                            ItemsSource="{Binding Doctors}" />
+                        <materialDesign:PopupBox
+                            PlacementMode="BottomAndAlignLeftEdges"
+                            StaysOpen="True"
+                            ToolTip="Изменить список докторов">
+                            <StackPanel>
+                                <TextBox
+                                    x:Name="tbDoctors"
+                                    Margin="10,5"
+                                    materialDesign:HintAssist.Hint="Введите Ф.И.О." />
+                                <Button Content="Добавить доктора" />
+                                <Button Content="Удалить доктора" />
+                                <Button Content="Переименовать выбранного доктора" />
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                        <Button
+                            x:Name="btnSaveXML"
+                            Margin="10,0"
+                            Command="{Binding SaveDoctorsListCommand}"
+                            ToolTip="Сохранить список докторов">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                Kind="ContentSaveAllOutline" />
+                        </Button>
+                    </StackPanel>
+                    <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*" MinWidth="500" />
                             <ColumnDefinition Width="*" MinWidth="300" />
@@ -142,7 +197,7 @@
                         <GroupBox Grid.Column="1" MinWidth="300">
                             <GroupBox.Header>
                                 <UniformGrid Rows="1">
-                                    <Button Background="#FFC2C0C0">
+                                    <Button>
                                         <materialDesign:PackIcon
                                             Width="24"
                                             Height="24"
@@ -171,9 +226,9 @@
                                     <GridSplitter IsEnabled="False" />
                                     <Button
                                         x:Name="Clear"
+                                        Command="{Binding ClearDiaryBoxCommand}"
                                         CommandParameter="{Binding ElementName=tbDiary}"
-                                        ToolTip="Очистить поле"
-                                        Command="{Binding ClearDiaryBoxCommand}">
+                                        ToolTip="Очистить поле">
                                         <materialDesign:PackIcon
                                             Width="24"
                                             Height="24"
@@ -188,13 +243,11 @@
                                 materialDesign:HintAssist.Hint="Введите текст"
                                 AcceptsReturn="True"
                                 IsReadOnly="{Binding EnableTextBox}"
+                                Text="{Binding DiaryBox}"
                                 TextWrapping="Wrap"
-                                VerticalScrollBarVisibility="Auto"
-                                Text="{Binding DiaryBox}" />
+                                VerticalScrollBarVisibility="Auto" />
                         </GroupBox>
                     </Grid>
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" >
-                    </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem Visibility="Hidden">
