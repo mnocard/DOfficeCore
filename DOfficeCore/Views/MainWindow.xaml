@@ -134,7 +134,6 @@
                             x:Name="cbPositionList"
                             MinWidth="200"
                             Margin="10,0"
-                            HorizontalContentAlignment="Center"
                             materialDesign:HintAssist.Hint="Выберите должность"
                             BorderBrush="Black"
                             FontSize="16"

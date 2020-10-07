@@ -8,6 +8,7 @@ namespace DOfficeCore.Services
     /// <summary>Класс, реализующий сохранение данных в файл и загрузки данных из файла</summary>
     internal class DataProviderService : IDataProviderService
     {
+
         public bool SaveDataToFile<T>(IEnumerable<T> data, string fileName)
         {
             bool result = false;
@@ -18,6 +19,21 @@ namespace DOfficeCore.Services
                 result = true;
             }
             return result;
+        }
+
+        public IEnumerable<string> LoadDoctorsFromFile(string fileName)
+        {
+            if (!File.Exists(fileName))
+            {
+                using FileStream fs = File.Create(fileName);
+                return null;
+            }
+            else
+            {
+                using StreamReader file = File.OpenText(fileName);
+                JsonSerializer serializer = new JsonSerializer();
+                return (IEnumerable<string>)serializer.Deserialize(file, typeof(IEnumerable<string>));
+            }
         }
 
         public List<Diagnosis> LoadDataFromFile(string fileName)

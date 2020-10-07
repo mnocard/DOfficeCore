@@ -10,6 +10,22 @@ namespace DOfficeCore.ViewModels
     {
         #region Команды
 
+        #region Команда сохранения списка должностей и врачей
+        /// <summary>Команда сохранения списка должностей и врачей</summary>
+        public ICommand SaveDoctorsListCommand { get; }
+        /// <summary>Команда сохранения списка должностей и врачей</summary>
+        private void OnSaveDoctorsListCommandExecuted(object parameter)
+        {
+            if (Doctors != null)
+                _DataProviderService.SaveDataToFile(Doctors, "Doctors");
+            if (Position != null)
+                _DataProviderService.SaveDataToFile(Position, "Position");
+        }
+
+        private bool CanSaveDoctorsListCommandExecute(object parameter) => true;
+
+        #endregion
+
         #region Команда редактирования выбранной в комбобоксе должности
         /// <summary>Команда редактирования выбранной в комбобоксе должности</summary>
         public ICommand EditPositionCommand { get; }
@@ -174,6 +190,10 @@ namespace DOfficeCore.ViewModels
         {
             _ViewCollection.DataCollection = _DataProviderService.LoadDataFromFile("file.json");
             _ViewCollectionProvider.DiagnosisFromDataToView();
+            var temp = _DataProviderService.LoadDoctorsFromFile("Doctors.json");
+            if (temp != null) Doctors = new ObservableCollection<string>(temp);
+            temp = _DataProviderService.LoadDoctorsFromFile("Position.json");
+            if (temp != null) Position = new ObservableCollection<string>(temp);
         }
 
         private bool CanLoadDataCommandExecute(object parameter) => true;
