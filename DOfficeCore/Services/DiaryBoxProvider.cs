@@ -1,11 +1,25 @@
 ﻿using DOfficeCore.Services.Interfaces;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace DOfficeCore.Services
 {
     class DiaryBoxProvider : IDiaryBoxProvider
     {
+        public string DocToDiary(string DiaryBox, string position, string doctor)
+        {
+            if (DiaryBox == null) DiaryBox = "";
+            if (DiaryBox.Contains(position) && DiaryBox.Contains(doctor))
+            {
+                return DiaryBox.Remove(DiaryBox.IndexOf(position) - 1);
+            }
+            else
+            {
+                return DiaryBox +"\n" + position + "\t\t\t" + doctor;
+            }
+        }
+
         public string LineToDiaryBox(string DiaryBox, string Line)
         {
             if (DiaryBox == null) DiaryBox = "";

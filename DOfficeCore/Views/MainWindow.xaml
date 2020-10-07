@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:infra="clr-namespace:DOfficeCore.Infrastructure"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="clr-namespace:DOfficeCore.Views"
@@ -24,6 +25,9 @@
             <i:InvokeCommandAction Command="{Binding LoadDataCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
+    <Window.Resources>
+        <infra:DoctorsConverter x:Key="doctorsConverter"/>
+    </Window.Resources>
     <DockPanel Background="#FF686868" LastChildFill="True">
         <TabControl SelectedIndex="1" TabStripPlacement="Left">
             <TabControl.Resources>
@@ -129,7 +133,14 @@
                         VerticalAlignment="Stretch"
                         Background="#FF9E9E9E"
                         Orientation="Horizontal">
-                        <Button Margin="10,0" Content="Добавить подпись" />
+                        <Button Margin="10,0" Content="Добавить подпись" Command="{Binding AddDocToDiaryCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource doctorsConverter}">
+                                    <Binding ElementName="cbPositionList" Path="SelectedItem"/>
+                                    <Binding ElementName="cbDoctorsList" Path="SelectedItem"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
                         <ComboBox
                             x:Name="cbPositionList"
                             MinWidth="200"

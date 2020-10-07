@@ -10,6 +10,22 @@ namespace DOfficeCore.ViewModels
     {
         #region Команды
 
+        #region Команда добавления подписи в дневник
+        /// <summary>DESCRIPTION</summary>
+        public ICommand AddDocToDiaryCommand { get; }
+        /// <summary>DESCRIPTION</summary>
+        private void OnAddDocToDiaryCommandExecuted(object parameter)
+        {
+            if (parameter is object[] sign && sign[0] is string position && sign[1] is string doctor)
+            {
+                DiaryBox = _DiaryBoxProvider.DocToDiary(DiaryBox, position, doctor);
+            }
+        }
+
+        private bool CanAddDocToDiaryCommandExecute(object parameter) => true;
+
+        #endregion
+
         #region Команда сохранения списка должностей и врачей
         /// <summary>Команда сохранения списка должностей и врачей</summary>
         public ICommand SaveDoctorsListCommand { get; }
