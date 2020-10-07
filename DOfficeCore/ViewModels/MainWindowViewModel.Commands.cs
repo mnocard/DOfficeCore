@@ -10,6 +10,22 @@ namespace DOfficeCore.ViewModels
     {
         #region Команды
 
+        #region Создание случайного дневника
+        /// <summary>DESCRIPTION</summary>
+        public ICommand RandomCommand { get; }
+        /// <summary>DESCRIPTION</summary>
+        private void OnRandomCommandExecuted(object parameter)
+        {
+            if (_ViewCollection.CurrentDiagnosis != null)
+            {
+                DiaryBox = _ViewCollectionProvider.RandomDiary();
+            }
+        }
+
+        private bool CanRandomCommandExecute(object parameter) => true;
+
+        #endregion
+
         #region Команда добавления подписи в дневник
         /// <summary>DESCRIPTION</summary>
         public ICommand AddDocToDiaryCommand { get; }

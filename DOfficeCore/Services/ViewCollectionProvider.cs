@@ -21,6 +21,26 @@ namespace DOfficeCore.Services
         #endregion
 
         #region Методы
+        
+        public string RandomDiary()
+        {
+            string result = "";
+            Random rnd = new Random();
+            if (_ViewCollection.CurrentDiagnosis != null)
+            {
+                foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
+                {
+                    if(diagnosis.Code.Equals(_ViewCollection.CurrentDiagnosis))
+                    {
+                        foreach (Block block in diagnosis.Blocks)
+                        {
+                            result += block.Lines[rnd.Next(block.Lines.Count)] + " ";
+                        }
+                    }
+                }
+            }
+            return result;
+        }
 
         /// <summary>Метод для отображения списка диагнозов в таблице</summary>
         public void DiagnosisFromDataToView()

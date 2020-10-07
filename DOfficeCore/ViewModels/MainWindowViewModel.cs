@@ -43,6 +43,7 @@ namespace DOfficeCore.ViewModels
             EditPositionCommand = new LambdaCommand(OnEditPositionCommandExecuted, CanEditPositionCommandExecute);
             SaveDoctorsListCommand = new LambdaCommand(OnSaveDoctorsListCommandExecuted, CanSaveDoctorsListCommandExecute);
             AddDocToDiaryCommand = new LambdaCommand(OnAddDocToDiaryCommandExecuted, CanAddDocToDiaryCommandExecute);
+            RandomCommand = new LambdaCommand(OnRandomCommandExecuted, CanRandomCommandExecute);
 
             #endregion
         }
