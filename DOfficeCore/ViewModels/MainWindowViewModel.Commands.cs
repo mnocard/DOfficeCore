@@ -226,6 +226,8 @@ namespace DOfficeCore.ViewModels
             if (temp != null) Doctors = new ObservableCollection<string>(temp);
             temp = _DataProviderService.LoadDoctorsFromFile("Position.json");
             if (temp != null) Position = new ObservableCollection<string>(temp);
+
+
         }
 
         private bool CanLoadDataCommandExecute(object parameter) => true;
