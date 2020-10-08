@@ -1,4 +1,5 @@
-﻿using DOfficeCore.Models;
+﻿using DOfficeCore.Logger;
+using DOfficeCore.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,19 +12,25 @@ namespace DOfficeCore.Services
     /// <summary>Класс для обеспечения взаимодействия между ViewCollection и коллекцией диагнозов</summary>
     class ViewCollectionProvider : IViewCollectionProvider
     {
-        public ViewCollectionProvider(IViewCollection ViewCollection)
+        public ViewCollectionProvider(IViewCollection ViewCollection, ILogger Logger)
         {
+            _Logger = Logger;
             _ViewCollection = ViewCollection;
         }
 
-        #region Коллекция данных
+        #region 
+        private readonly ILogger _Logger;
         private readonly IViewCollection _ViewCollection;
         #endregion
 
         #region Методы
         
+        /// <summary>Метод создание случайного дневника </summary>
+        /// <returns>Случайный дневник</returns>
         public string RandomDiary()
         {
+            _Logger.WriteLog("INFO");
+
             string result = "";
             Random rnd = new Random();
             if (_ViewCollection.CurrentDiagnosis != null)
@@ -39,19 +46,27 @@ namespace DOfficeCore.Services
                     }
                 }
             }
+            _Logger.WriteLog("DONE");
+
             return result;
         }
 
         /// <summary>Метод для отображения списка диагнозов в таблице</summary>
         public void DiagnosisFromDataToView()
         {
+            _Logger.WriteLog("INFO");
+
             _ViewCollection.DiagnosisCode = new ObservableCollection<string>(_ViewCollection.DataCollection.
                 Select(t => t.Code));
+            _Logger.WriteLog("DONE");
+
         }
 
         /// <summary>Метод для отображения списка блоков в таблице</summary>
         public void BlocksFromDataToView()
         {
+            _Logger.WriteLog("INFO");
+
             if (_ViewCollection.CurrentDiagnosis == null) return;
             _ViewCollection.BlocksNames = new ObservableCollection<string>();
 
@@ -66,11 +81,15 @@ namespace DOfficeCore.Services
                     return;
                 }
             }
+            _Logger.WriteLog("DONE");
+
         }
 
         /// <summary>Метод для отображения списка строк в таблице</summary>
         public void LinesFromDataToView()
         {
+            _Logger.WriteLog("INFO");
+
             if (_ViewCollection.BlocksNames == null ||
                 _ViewCollection.CurrentDiagnosis == null ||
                 _ViewCollection.CurrentBlock == null) return;
@@ -86,6 +105,7 @@ namespace DOfficeCore.Services
                         if(block.Name.Equals(_ViewCollection.CurrentBlock))
                         {
                             _ViewCollection.LinesNames = new ObservableCollection<string>(block.Lines);
+                            _Logger.WriteLog("DONE");
                             return;
                         }
                     }
@@ -98,6 +118,8 @@ namespace DOfficeCore.Services
         /// <param name="MultiBox">Содержимое мультибокса</param>
         public void RemoveElement(string FocusedDataGrid,string MultiBox)
         {
+            _Logger.WriteLog("INFO");
+
             MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
@@ -112,6 +134,7 @@ namespace DOfficeCore.Services
                             DiagnosisFromDataToView();
                             _ViewCollection.BlocksNames = null;
                             _ViewCollection.LinesNames = null;
+                            _Logger.WriteLog("DONE");
                             return;
                         }
                     }
@@ -127,6 +150,7 @@ namespace DOfficeCore.Services
                                     diagnosis.Blocks.Remove(block);
                                     BlocksFromDataToView();
                                     _ViewCollection.LinesNames = null;
+                                    _Logger.WriteLog("DONE");
                                     return;
                                 }
                             }
@@ -140,6 +164,7 @@ namespace DOfficeCore.Services
                                     {
                                         block.Lines.Remove(line);
                                         LinesFromDataToView();
+                                        _Logger.WriteLog("DONE");
                                         return;
                                     }
                                 }
@@ -154,6 +179,8 @@ namespace DOfficeCore.Services
         /// <param name="MultiBox">Содержимое мультибокса</param>
         public void SearchElement(string MultiBox)
         {
+            _Logger.WriteLog("INFO");
+
             _ViewCollection.DiagnosisCode = null;
             _ViewCollection.DiagnosisCode = new ObservableCollection<string>();
             _ViewCollection.BlocksNames = null;
@@ -191,6 +218,7 @@ namespace DOfficeCore.Services
             if (_ViewCollection.DiagnosisCode.Count == 0) DiagnosisFromDataToView();
             if (_ViewCollection.BlocksNames.Count == 0) BlocksFromDataToView();
             if (_ViewCollection.LinesNames.Count == 0) LinesFromDataToView();
+            _Logger.WriteLog("DONE");
         }
 
         /// <summary>Метод для редактирования элемента базы данных</summary>
@@ -198,6 +226,7 @@ namespace DOfficeCore.Services
         /// <param name="MultiBox">Содержимое мультибокса</param>
         public void EditElement(string FocusedDataGrid, string MultiBox)
         {
+            _Logger.WriteLog("INFO");
 
             if (CheckForDoubles(FocusedDataGrid, MultiBox)) return;
 
@@ -212,6 +241,7 @@ namespace DOfficeCore.Services
                         diagnosis.Code = MultiBox;
                         _ViewCollection.CurrentDiagnosis = MultiBox;
                         DiagnosisFromDataToView();
+                        _Logger.WriteLog("DONE");
                         return;
                     }
                 }
@@ -228,6 +258,7 @@ namespace DOfficeCore.Services
                                 block.Name = MultiBox;
                                 _ViewCollection.CurrentBlock = MultiBox;
                                 BlocksFromDataToView();
+                                _Logger.WriteLog("DONE");
                                 return;
                             }
                         }
@@ -243,6 +274,7 @@ namespace DOfficeCore.Services
                                     block.Lines.RemoveAt(i);
                                     block.Lines.Add(MultiBox);
                                     LinesFromDataToView();
+                                    _Logger.WriteLog("DONE");
                                     return;
                                 }
                             }
@@ -257,7 +289,9 @@ namespace DOfficeCore.Services
         /// <param name="CurrentItem">Содержимое выбранного элемента</param>
         public void SelectedData(string FocusedDataGrid, string CurrentItem)
         {
-            switch(FocusedDataGrid)
+            _Logger.WriteLog("INFO");
+
+            switch (FocusedDataGrid)
             {
                 case "dgCodes":
                     _ViewCollection.CurrentDiagnosis = CurrentItem;
@@ -271,6 +305,7 @@ namespace DOfficeCore.Services
                     _ViewCollection.CurrentLine = CurrentItem;
                     break;
             }
+            _Logger.WriteLog("DONE");
         }
         #endregion
 
@@ -279,6 +314,8 @@ namespace DOfficeCore.Services
         /// <param name="MultiBox">Элемент, который нужно добавить</param>
         public void AddELement(string FocusedDataGrid, string MultiBox)
         {
+            _Logger.WriteLog("INFO");
+
             if (CheckForDoubles(FocusedDataGrid, MultiBox)) return;
 
             if(FocusedDataGrid.Equals("dgCodes"))
@@ -297,6 +334,7 @@ namespace DOfficeCore.Services
                         {
                             diagnosis.Blocks.Add(new Block { Name = MultiBox, Lines = new List<string>() });
                             BlocksFromDataToView();
+                            _Logger.WriteLog("DONE");
                             return;
                         }
                     }
@@ -308,6 +346,7 @@ namespace DOfficeCore.Services
                             {
                                 block.Lines.Add(MultiBox);
                                 LinesFromDataToView();
+                                _Logger.WriteLog("DONE");
                                 return;
                             }
                         }
@@ -324,6 +363,8 @@ namespace DOfficeCore.Services
         /// <returns>True, если элемент найден</returns>
         private bool CheckForDoubles(string FocusedDataGrid, string MultiBox)
         {
+            _Logger.WriteLog("INFO");
+
             foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
             {
                 if (FocusedDataGrid.Equals("dgCodes"))
@@ -331,6 +372,7 @@ namespace DOfficeCore.Services
                     if (diagnosis.Code.Equals(MultiBox))
                     {
                         MessageBox.Show("Элемент с таким названием уже существует.");
+                        _Logger.WriteLog("DONE");
                         return true;
                     }
                 }
@@ -343,6 +385,7 @@ namespace DOfficeCore.Services
                             if (block.Name.Equals(MultiBox))
                             {
                                 MessageBox.Show("Элемент с таким названием уже существует.");
+                                _Logger.WriteLog("DONE");
                                 return true;
                             }
                         }
@@ -353,6 +396,7 @@ namespace DOfficeCore.Services
                                 if (line.Equals(MultiBox))
                                 {
                                     MessageBox.Show("Элемент с таким названием уже существует.");
+                                    _Logger.WriteLog("DONE");
                                     return true;
                                 }
                             }
@@ -360,6 +404,7 @@ namespace DOfficeCore.Services
                     }
                 }
             }
+            _Logger.WriteLog("DONE");
             return false;
         }
 

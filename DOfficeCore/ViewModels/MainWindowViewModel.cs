@@ -1,4 +1,5 @@
 ﻿using DOfficeCore.Infrastructure.Commands;
+using DOfficeCore.Logger;
 using DOfficeCore.Models;
 using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
@@ -13,12 +14,16 @@ namespace DOfficeCore.ViewModels
         public MainWindowViewModel(IDataProviderService DataProviderService, 
                                     IViewCollectionProvider ViewCollectionProvider, 
                                     IViewCollection ViewCollection,
-                                    IDiaryBoxProvider DiaryBoxProvider)
+                                    IDiaryBoxProvider DiaryBoxProvider,
+                                    ILogger Logger)
         {
             _DataProviderService = DataProviderService;
             _ViewCollectionProvider = ViewCollectionProvider;
             _ViewCollection = ViewCollection;
             _DiaryBoxProvider = DiaryBoxProvider;
+            _Logger = Logger;
+
+            _Logger.WriteLog("INFO", "Создание MainWindowViewModel");
 
             #region Команды
 
@@ -44,11 +49,16 @@ namespace DOfficeCore.ViewModels
             SaveDoctorsListCommand = new LambdaCommand(OnSaveDoctorsListCommandExecuted, CanSaveDoctorsListCommandExecute);
             AddDocToDiaryCommand = new LambdaCommand(OnAddDocToDiaryCommandExecuted, CanAddDocToDiaryCommandExecute);
             RandomCommand = new LambdaCommand(OnRandomCommandExecuted, CanRandomCommandExecute);
+            ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
 
             #endregion
         }
 
         #region Свойства
+
+        #region Сервис логгирования
+        private readonly ILogger _Logger;
+        #endregion
 
         #region Сервис работы с файлами
         private readonly IDataProviderService _DataProviderService;

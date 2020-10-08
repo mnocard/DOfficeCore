@@ -24,6 +24,9 @@
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadDataCommand}" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding ClosingAppCommand, Mode=OneTime}" />
+        </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>
         <infra:DoctorsConverter x:Key="doctorsConverter"/>
