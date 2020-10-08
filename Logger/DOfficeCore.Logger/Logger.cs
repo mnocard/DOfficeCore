@@ -32,7 +32,6 @@ namespace DOfficeCore.Logger
             [CallerFilePath] string sourceFilePath = null,
             [CallerLineNumber] int sourceLineNumber = 0)
         {
-
             if (Lines < 20 && !Message.Equals("FATAL") && !Message.Equals("EXIT") && !Message.Equals("DONE"))
             {
                 logBuffer += DateTime.Now.ToString(dateTimeFormat) + $" -- {Message}" + "\n" +

@@ -92,7 +92,11 @@ namespace DOfficeCore.Services
 
             if (_ViewCollection.BlocksNames == null ||
                 _ViewCollection.CurrentDiagnosis == null ||
-                _ViewCollection.CurrentBlock == null) return;
+                _ViewCollection.CurrentBlock == null)
+            {
+                _Logger.WriteLog("DONE");
+                return;
+            }
 
             _ViewCollection.LinesNames = null;
 
