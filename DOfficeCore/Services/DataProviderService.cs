@@ -39,7 +39,7 @@ namespace DOfficeCore.Services
                 
                 _Logger.WriteLog("DONE");
 
-                return null;
+                return new List<string>();
             }
             else
             {

@@ -56,6 +56,7 @@ namespace DOfficeCore.Services
         {
             _Logger.WriteLog("INFO");
 
+            if (_ViewCollection.DataCollection == null) _ViewCollection.DataCollection = new List<Diagnosis>();
             _ViewCollection.DiagnosisCode = new ObservableCollection<string>(_ViewCollection.DataCollection.
                 Select(t => t.Code));
             _Logger.WriteLog("DONE");

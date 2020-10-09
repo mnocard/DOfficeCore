@@ -21,9 +21,10 @@ namespace DOfficeCore.Logger
             lockObject = new object();
 
             string logHEader = logFileName + " is created.";
-            if (File.Exists(logFileName))
+            if (!File.Exists(logFileName))
             {
-                WriteLine("INFO", logHEader);
+                File.Create(logFileName);
+                WriteLine("INFO: " + logHEader);
             }
         }
 
