@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using DocumentFormat.OpenXml.Packaging;
@@ -34,7 +37,27 @@ namespace DOfficeCore.Services
         }
         public List<string> TextToLines(string lines)
         {
+            lines = Regex.Replace(lines, @"(\d+)([.|,])(\d+)([.|,])(\d+)([г][.|,])|(\d+)([.|,])(\d+)([г][.|,])|(\d+)([г][.|,])|(\d+)([г])|(\d+)([.|,])(\d+)([.|,])(\d+)|(\d+)([.|,])(\d+)", "");
+            lines = Regex.Replace(lines, @"(\s+)", " ");
 
+            var words = lines.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            for (var i = 0; i < words.Count;)
+            {
+                string line = words[i].Trim();
+                if(line.Length > 7)
+                {
+                    line = line.Replace("  ", " ");
+                    line = line.ToLower();
+                    line = char.ToUpper(line[0]) + line.Substring(1);
+                    words[i] = line + ".";
+                    i++;
+                }
+                else
+                {
+                    words.RemoveAt(i);
+                }
+            }
+            return words;
         }
     }
 }

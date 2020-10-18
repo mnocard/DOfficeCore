@@ -10,6 +10,8 @@ namespace DOfficeCore.ViewModels
 {
     partial class MainWindowViewModel
     {
+        private const string dlgFilter = "Word documents (.docx)|*.docx";
+        private const string dlgDefaultExt = ".docx";
         #region Команды вкладки дневника
 
         #region Команда закрытия программы
@@ -482,14 +484,15 @@ namespace DOfficeCore.ViewModels
         private void OnOpenFileCommandExecuted(object parameter)
         {
             var dlg = new OpenFileDialog();
-            dlg.DefaultExt = ".docx";
-            dlg.Filter = "Word documents (.docx)|*.docx";
+            dlg.DefaultExt = dlgDefaultExt;
+            dlg.Filter = dlgFilter;
 
             var result = dlg.ShowDialog();
 
             if (result == true)
             {
                 TextForEditing = _LineEditorService.OpenDocument(dlg.FileName);
+                ObservableCollection<string> col = new ObservableCollection<string>(_LineEditorService.TextToLines(TextForEditing));
             }
         }
 
