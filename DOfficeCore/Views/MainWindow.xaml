@@ -29,7 +29,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>
-        <infra:DoctorsConverter x:Key="doctorsConverter"/>
+        <infra:DoctorsConverter x:Key="doctorsConverter" />
     </Window.Resources>
     <DockPanel Background="#FF686868" LastChildFill="True">
         <TabControl SelectedIndex="1" TabStripPlacement="Left">
@@ -136,11 +136,14 @@
                         VerticalAlignment="Stretch"
                         Background="#FF9E9E9E"
                         Orientation="Horizontal">
-                        <Button Margin="10,0" Content="Добавить подпись" Command="{Binding AddDocToDiaryCommand}">
+                        <Button
+                            Margin="10,0"
+                            Command="{Binding AddDocToDiaryCommand}"
+                            Content="Добавить подпись">
                             <Button.CommandParameter>
                                 <MultiBinding Converter="{StaticResource doctorsConverter}">
-                                    <Binding ElementName="cbPositionList" Path="SelectedItem"/>
-                                    <Binding ElementName="cbDoctorsList" Path="SelectedItem"/>
+                                    <Binding ElementName="cbPositionList" Path="SelectedItem" />
+                                    <Binding ElementName="cbDoctorsList" Path="SelectedItem" />
                                 </MultiBinding>
                             </Button.CommandParameter>
                         </Button>
@@ -284,14 +287,54 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Visibility="Hidden">
+            <TabItem>
                 <TabItem.Header>
                     <materialDesign:PackIcon
                         Width="48"
                         Height="48"
-                        Kind="UserOutline" />
+                        Kind="FolderOutline" />
                 </TabItem.Header>
-                <Grid Margin="-3" Background="#FFD9D7D7" />
+                <Grid Margin="-3" Background="#FFD9D7D7">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal"
+                        Grid.ColumnSpan="3"
+                        Background="#FF686868"
+                        Grid.Row="0">
+                        <Button
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="10,0"
+                            Command="{Binding OpenFileCommand}"
+                            Content="Выбрать файл" 
+                            ToolTip="Выбрать документ docx"/>
+                        <Button
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="10,0"
+                            Content="Вставить текст" 
+                            ToolTip="Вставить скопированный текст из буфера обмена"/>
+                    </StackPanel>
+                    <ListBox
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        SelectionMode="Single" />
+                    <ListBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        SelectionMode="Single" />
+                    <ListBox
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        SelectionMode="Single" />
+                </Grid>
             </TabItem>
         </TabControl>
     </DockPanel>

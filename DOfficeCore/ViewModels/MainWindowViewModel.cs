@@ -15,12 +15,14 @@ namespace DOfficeCore.ViewModels
                                     IViewCollectionProvider ViewCollectionProvider, 
                                     IViewCollection ViewCollection,
                                     IDiaryBoxProvider DiaryBoxProvider,
-                                    ILogger Logger)
+                                    ILogger Logger,
+                                    ILineEditorService LineEditorService)
         {
             _DataProviderService = DataProviderService;
             _ViewCollectionProvider = ViewCollectionProvider;
             _ViewCollection = ViewCollection;
             _DiaryBoxProvider = DiaryBoxProvider;
+            _LineEditorService = LineEditorService;
             _Logger = Logger;
 
             _Logger.WriteLog("INFO", "Создание MainWindowViewModel");
@@ -51,10 +53,16 @@ namespace DOfficeCore.ViewModels
             RandomCommand = new LambdaCommand(OnRandomCommandExecuted, CanRandomCommandExecute);
             ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
 
+            OpenFileCommand = new LambdaCommand(OnOpenFileCommandExecuted, CanOpenFileCommandExecute);
+
             #endregion
         }
 
-        #region Свойства
+        #region Свойства окна дневника
+
+        #region Сервис обработки строк
+        private readonly ILineEditorService _LineEditorService;
+        #endregion
 
         #region Сервис логгирования
         private readonly ILogger _Logger;
@@ -207,6 +215,24 @@ namespace DOfficeCore.ViewModels
         {
             get => _CurrentDoctor;
             set => Set(ref _CurrentDoctor, value);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Свойства окна обработчика строк
+
+        #region TextForEditing : string - Текст, который необходимо обработать
+
+        /// <summary>Текст, который необходимо обработать</summary>
+        private string _TextForEditing;
+
+        /// <summary>Текст, который необходимо обработать</summary>
+        public string TextForEditing
+        {
+            get => _TextForEditing;
+            set => Set(ref _TextForEditing, value);
         }
 
         #endregion

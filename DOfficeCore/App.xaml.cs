@@ -39,6 +39,8 @@ namespace DOfficeCore
             services.AddSingleton<IViewCollection, ViewCollection>();
             services.AddSingleton<IDiaryBoxProvider, DiaryBoxProvider>();
             services.AddSingleton<ILogger, Logger.Logger>();
+            services.AddSingleton<ILineEditorService, LineEditorService>();
+
         }
     }
 }

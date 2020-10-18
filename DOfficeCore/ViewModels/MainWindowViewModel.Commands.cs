@@ -3,12 +3,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System;
 using System.Collections.ObjectModel;
+using Microsoft.Win32;
+using DOfficeCore.Services;
 
 namespace DOfficeCore.ViewModels
 {
     partial class MainWindowViewModel
     {
-        #region Команды
+        #region Команды вкладки дневника
 
         #region Команда закрытия программы
         /// <summary>Команда закрытия программы</summary>
@@ -469,6 +471,32 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
+        #endregion
+
+        #region Команды окна обработчика строк
+
+        #region Открытие файла
+        /// <summary>Открытие файла</summary>
+        public ICommand OpenFileCommand { get; }
+        /// <summary>Открытие файла</summary>
+        private void OnOpenFileCommandExecuted(object parameter)
+        {
+            var dlg = new OpenFileDialog();
+            dlg.DefaultExt = ".docx";
+            dlg.Filter = "Word documents (.docx)|*.docx";
+
+            var result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                TextForEditing = _LineEditorService.OpenDocument(dlg.FileName);
+            }
+        }
+
+        private bool CanOpenFileCommandExecute(object parameter) => true;
+
+
+        #endregion
         #endregion
     }
 }
