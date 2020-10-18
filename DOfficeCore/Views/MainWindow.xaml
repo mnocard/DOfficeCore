@@ -4,36 +4,38 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:infra="clr-namespace:DOfficeCore.Infrastructure"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:data="clr-namespace:DOfficeCore.Data"
-    xmlns:cmd ="clr-namespace:DOfficeCore.Infrastructure.Commands"
+    xmlns:views="clr-namespace:DOfficeCore.Views"
     Title="{Binding Title}"
     MinWidth="800"
     MinHeight="450"
     Background="{DynamicResource MaterialDesignPaper}"
+    DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
     FontFamily="{DynamicResource MaterialDesignFont}"
-    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    mc:Ignorable="d"
-    DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}">
+    mc:Ignorable="d">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadDataCommand}" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding ClosingAppCommand, Mode=OneTime}" />
+        </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>
-        <data:BlockConverter x:Key="myBlockConverter" />
+        <infra:DoctorsConverter x:Key="doctorsConverter"/>
     </Window.Resources>
-    <DockPanel LastChildFill="True">
-        <TabControl BorderThickness="0" TabStripPlacement="Left">
+    <DockPanel Background="#FF686868" LastChildFill="True">
+        <TabControl SelectedIndex="1" TabStripPlacement="Left">
             <TabControl.Resources>
                 <Style TargetType="{x:Type Grid}">
-                    <Setter Property="Background" Value="#20232A" />
+                    <Setter Property="Background" Value="#FF686868" />
                 </Style>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Template">
@@ -42,7 +44,7 @@
                                 <Border
                                     x:Name="Border"
                                     Margin="5,5,0,0"
-                                    BorderBrush="Black"
+                                    BorderBrush="#FF686868"
                                     BorderThickness="1,1,0,1"
                                     CornerRadius="10,0,0,10">
                                     <ContentPresenter
@@ -54,10 +56,10 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="White" />
+                                        <Setter TargetName="Border" Property="Background" Value="#FFC2C0C0" />
                                         <Setter TargetName="Border" Property="Margin" Value="5,5,-1,0" />
-                                        <Setter TargetName="Border" Property="Background" Value="White" />
-                                        <Setter TargetName="Border" Property="BorderBrush" Value="White" />
+                                        <Setter TargetName="Border" Property="Background" Value="#FFC2C0C0" />
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#FFC2C0C0" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="False">
                                         <Setter TargetName="Border" Property="Background" Value="Gray" />
@@ -69,23 +71,28 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
+            <TabItem Height="33" Visibility="Hidden" />
             <TabItem>
                 <TabItem.Header>
                     <materialDesign:PackIcon
                         Width="48"
                         Height="48"
-                        Kind="NotebookOutline" />
+                        Kind="NotebookOutline">
+                        <materialDesign:PackIcon.Background>
+                            <ImageBrush />
+                        </materialDesign:PackIcon.Background>
+                    </materialDesign:PackIcon>
                 </TabItem.Header>
-                <Grid>
+                <Grid Margin="-3">
                     <Grid.Resources>
                         <Style TargetType="{x:Type Grid}">
-                            <Setter Property="Background" Value="White" />
+                            <Setter Property="Background" Value="#FFD9D7D7" />
                         </Style>
                     </Grid.Resources>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
                         <RowDefinition />
-                        <RowDefinition Height="50" />
                     </Grid.RowDefinitions>
                     <StackPanel
                         Grid.Row="0"
@@ -93,109 +100,126 @@
                         VerticalAlignment="Stretch"
                         Background="#FF686868"
                         Orientation="Horizontal">
-                        <CheckBox
+                        <Button
                             x:Name="cbDiaryDate"
                             Margin="10,0"
                             VerticalAlignment="Center"
+                            Command="{Binding AddDateCommand}"
                             Content="Добавить дату" />
                         <DatePicker
                             x:Name="DiaryDate"
                             MinWidth="100"
                             Margin="5,3,0,0"
                             VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Выберите дату"
                             IsDropDownOpen="False"
-                            SelectedDate="{x:Static sys:DateTime.Now}"
+                            SelectedDate="{Binding ChoosenDate}"
                             SelectedDateFormat="Short" />
-                        <CheckBox
+                        <Button
                             x:Name="cbDiaryTime"
                             Margin="10,0"
+                            Command="{Binding AddTimeCommand}"
                             Content="Добавить время" />
                         <materialDesign:TimePicker
                             x:Name="DiaryTime"
+                            Width="70"
                             Margin="5,3,0,0"
                             VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Выберите время"
                             Background="Transparent"
                             Is24Hours="True"
-                            SelectedTime="10:30" />
+                            SelectedTime="{Binding ChoosenDate}" />
                     </StackPanel>
-                    <Grid Grid.Row="1">
+                    <StackPanel
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Background="#FF9E9E9E"
+                        Orientation="Horizontal">
+                        <Button Margin="10,0" Content="Добавить подпись" Command="{Binding AddDocToDiaryCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource doctorsConverter}">
+                                    <Binding ElementName="cbPositionList" Path="SelectedItem"/>
+                                    <Binding ElementName="cbDoctorsList" Path="SelectedItem"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <ComboBox
+                            x:Name="cbPositionList"
+                            MinWidth="200"
+                            Margin="10,0"
+                            materialDesign:HintAssist.Hint="Выберите должность"
+                            BorderBrush="Black"
+                            FontSize="16"
+                            ItemsSource="{Binding Position}" />
+                        <materialDesign:PopupBox
+                            PlacementMode="BottomAndAlignLeftEdges"
+                            StaysOpen="True"
+                            ToolTip="Изменить список должностей">
+                            <StackPanel>
+                                <TextBox
+                                    x:Name="tbPosition"
+                                    Margin="10,5"
+                                    materialDesign:HintAssist.Hint="Введите должность"
+                                    Text="{Binding CurrentPosition}" />
+                                <Button Command="{Binding AddPositionCommand}" Content="Добавить должность" />
+                                <Button
+                                    Command="{Binding DeletePositionCommand}"
+                                    CommandParameter="{Binding ElementName=cbPositionList, Path=SelectedItem}"
+                                    Content="Удалить должность" />
+                                <Button
+                                    Command="{Binding EditPositionCommand}"
+                                    CommandParameter="{Binding ElementName=cbPositionList, Path=SelectedItem}"
+                                    Content="Изменить выбранную должность" />
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                        <ComboBox
+                            x:Name="cbDoctorsList"
+                            MinWidth="200"
+                            Margin="10,0"
+                            materialDesign:HintAssist.Hint="Выберите доктора"
+                            BorderBrush="Black"
+                            FontSize="16"
+                            ItemsSource="{Binding Doctors}" />
+                        <materialDesign:PopupBox
+                            PlacementMode="BottomAndAlignLeftEdges"
+                            StaysOpen="True"
+                            ToolTip="Изменить список докторов">
+                            <StackPanel>
+                                <TextBox
+                                    x:Name="tbDoctors"
+                                    Margin="10,5"
+                                    materialDesign:HintAssist.Hint="Введите Ф.И.О."
+                                    Text="{Binding CurrentDoctor}" />
+                                <Button Command="{Binding AddDoctorCommand}" Content="Добавить доктора" />
+                                <Button
+                                    Command="{Binding DeleteDoctorCommand}"
+                                    CommandParameter="{Binding ElementName=cbDoctorsList, Path=SelectedItem}"
+                                    Content="Удалить доктора" />
+                                <Button
+                                    Command="{Binding EditDoctorCommand}"
+                                    CommandParameter="{Binding ElementName=cbDoctorsList, Path=SelectedItem}"
+                                    Content="Переименовать выбранного доктора" />
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                        <Button
+                            x:Name="btnSaveXML"
+                            Margin="10,0"
+                            Command="{Binding SaveDoctorsListCommand}"
+                            ToolTip="Сохранить список докторов">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                Kind="ContentSaveAllOutline" />
+                        </Button>
+                    </StackPanel>
+                    <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="2*" MinWidth="500" />
+                            <ColumnDefinition Width="*" MinWidth="300" />
                         </Grid.ColumnDefinitions>
                         <DockPanel LastChildFill="True">
-                            <GroupBox>
-                                <GroupBox.Header>
-                                    <DockPanel LastChildFill="True">
-                                        <Button
-                                            x:Name="btnAddNode"
-                                            DockPanel.Dock="Left"
-                                            ToolTip="Добавить новый элемент">
-                                            <materialDesign:PackIcon
-                                                Width="24"
-                                                Height="24"
-                                                Kind="PlusBoxOutline" />
-                                        </Button>
-                                        <Button
-                                            x:Name="btnSearchNode"
-                                            DockPanel.Dock="Left"
-                                            ToolTip="Удалить выбранный элемент">
-                                            <materialDesign:PackIcon
-                                                Width="24"
-                                                Height="24"
-                                                Kind="Magnify" />
-                                        </Button>
-                                        <Button
-                                            x:Name="btnDeleteNode"
-                                            DockPanel.Dock="Left"
-                                            ToolTip="Удалить выбранный элемент">
-                                            <materialDesign:PackIcon
-                                                Width="24"
-                                                Height="24"
-                                                Kind="TrashCanOutline" />
-                                        </Button>
-                                        <Button
-                                            x:Name="btnSaveXML"
-                                            Command="{Binding SaveDataToFileCommand}"
-                                            CommandParameter="{Binding Path=Items, ElementName=dgDataTree}"
-                                            DockPanel.Dock="Right"
-                                            ToolTip="Сохранить">
-                                            <materialDesign:PackIcon
-                                                Width="24"
-                                                Height="24"
-                                                Kind="ContentSaveAllOutline" />
-                                        </Button>
-                                        <TextBox
-                                            x:Name="tbElementData"
-                                            Width="Auto"
-                                            Margin="5,0"
-                                            VerticalContentAlignment="Center"
-                                            Text="Введите текст" />
-                                    </DockPanel>
-                                </GroupBox.Header>
-                                <DataGrid
-                                    x:Name="dgDataTree"
-                                    AutoGenerateColumns="False"
-                                    ItemsSource="{Binding Diagnoses, Mode=TwoWay}"
-                                    SelectionMode="Single"
-                                    SelectionUnit="Cell"
-                                    IsReadOnly="True">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="SelectionChanged">
-                                            <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn
-                                            x:Name="dgcCode"
-                                            Binding="{Binding Code}"
-                                            Header="Диагнозы" />
-                                        <DataGridTextColumn Header="Блоки" Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                                                     AncestorType=DataGrid}, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource myBlockConverter}}" />
-                                        <DataGridTextColumn Header="Строки" Binding="{Binding}"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </GroupBox>
+                            <views:DataGridView />
                         </DockPanel>
                         <GridSplitter
                             Grid.Column="0"
@@ -207,7 +231,7 @@
                         <GroupBox Grid.Column="1" MinWidth="300">
                             <GroupBox.Header>
                                 <UniformGrid Rows="1">
-                                    <Button>
+                                    <Button Command="{Binding RandomCommand}">
                                         <materialDesign:PackIcon
                                             Width="24"
                                             Height="24"
@@ -234,10 +258,11 @@
                                             Kind="PencilOutline" />
                                     </Button>
                                     <GridSplitter IsEnabled="False" />
-                                    <Button x:Name="Clear" ToolTip="Очистить поле" CommandParameter="{Binding ElementName=tbDiary}">
-                                        <Button.Command>
-                                            <cmd:ClearDiaryBoxCommand />
-                                        </Button.Command>
+                                    <Button
+                                        x:Name="Clear"
+                                        Command="{Binding ClearDiaryBoxCommand}"
+                                        CommandParameter="{Binding ElementName=tbDiary}"
+                                        ToolTip="Очистить поле">
                                         <materialDesign:PackIcon
                                             Width="24"
                                             Height="24"
@@ -249,22 +274,24 @@
                                 x:Name="tbDiary"
                                 Grid.Column="1"
                                 MinWidth="300"
+                                materialDesign:HintAssist.Hint="Введите текст"
                                 AcceptsReturn="True"
                                 IsReadOnly="{Binding EnableTextBox}"
-                                Text="Hallo"
+                                Text="{Binding DiaryBox}"
                                 TextWrapping="Wrap"
                                 VerticalScrollBarVisibility="Auto" />
                         </GroupBox>
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem>
+            <TabItem Visibility="Hidden">
                 <TabItem.Header>
                     <materialDesign:PackIcon
                         Width="48"
                         Height="48"
                         Kind="UserOutline" />
                 </TabItem.Header>
+                <Grid Margin="-3" Background="#FFD9D7D7" />
             </TabItem>
         </TabControl>
     </DockPanel>

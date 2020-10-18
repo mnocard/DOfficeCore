@@ -1,20 +1,21 @@
-﻿using DOfficeCore.Models;
+﻿using DOfficeCore.Logger;
+using DOfficeCore.Models;
 using Newtonsoft.Json;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows;
-using System.Windows.Documents;
 
 namespace DOfficeCore.Services
 {
     /// <summary>Класс, реализующий сохранение данных в файл и загрузки данных из файла</summary>
-    static class DataProviderService
+    internal class DataProviderService : IDataProviderService
     {
+        private readonly ILogger _Logger;
 
-        public static bool SaveDataToFile<T>(IEnumerable<T> data, string fileName)
+        public DataProviderService(ILogger Logger) => _Logger = Logger;
+        public bool SaveDataToFile<T>(IEnumerable<T> data, string fileName)
         {
+            _Logger.WriteLog("INFO");
+
             bool result = false;
             using (StreamWriter file = File.CreateText(fileName + ".json"))
             {
@@ -22,12 +23,41 @@ namespace DOfficeCore.Services
                 serializer.Serialize(file, data);
                 result = true;
             }
+            
+            _Logger.WriteLog("DONE");
+            
             return result;
         }
 
-        public static ObservableCollection<Diagnosis> LoadDataFromFile(string fileName)
+        public IEnumerable<string> LoadDoctorsFromFile(string fileName)
         {
-            ObservableCollection<Diagnosis> result = null;
+            _Logger.WriteLog("INFO");
+
+            if (!File.Exists(fileName))
+            {
+                using FileStream fs = File.Create(fileName);
+                
+                _Logger.WriteLog("DONE");
+
+                return null;
+            }
+            else
+            {
+                using StreamReader file = File.OpenText(fileName);
+                JsonSerializer serializer = new JsonSerializer();
+                var result = (IEnumerable<string>)serializer.Deserialize(file, typeof(IEnumerable<string>));
+                
+                _Logger.WriteLog("DONE");
+
+                return result;
+            }
+        }
+
+        public List<Diagnosis> LoadDataFromFile(string fileName)
+        {
+            _Logger.WriteLog("INFO");
+
+            List<Diagnosis> result = null;
 
             if (!File.Exists(fileName))
             {
@@ -35,12 +65,11 @@ namespace DOfficeCore.Services
             }
             else
             {
-                using (StreamReader file = File.OpenText(fileName))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    result = (ObservableCollection<Diagnosis>)serializer.Deserialize(file, typeof(ObservableCollection<Diagnosis>));
-                }
+                using StreamReader file = File.OpenText(fileName);
+                JsonSerializer serializer = new JsonSerializer();
+                result = (List<Diagnosis>)serializer.Deserialize(file, typeof(List<Diagnosis>));
             }
+            _Logger.WriteLog("DONE");
 
             return result;
         }

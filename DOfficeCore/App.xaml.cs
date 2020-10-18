@@ -1,12 +1,11 @@
-﻿using DOfficeCore.ViewModels;
+﻿using DOfficeCore.Logger;
+using DOfficeCore.Models;
+using DOfficeCore.Services;
+using DOfficeCore.Services.Interfaces;
+using DOfficeCore.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace DOfficeCore
@@ -23,6 +22,9 @@ namespace DOfficeCore
             {
                 if (_Hosting != null) return _Hosting;
                 var host_builder = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs());
+
+                host_builder.ConfigureServices(ConfigureServices);
+
                 return _Hosting = host_builder.Build();
             }
         }
@@ -32,6 +34,11 @@ namespace DOfficeCore
         private static void ConfigureServices (HostBuilderContext host, IServiceCollection services)
         {
             services.AddSingleton<MainWindowViewModel>();
+            services.AddTransient<IDataProviderService, DataProviderService>();
+            services.AddSingleton<IViewCollectionProvider, ViewCollectionProvider>();
+            services.AddSingleton<IViewCollection, ViewCollection>();
+            services.AddSingleton<IDiaryBoxProvider, DiaryBoxProvider>();
+            services.AddSingleton<ILogger, Logger.Logger>();
         }
     }
 }

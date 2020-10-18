@@ -1,33 +1,77 @@
 ﻿using DOfficeCore.Infrastructure.Commands;
+using DOfficeCore.Logger;
 using DOfficeCore.Models;
 using DOfficeCore.Services;
+using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels.Core;
-using Newtonsoft.Json;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace DOfficeCore.ViewModels
 {
-    internal class MainWindowViewModel : ViewModelCore
+    internal partial class MainWindowViewModel : ViewModelCore
     {
-        public MainWindowViewModel()
+        public MainWindowViewModel(IDataProviderService DataProviderService, 
+                                    IViewCollectionProvider ViewCollectionProvider, 
+                                    IViewCollection ViewCollection,
+                                    IDiaryBoxProvider DiaryBoxProvider,
+                                    ILogger Logger)
         {
+            _DataProviderService = DataProviderService;
+            _ViewCollectionProvider = ViewCollectionProvider;
+            _ViewCollection = ViewCollection;
+            _DiaryBoxProvider = DiaryBoxProvider;
+            _Logger = Logger;
+
+            _Logger.WriteLog("INFO", "Создание MainWindowViewModel");
+
             #region Команды
+
             EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
             CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
             SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
-            //SelectionChangedCommand = new LambdaCommand(OnSelectionChangedCommandExecuted, CanSelectionChangedCommandExecute);
+            SelectedDataCommand = new LambdaCommand(OnSelectedDataCommandExecuted, CanSelectedDataCommandExecute);
+            EditElementCommand = new LambdaCommand(OnEditElementCommandExecuted, CanEditElementCommandExecute);
+            StringTransferCommand = new LambdaCommand(OnStringTransferCommandExecuted, CanStringTransferCommandExecute);
+            SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted, CanSearchElementCommandExecute);
+            RemoveElementCommand = new LambdaCommand(OnRemoveElementCommandExecuted, CanRemoveElementCommandExecute);
+            AddElementCommand = new LambdaCommand(OnAddElementCommandExecuted, CanAddElementCommandExecute);
+            AddTimeCommand = new LambdaCommand(OnAddTimeCommandExecuted, CanAddTimeCommandExecute);
+            AddDateCommand = new LambdaCommand(OnAddDateCommandExecuted, CanAddDateCommandExecute);
+            ClearDiaryBoxCommand = new LambdaCommand(OnClearDiaryBoxCommandExecuted, CanClearDiaryBoxCommandExecute);
+            AddDoctorCommand = new LambdaCommand(OnAddDoctorCommandExecuted, CanAddDoctorCommandExecute);
+            DeleteDoctorCommand = new LambdaCommand(OnDeleteDoctorCommandExecuted, CanDeleteDoctorCommandExecute);
+            EditDoctorCommand = new LambdaCommand(OnEditDoctorCommandExecuted, CanEditDoctorCommandExecute);
+            AddPositionCommand = new LambdaCommand(OnAddPositionCommandExecuted, CanAddPositionCommandExecute);
+            DeletePositionCommand = new LambdaCommand(OnDeletePositionCommandExecuted, CanDeletePositionCommandExecute);
+            EditPositionCommand = new LambdaCommand(OnEditPositionCommandExecuted, CanEditPositionCommandExecute);
+            SaveDoctorsListCommand = new LambdaCommand(OnSaveDoctorsListCommandExecuted, CanSaveDoctorsListCommandExecute);
+            AddDocToDiaryCommand = new LambdaCommand(OnAddDocToDiaryCommandExecuted, CanAddDocToDiaryCommandExecute);
+            RandomCommand = new LambdaCommand(OnRandomCommandExecuted, CanRandomCommandExecute);
+            ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
+
             #endregion
         }
 
         #region Свойства
+
+        #region Сервис логгирования
+        private readonly ILogger _Logger;
+        #endregion
+
+        #region Сервис работы с файлами
+        private readonly IDataProviderService _DataProviderService;
+        #endregion
+
+        #region Сервис работы с данными
+        private readonly IViewCollectionProvider _ViewCollectionProvider;
+        #endregion
+
+        #region Сервис работы с дневником
+        private readonly IDiaryBoxProvider _DiaryBoxProvider;
+        #endregion
+
         #region Заголовок окна
         /// <summary>Заголовок окна</summary>
         private string _Title = "Кабинет врача";
@@ -38,8 +82,13 @@ namespace DOfficeCore.ViewModels
             set => Set(ref _Title, value);
         }
         #endregion
+        
+        #region ViewCollection : IViewCollection - Коллекция данных
+        private readonly IViewCollection _ViewCollection;
+        public IViewCollection ViewCollection { get => _ViewCollection; }
+        #endregion
 
-        #region Редактирование текста
+        #region EnableTextBox : bool - Состояние возможности редактирования текстового окна
         /// <summary>Состояние возможности редактирования текстового окна</summary>
         private bool _EnableTextBox = true;
         /// <summary>Состояние возможности редактирования текстового окна</summary>
@@ -50,154 +99,117 @@ namespace DOfficeCore.ViewModels
         }
         #endregion
 
-        #region Коллекция данных
-        /// <summary>Коллекция данных для отправки в дерево</summary>
-        private ObservableCollection<Diagnosis> _Diagnoses;
-        /// <summary>Коллекция данных для отправки в дерево</summary>
-        public ObservableCollection<Diagnosis> Diagnoses
+        #region FocusedDataGrid : DataGrid - Имя датагрида, который сейчас находится в фокусе
+
+        /// <summary>Имя датагрида, который сейчас находится в фокусе</summary>
+        private string _FocusedDataGrid;
+
+        /// <summary>Имя датагрида, который сейчас находится в фокусе</summary>
+        public string FocusedDataGrid
         {
-            get => _Diagnoses;
-            set => Set(ref _Diagnoses, value);
-        }
-        #endregion
-
-        #region dgData : ObservableCollection<DataGridProvider> - Данные для датагрида
-
-        /// <summary>Данные для датагрида</summary>
-        private ObservableCollection<DataGridProvider> _dgData;
-
-        /// <summary>Данные для датагрида</summary>
-        public ObservableCollection<DataGridProvider> dgData
-        {
-            get => _dgData;
-            set => Set(ref _dgData, value);
+            get => _FocusedDataGrid;
+            set => Set(ref _FocusedDataGrid, value);
         }
 
         #endregion
 
-        //#region Текущая ячейка
-        ///// <summary>Текущая ячейка</summary>
-        //private DataGridCellInfo _cellInfo;
-        ///// <summary>Текущая ячейка</summary>
-        //public DataGridCellInfo CellInfo
-        //{
-        //    get => _cellInfo;
-        //    set => _cellInfo = value;
-        //}
-        //#endregion
+        #region MultiBox : string - Содержимое мультибокса
 
-        //#region Blocks : ObservableCollection<Block> - Коллекция блоков
-        ///// <summary>Коллекция блоков</summary>
-        //private ObservableCollection<Block> _Blocks;
-        ///// <summary>Коллекция блоков</summary>
-        //public ObservableCollection<Block> Blocks
-        //{
-        //    get => _Blocks;
-        //    set => Set(ref _Blocks, value);
-        //}
-        //#endregion
+        /// <summary>Содержимое мультибокса</summary>
+        private string _MultiBox;
+
+        /// <summary>Содержимое мультибокса</summary>
+        public string MultiBox
+        {
+            get => _MultiBox;
+            set => Set(ref _MultiBox, value);
+        }
 
         #endregion
 
-        #region Команды
+        #region DiaryBox : string - Содержимое дневника
 
-        #region Команда редактирования текста
-        /// <summary>Команда редактирования текста</summary>
-        public ICommand EditTextCommand { get; }
-        /// <summary>Команда редактирования текста</summary>
-        private void OnEditTextCommandExecuted(object p)
+        /// <summary>Содержимое дневника</summary>
+        private string _DiaryBox;
+
+        /// <summary>Содержимое дневника</summary>
+        public string DiaryBox
         {
-            if (EnableTextBox) EnableTextBox = false;
+            get => _DiaryBox;
+            set => Set(ref _DiaryBox, value);
         }
 
-        private bool CanEditTextCommandExecute(object p)
-        {
-            return EnableTextBox;
-        }
         #endregion
 
-        #region Команда копирования текста
-        /// <summary>Команда копирования текста</summary>
-        public ICommand CopyTextCommand { get; }
-        /// <summary>Команда копирования текста</summary>
-        private void OnCopyTextCommandExecuted(object parameter)
+        #region ChoosenDate : Datetime - Выбранная дата
+
+        /// <summary>Выбранная дата</summary>
+        private DateTime _ChoosenDate = DateTime.Now;
+
+        /// <summary>Выбранная дата</summary>
+        public DateTime ChoosenDate
         {
-            if (parameter as string != null)
-            {
-                Clipboard.SetText(parameter as string);
-                EnableTextBox = true;
-            }
+            get => _ChoosenDate;
+            set => Set(ref _ChoosenDate, value);
         }
 
-        private bool CanCopyTextCommandExecute(object parameter) => true;
         #endregion
 
-        #region Команда сохранения данных в файл
-        /// <summary>Команда сохранения данных в файл</summary>
-        public ICommand SaveDataToFileCommand { get; }
-        /// <summary>Команда сохранения данных в файл</summary>
-        private void OnSaveDataToFileCommandExecuted(object p)
+        #region Doctors : ObservableCollection<string> - Список докторов
+
+        /// <summary>Список докторов</summary>
+        private ObservableCollection<string> _Doctors;
+
+        /// <summary>Список докторов</summary>
+        public ObservableCollection<string> Doctors
         {
-            if (p as IEnumerable != null)
-            {
-                ObservableCollection<Diagnosis> col = new ObservableCollection<Diagnosis>();
-                foreach (Diagnosis item in (IEnumerable)p)
-                {
-                    col.Add(item);
-                }
-                if(DataProviderService.SaveDataToFile<Diagnosis>(col, "file"))
-                {
-                    MessageBox.Show("Файл успешно сохранён.");
-                }
-            }
+            get => _Doctors;
+            set => Set(ref _Doctors, value);
         }
 
-        private bool CanSaveDataToFileCommandExecute(object p)
-        {
-            return true;
-        }
         #endregion
 
-        #region Команда Загрузки данных
-        /// <summary>Команда Загрузки данных</summary>
-        public ICommand LoadDataCommand { get; }
-        /// <summary>Команда Загрузки данных</summary>
-        private void OnLoadDataCommandExecuted(object parameter)
+        #region Position : ObservableCollection<string> - Должность
+
+        /// <summary>DESCRIPTION</summary>
+        private ObservableCollection<string> _Position;
+
+        /// <summary>DESCRIPTION</summary>
+        public ObservableCollection<string> Position
         {
-            Diagnoses = DataProviderService.LoadDataFromFile("file.json");
+            get => _Position;
+            set => Set(ref _Position, value);
         }
 
-        private bool CanLoadDataCommandExecute(object parameter) => true;
         #endregion
 
-        //#region Команда получения данных из выделенной ячейки
-        ///// <summary>Команда Загрузки данных</summary>
-        //public ICommand SelectionChangedCommand { get; }
-        ///// <summary>Команда Загрузки данных</summary>
-        //private void OnSelectionChangedCommandExecuted(object parameter)
-        //{
-        //    if (parameter as DataGrid != null)
-        //    {
-        //        Diagnosis dg = (Diagnosis)(parameter as DataGrid).CurrentItem;
+        #region CurrentPosition : string - Поле ввода для должностей
 
-        //        var a = parameter as DataGrid;
+        /// <summary>Поле ввода для должностей</summary>
+        private string _CurrentPosition;
 
+        /// <summary>Поле ввода для должностей</summary>
+        public string CurrentPosition
+        {
+            get => _CurrentPosition;
+            set => Set(ref _CurrentPosition, value);
+        }
 
-        //        var i = (parameter as DataGrid).Columns;
-                
-        //        var x = (parameter as DataGrid).CurrentCell.Item;
+        #endregion
 
-        //        var y = x as Diagnosis;
+        #region CurrentDoctor : string - Поле ввода для докторов
 
-        //        var z = y.Blocks;
+        /// <summary>Поле ввода для докторов</summary>
+        private string _CurrentDoctor;
 
-        //        //a.ItemsSource = ;
-        //    }
-        //}
+        /// <summary>Поле ввода для докторов</summary>
+        public string CurrentDoctor
+        {
+            get => _CurrentDoctor;
+            set => Set(ref _CurrentDoctor, value);
+        }
 
-        //private bool CanSelectionChangedCommandExecute(object parameter) => true;
-
-        //#endregion
+        #endregion
 
         #endregion
     }
