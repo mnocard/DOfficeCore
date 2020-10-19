@@ -5,13 +5,17 @@ using System;
 using System.Collections.ObjectModel;
 using Microsoft.Win32;
 using DOfficeCore.Services;
+using System.Linq;
 
 namespace DOfficeCore.ViewModels
 {
     partial class MainWindowViewModel
     {
+        #region Форматы открываемых файлов
         private const string dlgFilter = "Word documents (.docx)|*.docx";
         private const string dlgDefaultExt = ".docx";
+        #endregion
+
         #region Команды вкладки дневника
 
         #region Команда закрытия программы
@@ -492,14 +496,53 @@ namespace DOfficeCore.ViewModels
             if (result == true)
             {
                 TextForEditing = _LineEditorService.OpenDocument(dlg.FileName);
-                ObservableCollection<string> col = new ObservableCollection<string>(_LineEditorService.TextToLines(TextForEditing));
+                if (RawLines == null) RawLines = new ObservableCollection<string>();
+                foreach (var item in _LineEditorService.TextToLines(TextForEditing))
+                {
+                    RawLines.Add(item);
+                }
             }
         }
 
         private bool CanOpenFileCommandExecute(object parameter) => true;
 
+        #endregion
+
+        #region Получение текста из буфера обмена
+        /// <summary>Получение текста из буфера обмена</summary>
+        public ICommand GetTextFromClipboardCommand { get; }
+        /// <summary>Получение текста из буфера обмена</summary>
+        private void OnGetTextFromClipboardCommandExecuted(object parameter)
+        {
+            if (Clipboard.ContainsText())
+            {
+                TextForEditing = Clipboard.GetText();
+                if (RawLines == null) RawLines = new ObservableCollection<string>();
+                foreach (var item in _LineEditorService.TextToLines(TextForEditing))
+                {
+                    RawLines.Add(item);
+                }
+            }
+        }
+
+        private bool CanGetTextFromClipboardCommandExecute(object parameter) => true;
 
         #endregion
+
+        #region Удаление всех элементов необработанной таблицы
+        /// <summary>Удаление всех элементов необработанной таблицы</summary>
+        public ICommand ClearListBoxCommand { get; }
+        /// <summary>Удаление всех элементов необработанной таблицы</summary>
+        private void OnClearListBoxCommandExecuted(object parameter)
+        {
+            RawLines = new ObservableCollection<string>();
+        }
+
+        private bool CanClearListBoxCommandExecute(object parameter) => RawLines != null;
+
+        #endregion
+
+
         #endregion
     }
 }

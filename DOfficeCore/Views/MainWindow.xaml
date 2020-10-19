@@ -304,32 +304,52 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Horizontal"
+                    <StackPanel
+                        Grid.Row="0"
                         Grid.ColumnSpan="3"
                         Background="#FF686868"
-                        Grid.Row="0">
+                        Orientation="Horizontal">
                         <Button
-                            Grid.Row="0"
-                            Grid.Column="0"
                             Margin="10,0"
                             Command="{Binding OpenFileCommand}"
-                            Content="Выбрать файл" 
-                            ToolTip="Выбрать документ docx"/>
+                            Content="Выбрать файл"
+                            ToolTip="Выбрать документ docx" />
                         <Button
-                            Grid.Row="0"
-                            Grid.Column="1"
                             Margin="10,0"
-                            Content="Вставить текст" 
-                            ToolTip="Вставить скопированный текст из буфера обмена"/>
+                            Command="{Binding GetTextFromClipboardCommand}"
+                            Content="Вставить текст"
+                            ToolTip="Вставить скопированный текст из буфера обмена" />
                     </StackPanel>
-                    <ListBox
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        SelectionMode="Single" />
-                    <ListBox
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        SelectionMode="Single" />
+                    <DockPanel Grid.Row="1" Grid.Column="0">
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="10,5"
+                            Command="{Binding ClearListBoxCommand}"
+                            Content="Очистить таблицу"
+                            DockPanel.Dock="Bottom"
+                            ToolTip="Удалить все элементы из первой таблицы" />
+                        <ListBox
+                            Background="#FF9E9E9E"
+                            ItemsSource="{Binding RawLines, UpdateSourceTrigger=PropertyChanged}"
+                            SelectionMode="Single">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                    <DockPanel Grid.Row="1" Grid.Column="1">
+                        <ComboBox Background="#FF9E9E9E" DockPanel.Dock="Top" />
+                        <ListBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Background="#FF9E9E9E"
+                            SelectionMode="Single" />
+                    </DockPanel>
                     <ListBox
                         Grid.Row="1"
                         Grid.Column="2"

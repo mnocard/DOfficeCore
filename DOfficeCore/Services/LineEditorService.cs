@@ -35,6 +35,7 @@ namespace DOfficeCore.Services
             }
             return textBuilder.ToString();
         }
+
         public List<string> TextToLines(string lines)
         {
             lines = Regex.Replace(lines, @"(\d+)([.|,])(\d+)([.|,])(\d+)([г][.|,])|(\d+)([.|,])(\d+)([г][.|,])|(\d+)([г][.|,])|(\d+)([г])|(\d+)([.|,])(\d+)([.|,])(\d+)|(\d+)([.|,])(\d+)", "");

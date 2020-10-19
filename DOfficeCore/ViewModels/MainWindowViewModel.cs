@@ -54,6 +54,8 @@ namespace DOfficeCore.ViewModels
             ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
 
             OpenFileCommand = new LambdaCommand(OnOpenFileCommandExecuted, CanOpenFileCommandExecute);
+            GetTextFromClipboardCommand = new LambdaCommand(OnGetTextFromClipboardCommandExecuted, CanGetTextFromClipboardCommandExecute);
+            ClearListBoxCommand = new LambdaCommand(OnClearListBoxCommandExecuted, CanClearListBoxCommandExecute);
 
             #endregion
         }
@@ -237,6 +239,19 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
+        #region RawLines : ObservableCollection<string> - Необработанная коллекция строк
+
+        /// <summary>Необработанная коллекция строк</summary>
+        private ObservableCollection<string> _RawLines;
+
+        /// <summary>Необработанная коллекция строк</summary>
+        public ObservableCollection<string> RawLines
+        {
+            get => _RawLines;
+            set => Set(ref _RawLines, value);
+        }
+
+        #endregion
         #endregion
     }
 }
