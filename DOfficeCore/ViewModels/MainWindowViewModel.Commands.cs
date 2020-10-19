@@ -535,7 +535,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Удаление всех элементов необработанной таблицы</summary>
         private void OnClearListBoxCommandExecuted(object parameter)
         {
-            RawLines = new ObservableCollection<string>();
+            RawLines = null;
         }
 
         private bool CanClearListBoxCommandExecute(object parameter) => RawLines != null;

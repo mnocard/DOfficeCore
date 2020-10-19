@@ -342,13 +342,33 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </DockPanel>
+                    <GridSplitter
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        MinWidth="5"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch"
+                        Opacity="0"
+                        ShowsPreview="False" />
                     <DockPanel Grid.Row="1" Grid.Column="1">
-                        <ComboBox Background="#FF9E9E9E" DockPanel.Dock="Top" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                            <TextBox Width="{Binding ElementName=DiagnosisCodes, Path=Width, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button Content="X" />
+                            <Button Content="+" />
+                        </StackPanel>
                         <ListBox
-                            Grid.Row="1"
-                            Grid.Column="1"
+                            x:Name="DiagnosisCodes"
                             Background="#FF9E9E9E"
-                            SelectionMode="Single" />
+                            SelectionMode="Single" 
+                            Width="Auto">
+
+                        </ListBox>
+                        <GridSplitter/>
+                        <ListBox
+                            Background="#FF9E9E9E"
+                            SelectionMode="Single" >
+
+                        </ListBox>
                     </DockPanel>
                     <ListBox
                         Grid.Row="1"
