@@ -8,13 +8,13 @@ namespace DOfficeCore.Models
     {
         #region Свойства
 
-        #region DataCollection : List<Diagnosis> - Коллекция данных из базы данных
+        #region DataCollection : HashSet<Diagnosis> - Коллекция данных из базы данных
 
         /// <summary>Коллекция данных из базы данных</summary>
-        private List<Diagnosis> _DataCollection;
+        private HashSet<Diagnosis> _DataCollection;
 
         /// <summary>Коллекция данных из базы данных</summary>
-        public List<Diagnosis> DataCollection
+        public HashSet<Diagnosis> DataCollection
         {
             get => _DataCollection;
             set => Set(ref _DataCollection, value);

@@ -15,10 +15,9 @@ namespace DOfficeCore.Services
         public ViewCollectionProvider(IViewCollection ViewCollection, ILogger Logger)
         {
             _Logger = Logger;
-            _ViewCollection = ViewCollection;
         }
 
-        #region 
+        #region Сервисы
         private readonly ILogger _Logger;
         private readonly IViewCollection _ViewCollection;
         #endregion
@@ -41,7 +40,8 @@ namespace DOfficeCore.Services
                     {
                         foreach (Block block in diagnosis.Blocks)
                         {
-                            result += block.Lines[rnd.Next(block.Lines.Count)] + " ";
+                            if (block.Lines.Count != 0)
+                                result += block.Lines.ElementAt(rnd.Next(block.Lines.Count)) + " ";
                         }
                     }
                 }
@@ -56,7 +56,7 @@ namespace DOfficeCore.Services
         {
             _Logger.WriteLog("INFO");
 
-            if (_ViewCollection.DataCollection == null) _ViewCollection.DataCollection = new List<Diagnosis>();
+            if (_ViewCollection.DataCollection == null) _ViewCollection.DataCollection = new HashSet<Diagnosis>();
             _ViewCollection.DiagnosisCode = new ObservableCollection<string>(_ViewCollection.DataCollection.
                 Select(t => t.Code));
             _Logger.WriteLog("DONE");
@@ -269,19 +269,16 @@ namespace DOfficeCore.Services
                         }
                         else
                         {
-                            for (int i = 0; i < block.Lines.Count; i++)
+                            if (block.Lines.Contains(_ViewCollection.CurrentLine) &&
+                                !block.Lines.Contains(MultiBox) &&
+                                FocusedDataGrid == "dgLinesContent" &&
+                                !MultiBox.Equals(_ViewCollection.CurrentLine))
                             {
-                                if (!block.Lines[i].Equals(MultiBox) &&
-                                    block.Lines[i].Equals(_ViewCollection.CurrentLine) &&
-                                    FocusedDataGrid == "dgLinesContent" &&
-                                    !MultiBox.Equals(_ViewCollection.CurrentLine))
-                                {
-                                    block.Lines.RemoveAt(i);
-                                    block.Lines.Add(MultiBox);
-                                    LinesFromDataToView();
-                                    _Logger.WriteLog("DONE");
-                                    return;
-                                }
+                                block.Lines.Remove(_ViewCollection.CurrentLine);
+                                block.Lines.Add(MultiBox);
+                                LinesFromDataToView();
+                                _Logger.WriteLog("DONE");
+                                return;
                             }
                         }
                     }
@@ -325,7 +322,7 @@ namespace DOfficeCore.Services
 
             if(FocusedDataGrid.Equals("dgCodes"))
             {
-                _ViewCollection.DataCollection.Add(new Diagnosis { Code = MultiBox, Blocks = new List<Block>() });
+                _ViewCollection.DataCollection.Add(new Diagnosis { Code = MultiBox, Blocks = new HashSet<Block>() });
                 DiagnosisFromDataToView();
                 return;
             }
@@ -337,7 +334,7 @@ namespace DOfficeCore.Services
                     {
                         if (diagnosis.Code.Equals(_ViewCollection.CurrentDiagnosis))
                         {
-                            diagnosis.Blocks.Add(new Block { Name = MultiBox, Lines = new List<string>() });
+                            diagnosis.Blocks.Add(new Block { Name = MultiBox, Lines = new HashSet<string>() });
                             BlocksFromDataToView();
                             _Logger.WriteLog("DONE");
                             return;

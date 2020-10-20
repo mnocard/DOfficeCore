@@ -5,7 +5,7 @@ namespace DOfficeCore.Models
 {
     interface IViewCollection
     {
-        List<Diagnosis> DataCollection { get; set; }
+        HashSet<Diagnosis> DataCollection { get; set; }
 
         string CurrentBlock { get; set; }
         string CurrentDiagnosis { get; set; }

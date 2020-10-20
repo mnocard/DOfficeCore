@@ -12,6 +12,7 @@ namespace DOfficeCore.Services
         private readonly ILogger _Logger;
 
         public DataProviderService(ILogger Logger) => _Logger = Logger;
+
         public bool SaveDataToFile<T>(IEnumerable<T> data, string fileName)
         {
             _Logger.WriteLog("INFO");
@@ -39,7 +40,7 @@ namespace DOfficeCore.Services
                 
                 _Logger.WriteLog("DONE");
 
-                return new List<string>();
+                return new HashSet<string>();
             }
             else
             {
@@ -53,11 +54,11 @@ namespace DOfficeCore.Services
             }
         }
 
-        public List<Diagnosis> LoadDataFromFile(string fileName)
+        public HashSet<Diagnosis> LoadDataFromFile(string fileName)
         {
             _Logger.WriteLog("INFO");
 
-            List<Diagnosis> result = null;
+            HashSet<Diagnosis> result = null;
 
             if (!File.Exists(fileName))
             {
@@ -67,7 +68,7 @@ namespace DOfficeCore.Services
             {
                 using StreamReader file = File.OpenText(fileName);
                 JsonSerializer serializer = new JsonSerializer();
-                result = (List<Diagnosis>)serializer.Deserialize(file, typeof(List<Diagnosis>));
+                result = (HashSet<Diagnosis>)serializer.Deserialize(file, typeof(HashSet<Diagnosis>));
             }
             _Logger.WriteLog("DONE");
 

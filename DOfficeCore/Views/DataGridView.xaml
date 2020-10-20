@@ -392,7 +392,7 @@
                     MinWidth="300"
                     materialDesign:HintAssist.Hint="Введите текст"
                     AcceptsReturn="True"
-                    IsReadOnly="{Binding EnableTextBox}"
+                    IsReadOnly="{Binding EnableDiaryBox}"
                     Text="{Binding DiaryBox}"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto" />

@@ -1,4 +1,5 @@
-﻿using DOfficeCore.Infrastructure.Commands;
+﻿using DOfficeCore.Data;
+using DOfficeCore.Infrastructure.Commands;
 using DOfficeCore.Logger;
 using DOfficeCore.Models;
 using DOfficeCore.Services;
@@ -83,13 +84,19 @@ namespace DOfficeCore.ViewModels
         private void OnLoadDataCommandExecuted(object parameter)
         {
             _Logger.WriteLog("INFO");
-
-            _ViewCollection.DataCollection = _DataProviderService.LoadDataFromFile("file.json");
-            _ViewCollectionProvider.DiagnosisFromDataToView();
+            
             var temp = _DataProviderService.LoadDoctorsFromFile("Doctors.json");
             if (temp != null) Doctors = new ObservableCollection<string>(temp);
             temp = _DataProviderService.LoadDoctorsFromFile("Position.json");
             if (temp != null) Position = new ObservableCollection<string>(temp);
+
+            // Тестовые данные
+            _ViewCollection.DataCollection = TestData.Diag;
+            _ViewCollectionProvider.DiagnosisFromDataToView();
+
+            // Реальные данные
+            //_ViewCollection.DataCollection = _DataProviderService.LoadDataFromFile("file.json");
+            //_ViewCollectionProvider.DiagnosisFromDataToView();
 
             _Logger.WriteLog("DONE");
         }

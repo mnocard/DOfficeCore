@@ -2,7 +2,7 @@
 
 Добавить модульных тестов
 
-изменение ViewCollection list на hashset
+изменение ViewCollection list на hashset (переопределить equal?)
 
 добавить статус бар
 

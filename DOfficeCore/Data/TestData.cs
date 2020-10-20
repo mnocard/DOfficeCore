@@ -1,39 +1,37 @@
-﻿using DOfficeCore.Models;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
+using DOfficeCore.Models;
 
 namespace DOfficeCore.Data
 {
     class TestData
     {
-        private static List<string> blockList = Enumerable.Range(1, 5)
+        private static HashSet<string> blockList = Enumerable.Range(1, 5)
             .Select(i => $"Line {i}")
-            .ToList();
+            .ToHashSet();
 
-        public static List<string> BlockList { get => blockList; set => blockList = value; }
+        public static HashSet<string> BlockList { get => blockList; set => blockList = value; }
 
 
-        private static List<Block> blocks = Enumerable.Range(1, 5)
+        private static HashSet<Block> blocks = Enumerable.Range(1, 5)
             .Select(i => new Block
             {
                 Name = $"Block {i}",
-                Lines = new List<string>(BlockList),
-            }).ToList();
+                Lines = new HashSet<string>(BlockList),
+            }).ToHashSet();
 
-        internal static List<Block> Blocks { get => blocks; set => blocks = value; }
+        public static HashSet<Block> Blocks { get => blocks; set => blocks = value; }
 
 
-        private static List<Diagnosis> diag = Enumerable.Range(1, 5)
+        private static HashSet<Diagnosis> diag = Enumerable.Range(1, 5)
             .Select(i => new Diagnosis
             {
                 Code = $"Diagnosis {i}",
-                Blocks = new List<Block>(Blocks),
-            }).ToList();
+                Blocks = new HashSet<Block>(Blocks),
+            }).ToHashSet();
 
-        internal static List<Diagnosis> Diag { get => diag; set => diag = value; }
+        public static HashSet<Diagnosis> Diag { get => diag; set => diag = value; }
 
         public static ObservableCollection<Diagnosis> Diagnoses { get; set; } = new ObservableCollection<Diagnosis>(Diag);
     }

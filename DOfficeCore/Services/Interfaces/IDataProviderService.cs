@@ -7,6 +7,6 @@ namespace DOfficeCore.Services
     {
         bool SaveDataToFile<T>(IEnumerable<T> data, string fileName);
         IEnumerable<string> LoadDoctorsFromFile(string fileName);
-        List<Diagnosis> LoadDataFromFile(string fileName);
+        HashSet<Diagnosis> LoadDataFromFile(string fileName);
     }
 }

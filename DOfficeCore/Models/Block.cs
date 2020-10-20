@@ -19,13 +19,26 @@ namespace DOfficeCore.Models
 
         #region Lines : List<string> - Список строк в блоке
         /// <summary>Список строк в блоке</summary>
-        private List<string> _Lines;
+        private HashSet<string> _Lines;
         /// <summary>Список строк в блоке</summary>
-        public List<string> Lines
+        public HashSet<string> Lines
         {
             get => _Lines;
             set => Set(ref _Lines, value);
         }
         #endregion
+
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() != this.GetType()) return false;
+
+            Block block = (Block)obj;
+            return (this.Name == block.Name);
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
     }
 }

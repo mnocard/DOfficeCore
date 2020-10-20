@@ -13,14 +13,14 @@ namespace DOfficeCore.ViewModels
     {
         #region Свойства окна дневника
 
-        #region EnableTextBox : bool - Состояние возможности редактирования текстового окна
+        #region EnableDiaryBox : bool - Состояние возможности редактирования текстового окна
         /// <summary>Состояние возможности редактирования текстового окна</summary>
-        private bool _EnableTextBox = true;
+        private bool _EnableDiaryBox = true;
         /// <summary>Состояние возможности редактирования текстового окна</summary>
-        public bool EnableTextBox
+        public bool EnableDiaryBox
         {
-            get => _EnableTextBox;
-            set => Set(ref _EnableTextBox, value);
+            get => _EnableDiaryBox;
+            set => Set(ref _EnableDiaryBox, value);
         }
         #endregion
 
@@ -343,12 +343,12 @@ namespace DOfficeCore.ViewModels
         {
             _Logger.WriteLog("INFO");
 
-            if (EnableTextBox) EnableTextBox = false;
+            if (EnableDiaryBox) EnableDiaryBox = false;
 
             _Logger.WriteLog("DONE");
         }
 
-        private bool CanEditTextCommandExecute(object p) => EnableTextBox;
+        private bool CanEditTextCommandExecute(object p) => EnableDiaryBox;
         #endregion
 
         #region Команда копирования текста
@@ -362,7 +362,7 @@ namespace DOfficeCore.ViewModels
             if (parameter is string temp && temp != string.Empty && temp != "")
             {
                 Clipboard.SetText(temp);
-                EnableTextBox = true;
+                EnableDiaryBox = true;
             }
 
             _Logger.WriteLog("DONE");
@@ -442,7 +442,7 @@ namespace DOfficeCore.ViewModels
                 {
                     DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, MultiBox);
                 }
-                EnableTextBox = true;
+                EnableDiaryBox = true;
             }
 
             _Logger.WriteLog("DONE");
@@ -556,7 +556,7 @@ namespace DOfficeCore.ViewModels
             _Logger.WriteLog("INFO");
 
             DiaryBox = null;
-            EnableTextBox = true;
+            EnableDiaryBox = true;
 
             _Logger.WriteLog("DONE");
         }

@@ -16,15 +16,28 @@ namespace DOfficeCore.Models
         }
         #endregion
 
-        #region Blocks : List<Blocks> - Уникальные блоки диагноза
+        #region Blocks : HashSet<Blocks> - Уникальные блоки диагноза
         /// <summary>Уникальные блоки диагноза</summary>
-        private List<Block> _Blocks;
+        private HashSet<Block> _Blocks;
         /// <summary>Уникальные блоки диагноза</summary>
-        public List<Block> Blocks
+        public HashSet<Block> Blocks
         {
             get => _Blocks;
             set => Set(ref _Blocks, value);
         }
         #endregion
+
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() != this.GetType()) return false;
+
+            Diagnosis diagnosis = (Diagnosis)obj;
+            return Code == diagnosis.Code;
+        }
+
+        public override int GetHashCode()
+        {
+            return Code.GetHashCode();
+        }
     }
 }
