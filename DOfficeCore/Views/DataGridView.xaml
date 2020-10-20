@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:infra="clr-namespace:DOfficeCore.Infrastructure"
     xmlns:local="clr-namespace:DOfficeCore.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,185 +12,391 @@
     d:DesignWidth="800"
     DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
-    <GroupBox>
-        <GroupBox.Header>
-            <DockPanel LastChildFill="True">
-                <materialDesign:PopupBox
-                    Width="56"
-                    Padding="16,4,16,4"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    DockPanel.Dock="Left"
-                    ToolTip="Добавить элемент">
-                    <materialDesign:PopupBox.ToggleContent>
-                        <materialDesign:PackIcon
-                            Width="32"
-                            Height="28"
-                            Kind="PlusBoxOutline" />
-                    </materialDesign:PopupBox.ToggleContent>
-                    <StackPanel>
-                        <Button
-                            Command="{Binding AddElementCommand}"
-                            CommandParameter="dgCodes"
-                            Content="Добавить диагноз" />
-                        <Button
-                            Command="{Binding AddElementCommand}"
-                            CommandParameter="dgBlocksNames"
-                            Content="Добавить раздел" />
-                        <Button
-                            Command="{Binding AddElementCommand}"
-                            CommandParameter="dgLinesContent"
-                            Content="Добавить предложение" />
-                    </StackPanel>
-                </materialDesign:PopupBox>
-                <Button
-                    x:Name="btnEditNode"
-                    Command="{Binding EditElementCommand, UpdateSourceTrigger=PropertyChanged}"
-                    CommandTarget="{Binding ElementName=tbMultiBox, Path=Text}"
-                    Cursor="Hand"
-                    ToolTip="Редактировать выбранный элемент">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="PencilOutline" />
-                </Button>
-                <Button
-                    x:Name="btnSearchNode"
-                    Command="{Binding SearchElementCommand, UpdateSourceTrigger=PropertyChanged}"
-                    Cursor="Hand"
-                    DockPanel.Dock="Left"
-                    ToolTip="Найти элемент">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="Magnify" />
-                </Button>
-                <Button
-                    x:Name="btnDeleteNode"
-                    Command="{Binding RemoveElementCommand, UpdateSourceTrigger=PropertyChanged}"
-                    DockPanel.Dock="Left"
-                    ToolTip="Удалить выбранный элемент">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="TrashCanOutline" />
-                </Button>
-                <Button
-                    x:Name="btnSaveXML"
-                    Command="{Binding SaveDataToFileCommand, UpdateSourceTrigger=PropertyChanged}"
-                    DockPanel.Dock="Right"
-                    ToolTip="Сохранить коллекцию">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="ContentSaveAllOutline" />
-                </Button>
-                <TextBox FontSize="16"
-                    x:Name="tbMultiBox"
-                    Width="Auto"
-                    Margin="5,0"
-                    VerticalContentAlignment="Center"
-                    materialDesign:HintAssist.Hint="Введите не менее 3х символов"
-                    CaretBrush="Black"
-                    Text="{Binding MultiBox}" />
-            </DockPanel>
-        </GroupBox.Header>
-        <Grid ShowGridLines="False">
+    <UserControl.Resources>
+        <infra:DoctorsConverter x:Key="doctorsConverter" />
+    </UserControl.Resources>
+    <Grid Margin="-3">
+        <Grid.Resources>
+            <Style TargetType="{x:Type Grid}">
+                <Setter Property="Background" Value="#FFD9D7D7" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel
+            Grid.Row="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="#FF686868"
+            Orientation="Horizontal">
+            <Button
+                x:Name="cbDiaryDate"
+                Margin="10,0"
+                VerticalAlignment="Center"
+                Command="{Binding AddDateCommand}"
+                Content="Добавить дату" />
+            <DatePicker
+                x:Name="DiaryDate"
+                MinWidth="100"
+                Margin="5,3,0,0"
+                VerticalAlignment="Center"
+                materialDesign:HintAssist.Hint="Выберите дату"
+                IsDropDownOpen="False"
+                SelectedDate="{Binding ChoosenDate}"
+                SelectedDateFormat="Short" />
+            <Button
+                x:Name="cbDiaryTime"
+                Margin="10,0"
+                Command="{Binding AddTimeCommand}"
+                Content="Добавить время" />
+            <materialDesign:TimePicker
+                x:Name="DiaryTime"
+                Width="70"
+                Margin="5,3,0,0"
+                VerticalAlignment="Center"
+                materialDesign:HintAssist.Hint="Выберите время"
+                Background="Transparent"
+                Is24Hours="True"
+                SelectedTime="{Binding ChoosenDate}" />
+        </StackPanel>
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="#FF9E9E9E"
+            Orientation="Horizontal">
+            <Button
+                Margin="10,0"
+                Command="{Binding AddDocToDiaryCommand}"
+                Content="Добавить подпись">
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource doctorsConverter}">
+                        <Binding ElementName="cbPositionList" Path="SelectedItem" />
+                        <Binding ElementName="cbDoctorsList" Path="SelectedItem" />
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+            <ComboBox
+                x:Name="cbPositionList"
+                MinWidth="200"
+                Margin="10,0"
+                materialDesign:HintAssist.Hint="Выберите должность"
+                BorderBrush="Black"
+                FontSize="16"
+                ItemsSource="{Binding Position}" />
+            <materialDesign:PopupBox
+                PlacementMode="BottomAndAlignLeftEdges"
+                StaysOpen="True"
+                ToolTip="Изменить список должностей">
+                <StackPanel>
+                    <TextBox
+                        x:Name="tbPosition"
+                        Margin="10,5"
+                        materialDesign:HintAssist.Hint="Введите должность"
+                        Text="{Binding CurrentPosition}" />
+                    <Button Command="{Binding AddPositionCommand}" Content="Добавить должность" />
+                    <Button
+                        Command="{Binding DeletePositionCommand}"
+                        CommandParameter="{Binding ElementName=cbPositionList, Path=SelectedItem}"
+                        Content="Удалить должность" />
+                    <Button
+                        Command="{Binding EditPositionCommand}"
+                        CommandParameter="{Binding ElementName=cbPositionList, Path=SelectedItem}"
+                        Content="Изменить выбранную должность" />
+                </StackPanel>
+            </materialDesign:PopupBox>
+            <ComboBox
+                x:Name="cbDoctorsList"
+                MinWidth="200"
+                Margin="10,0"
+                materialDesign:HintAssist.Hint="Выберите доктора"
+                BorderBrush="Black"
+                FontSize="16"
+                ItemsSource="{Binding Doctors}" />
+            <materialDesign:PopupBox
+                PlacementMode="BottomAndAlignLeftEdges"
+                StaysOpen="True"
+                ToolTip="Изменить список докторов">
+                <StackPanel>
+                    <TextBox
+                        x:Name="tbDoctors"
+                        Margin="10,5"
+                        materialDesign:HintAssist.Hint="Введите Ф.И.О."
+                        Text="{Binding CurrentDoctor}" />
+                    <Button Command="{Binding AddDoctorCommand}" Content="Добавить доктора" />
+                    <Button
+                        Command="{Binding DeleteDoctorCommand}"
+                        CommandParameter="{Binding ElementName=cbDoctorsList, Path=SelectedItem}"
+                        Content="Удалить доктора" />
+                    <Button
+                        Command="{Binding EditDoctorCommand}"
+                        CommandParameter="{Binding ElementName=cbDoctorsList, Path=SelectedItem}"
+                        Content="Переименовать выбранного доктора" />
+                </StackPanel>
+            </materialDesign:PopupBox>
+            <Button
+                x:Name="btnSaveDoctorsXML"
+                Margin="10,0"
+                Command="{Binding SaveDoctorsListCommand}"
+                ToolTip="Сохранить список докторов">
+                <materialDesign:PackIcon
+                    Width="24"
+                    Height="24"
+                    Kind="ContentSaveAllOutline" />
+            </Button>
+        </StackPanel>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="100" />
-                <ColumnDefinition Width="Auto" MinWidth="100" />
-                <ColumnDefinition Width="*" MinWidth="100" />
+                <ColumnDefinition Width="2*" MinWidth="500" />
+                <ColumnDefinition Width="*" MinWidth="300" />
             </Grid.ColumnDefinitions>
-            <DataGrid
-                x:Name="dgCodes"
-                Grid.Column="0"
-                Margin="0,0,5,0"
-                AutoGenerateColumns="False"
-                Background="#FF9E9E9E"
-                IsReadOnly="True"
-                ItemsSource="{Binding ViewCollection.DiagnosisCode}"
-                SelectionMode="Single"
-                SelectionUnit="Cell">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectedCellsChanged">
-                        <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding StringTransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Path=.}">
-                        <DataGridTextColumn.Header>
-                            <TextBlock Foreground="Black" Text="Шифр" />
-                        </DataGridTextColumn.Header>
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+            <DockPanel LastChildFill="True">
+                <GroupBox>
+                    <GroupBox.Header>
+                        <DockPanel LastChildFill="True">
+                            <materialDesign:PopupBox
+                                Width="56"
+                                Padding="16,4,16,4"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                DockPanel.Dock="Left"
+                                ToolTip="Добавить элемент">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon
+                                        Width="32"
+                                        Height="28"
+                                        Kind="PlusBoxOutline" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel>
+                                    <Button
+                                        Command="{Binding AddElementCommand}"
+                                        CommandParameter="dgCodes"
+                                        Content="Добавить диагноз" />
+                                    <Button
+                                        Command="{Binding AddElementCommand}"
+                                        CommandParameter="dgBlocksNames"
+                                        Content="Добавить раздел" />
+                                    <Button
+                                        Command="{Binding AddElementCommand}"
+                                        CommandParameter="dgLinesContent"
+                                        Content="Добавить предложение" />
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                            <Button
+                                x:Name="btnEditNode"
+                                Command="{Binding EditElementCommand, UpdateSourceTrigger=PropertyChanged}"
+                                CommandTarget="{Binding ElementName=tbMultiBox, Path=Text}"
+                                Cursor="Hand"
+                                ToolTip="Редактировать выбранный элемент">
+                                <materialDesign:PackIcon
+                                    Width="24"
+                                    Height="24"
+                                    Kind="PencilOutline" />
+                            </Button>
+                            <Button
+                                x:Name="btnSearchNode"
+                                Command="{Binding SearchElementCommand, UpdateSourceTrigger=PropertyChanged}"
+                                Cursor="Hand"
+                                DockPanel.Dock="Left"
+                                ToolTip="Найти элемент">
+                                <materialDesign:PackIcon
+                                    Width="24"
+                                    Height="24"
+                                    Kind="Magnify" />
+                            </Button>
+                            <Button
+                                x:Name="btnDeleteNode"
+                                Command="{Binding RemoveElementCommand, UpdateSourceTrigger=PropertyChanged}"
+                                DockPanel.Dock="Left"
+                                ToolTip="Удалить выбранный элемент">
+                                <materialDesign:PackIcon
+                                    Width="24"
+                                    Height="24"
+                                    Kind="TrashCanOutline" />
+                            </Button>
+                            <Button
+                                x:Name="btnSaveXML"
+                                Command="{Binding SaveDataToFileCommand, UpdateSourceTrigger=PropertyChanged}"
+                                DockPanel.Dock="Right"
+                                ToolTip="Сохранить коллекцию">
+                                <materialDesign:PackIcon
+                                    Width="24"
+                                    Height="24"
+                                    Kind="ContentSaveAllOutline" />
+                            </Button>
+                            <TextBox
+                                x:Name="tbMultiBox"
+                                Width="Auto"
+                                Margin="5,0"
+                                VerticalContentAlignment="Center"
+                                materialDesign:HintAssist.Hint="Введите не менее 3х символов"
+                                CaretBrush="Black"
+                                FontSize="16"
+                                Text="{Binding MultiBox}" />
+                        </DockPanel>
+                    </GroupBox.Header>
+                    <Grid ShowGridLines="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="100" />
+                            <ColumnDefinition Width="Auto" MinWidth="100" />
+                            <ColumnDefinition Width="*" MinWidth="100" />
+                        </Grid.ColumnDefinitions>
+                        <DataGrid
+                            x:Name="dgCodes"
+                            Grid.Column="0"
+                            Margin="0,0,5,0"
+                            AutoGenerateColumns="False"
+                            Background="#FF9E9E9E"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding ViewCollection.DiagnosisCode}"
+                            SelectionMode="Single"
+                            SelectionUnit="Cell">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectedCellsChanged">
+                                    <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseDoubleClick">
+                                    <i:InvokeCommandAction Command="{Binding StringTransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=.}">
+                                    <DataGridTextColumn.Header>
+                                        <TextBlock Foreground="Black" Text="Шифр" />
+                                    </DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <GridSplitter
+                            Grid.Column="0"
+                            MinWidth="5"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Stretch"
+                            Opacity="0" />
+                        <DataGrid
+                            x:Name="dgBlocksNames"
+                            Grid.Column="1"
+                            Margin="0,0,5,0"
+                            AutoGenerateColumns="False"
+                            Background="#FF9E9E9E"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding ViewCollection.BlocksNames}"
+                            SelectionMode="Single"
+                            SelectionUnit="Cell">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectedCellsChanged">
+                                    <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseDoubleClick">
+                                    <i:InvokeCommandAction Command="{Binding StringTransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=.}">
+                                    <DataGridTextColumn.Header>
+                                        <TextBlock Foreground="Black" Text="Раздел" />
+                                    </DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <GridSplitter
+                            Grid.Column="1"
+                            MinWidth="5"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Stretch"
+                            Opacity="0" />
+                        <DataGrid
+                            x:Name="dgLinesContent"
+                            Grid.Column="2"
+                            AutoGenerateColumns="False"
+                            Background="#FF9E9E9E"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding ViewCollection.LinesNames}"
+                            SelectionMode="Single"
+                            SelectionUnit="Cell">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectedCellsChanged">
+                                    <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseDoubleClick">
+                                    <i:InvokeCommandAction Command="{Binding StringTransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=.}">
+                                    <DataGridTextColumn.Header>
+                                        <TextBlock Foreground="Black" Text="Данные" />
+                                    </DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </GroupBox>
+            </DockPanel>
             <GridSplitter
                 Grid.Column="0"
                 MinWidth="5"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Stretch"
-                Opacity="0" />
-            <DataGrid
-                x:Name="dgBlocksNames"
-                Grid.Column="1"
-                Margin="0,0,5,0"
-                AutoGenerateColumns="False"
-                Background="#FF9E9E9E"
-                IsReadOnly="True"
-                ItemsSource="{Binding ViewCollection.BlocksNames}"
-                SelectionMode="Single"
-                SelectionUnit="Cell">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectedCellsChanged">
-                        <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding StringTransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Path=.}">
-                        <DataGridTextColumn.Header>
-                            <TextBlock Foreground="Black" Text="Раздел" />
-                        </DataGridTextColumn.Header>
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            <GridSplitter
-                Grid.Column="1"
-                MinWidth="5"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Stretch"
-                Opacity="0" />
-            <DataGrid
-                x:Name="dgLinesContent"
-                Grid.Column="2"
-                AutoGenerateColumns="False"
-                Background="#FF9E9E9E"
-                IsReadOnly="True"
-                ItemsSource="{Binding ViewCollection.LinesNames}"
-                SelectionMode="Single"
-                SelectionUnit="Cell">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectedCellsChanged">
-                        <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding StringTransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Path=.}">
-                        <DataGridTextColumn.Header>
-                            <TextBlock Foreground="Black" Text="Данные" />
-                        </DataGridTextColumn.Header>
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+                Opacity="0"
+                ShowsPreview="False" />
+            <GroupBox Grid.Column="1" MinWidth="300">
+                <GroupBox.Header>
+                    <UniformGrid Rows="1">
+                        <Button Command="{Binding RandomCommand}">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                Kind="Dice5Outline" />
+                        </Button>
+                        <Button
+                            x:Name="Copy"
+                            Command="{Binding CopyTextCommand}"
+                            CommandParameter="{Binding Text, ElementName=tbDiary}"
+                            ToolTip="Копировать текст">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                Kind="ContentCopy" />
+                        </Button>
+                        <Button
+                            x:Name="Edit"
+                            Command="{Binding EditTextCommand}"
+                            CommandTarget="{Binding ElementName=tbDiary}"
+                            ToolTip="Редактировать текст">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                Kind="PencilOutline" />
+                        </Button>
+                        <GridSplitter IsEnabled="False" />
+                        <Button
+                            x:Name="Clear"
+                            Command="{Binding ClearDiaryBoxCommand}"
+                            CommandParameter="{Binding ElementName=tbDiary}"
+                            ToolTip="Очистить поле">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                Kind="Close" />
+                        </Button>
+                    </UniformGrid>
+                </GroupBox.Header>
+                <TextBox
+                    x:Name="tbDiary"
+                    Grid.Column="1"
+                    MinWidth="300"
+                    materialDesign:HintAssist.Hint="Введите текст"
+                    AcceptsReturn="True"
+                    IsReadOnly="{Binding EnableTextBox}"
+                    Text="{Binding DiaryBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+            </GroupBox>
         </Grid>
-    </GroupBox>
+    </Grid>
 </UserControl>

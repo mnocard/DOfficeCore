@@ -5,3 +5,7 @@
 изменение ViewCollection list на hashset
 
 добавить статус бар
+
+прогресс бар загрузки и обработки файла
+
+ProgressBar.Value = streamReader.BaseStream.Position / (double) streamReader.DaseStream.Lenght;

@@ -1,0 +1,126 @@
+﻿<UserControl
+    x:Class="DOfficeCore.Views.LinesEditView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:DOfficeCore.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
+    mc:Ignorable="d">
+    <Grid Margin="-3" Background="#FFD9D7D7">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <StackPanel
+            Grid.Row="0"
+            Grid.ColumnSpan="3"
+            Background="#FF686868"
+            Orientation="Horizontal">
+            <Button
+                Margin="10,0"
+                Command="{Binding OpenFileCommand}"
+                Content="Выбрать файл"
+                ToolTip="Выбрать документ docx" />
+            <Button
+                Margin="10,0"
+                Command="{Binding GetTextFromClipboardCommand}"
+                Content="Вставить текст"
+                ToolTip="Вставить скопированный текст из буфера обмена" />
+        </StackPanel>
+        <DockPanel Grid.Row="1" Grid.Column="0">
+            <Button
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="10,5"
+                Command="{Binding ClearListBoxCommand}"
+                Content="Очистить таблицу"
+                DockPanel.Dock="Bottom"
+                ToolTip="Удалить все элементы из первой таблицы" />
+            <ListBox
+                Background="#FF9E9E9E"
+                ItemsSource="{Binding RawLines, UpdateSourceTrigger=PropertyChanged}"
+                SelectionMode="Single">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+        <GridSplitter
+            Grid.Row="1"
+            Grid.Column="0"
+            MinWidth="5"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Stretch"
+            Background="#FF686868"
+            Opacity="0"
+            ShowsPreview="False" />
+        <DockPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            MinWidth="100">
+            <DockPanel
+                Margin="3"
+                DockPanel.Dock="Top"
+                LastChildFill="True">
+                <Button
+                    Margin="3,0"
+                    Content="X"
+                    DockPanel.Dock="Right" />
+                <Button
+                    Margin="3,0"
+                    Content="+"
+                    DockPanel.Dock="Right" />
+                <TextBox Margin="3,0" VerticalContentAlignment="Center"/>
+            </DockPanel>
+            <ListBox
+                x:Name="DiagnosisCodes"
+                MinHeight="200"
+                Background="#FF9E9E9E"
+                DockPanel.Dock="Top"
+                SelectionMode="Single" />
+            <DockPanel
+                Margin="3"
+                DockPanel.Dock="Top"
+                LastChildFill="True">
+                <Button
+                    Margin="3,0"
+                    Content="X"
+                    DockPanel.Dock="Right" />
+                <Button
+                    Margin="3,0"
+                    Content="+"
+                    DockPanel.Dock="Right" />
+                <TextBox Margin="3,0" VerticalContentAlignment="Center"/>
+            </DockPanel>
+            <ListBox
+                MinHeight="200"
+                Background="#FF9E9E9E"
+                SelectionMode="Single" />
+        </DockPanel>
+        <GridSplitter
+            Grid.Row="1"
+            Grid.Column="1"
+            MinWidth="5"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Stretch"
+            ShowsPreview="False" 
+            Background="#FF686868"/>
+        <ListBox
+            Grid.Row="1"
+            Grid.Column="2"
+            SelectionMode="Single" />
+    </Grid>
+</UserControl>

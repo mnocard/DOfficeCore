@@ -1,35 +1,147 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System;
-using System.Collections.ObjectModel;
-using Microsoft.Win32;
-using DOfficeCore.Services;
-using System.Linq;
+using DOfficeCore.Models;
 
 namespace DOfficeCore.ViewModels
 {
     partial class MainWindowViewModel
     {
-        #region Форматы открываемых файлов
-        private const string dlgFilter = "Word documents (.docx)|*.docx";
-        private const string dlgDefaultExt = ".docx";
+        #region Свойства окна дневника
+
+        
+
+        #region EnableTextBox : bool - Состояние возможности редактирования текстового окна
+        /// <summary>Состояние возможности редактирования текстового окна</summary>
+        private bool _EnableTextBox = true;
+        /// <summary>Состояние возможности редактирования текстового окна</summary>
+        public bool EnableTextBox
+        {
+            get => _EnableTextBox;
+            set => Set(ref _EnableTextBox, value);
+        }
         #endregion
 
-        #region Команды вкладки дневника
+        #region FocusedDataGrid : DataGrid - Имя датагрида, который сейчас находится в фокусе
 
-        #region Команда закрытия программы
-        /// <summary>Команда закрытия программы</summary>
-        public ICommand ClosingAppCommand { get; }
-        /// <summary>Команда закрытия программы</summary>
-        private void OnClosingAppCommandExecuted(object parameter)
+        /// <summary>Имя датагрида, который сейчас находится в фокусе</summary>
+        private string _FocusedDataGrid;
+
+        /// <summary>Имя датагрида, который сейчас находится в фокусе</summary>
+        public string FocusedDataGrid
         {
-            _Logger.WriteLog("EXIT", "Закрытие программы.");
+            get => _FocusedDataGrid;
+            set => Set(ref _FocusedDataGrid, value);
         }
 
-        private bool CanClosingAppCommandExecute(object parameter) => true;
+        #endregion
+
+        #region MultiBox : string - Содержимое мультибокса
+
+        /// <summary>Содержимое мультибокса</summary>
+        private string _MultiBox;
+
+        /// <summary>Содержимое мультибокса</summary>
+        public string MultiBox
+        {
+            get => _MultiBox;
+            set => Set(ref _MultiBox, value);
+        }
 
         #endregion
+
+        #region DiaryBox : string - Содержимое дневника
+
+        /// <summary>Содержимое дневника</summary>
+        private string _DiaryBox;
+
+        /// <summary>Содержимое дневника</summary>
+        public string DiaryBox
+        {
+            get => _DiaryBox;
+            set => Set(ref _DiaryBox, value);
+        }
+
+        #endregion
+
+        #region ChoosenDate : Datetime - Выбранная дата
+
+        /// <summary>Выбранная дата</summary>
+        private DateTime _ChoosenDate = DateTime.Now;
+
+        /// <summary>Выбранная дата</summary>
+        public DateTime ChoosenDate
+        {
+            get => _ChoosenDate;
+            set => Set(ref _ChoosenDate, value);
+        }
+
+        #endregion
+
+        #region Doctors : ObservableCollection<string> - Список докторов
+
+        /// <summary>Список докторов</summary>
+        private ObservableCollection<string> _Doctors;
+
+        /// <summary>Список докторов</summary>
+        public ObservableCollection<string> Doctors
+        {
+            get => _Doctors;
+            set => Set(ref _Doctors, value);
+        }
+
+        #endregion
+
+        #region Position : ObservableCollection<string> - Должность
+
+        /// <summary>DESCRIPTION</summary>
+        private ObservableCollection<string> _Position;
+
+        /// <summary>DESCRIPTION</summary>
+        public ObservableCollection<string> Position
+        {
+            get => _Position;
+            set => Set(ref _Position, value);
+        }
+
+        #endregion
+
+        #region CurrentPosition : string - Поле ввода для должностей
+
+        /// <summary>Поле ввода для должностей</summary>
+        private string _CurrentPosition;
+
+        /// <summary>Поле ввода для должностей</summary>
+        public string CurrentPosition
+        {
+            get => _CurrentPosition;
+            set => Set(ref _CurrentPosition, value);
+        }
+
+        #endregion
+
+        #region CurrentDoctor : string - Поле ввода для докторов
+
+        /// <summary>Поле ввода для докторов</summary>
+        private string _CurrentDoctor;
+
+        /// <summary>Поле ввода для докторов</summary>
+        public string CurrentDoctor
+        {
+            get => _CurrentDoctor;
+            set => Set(ref _CurrentDoctor, value);
+        }
+
+        #endregion
+
+        #endregion
+
+
+        #region Команды вкладки дневника
 
         #region Создание случайного дневника
         /// <summary>Создание случайного дневника</summary>
@@ -98,9 +210,9 @@ namespace DOfficeCore.ViewModels
         {
             _Logger.WriteLog("INFO");
 
-            if (parameter is string positionName 
-                && Position.Contains(positionName) 
-                && CurrentPosition != null 
+            if (parameter is string positionName
+                && Position.Contains(positionName)
+                && CurrentPosition != null
                 && CurrentPosition != String.Empty)
             {
                 Position.Remove(positionName);
@@ -148,7 +260,7 @@ namespace DOfficeCore.ViewModels
             if (CurrentPosition != null && CurrentPosition != String.Empty)
             {
                 Position.Add(CurrentPosition);
-                CurrentPosition = null; 
+                CurrentPosition = null;
             }
 
             _Logger.WriteLog("DONE");
@@ -166,9 +278,9 @@ namespace DOfficeCore.ViewModels
         {
             _Logger.WriteLog("INFO");
 
-            if (parameter is string doctorsName 
+            if (parameter is string doctorsName
                 && Doctors.Contains(doctorsName)
-                && CurrentDoctor != null 
+                && CurrentDoctor != null
                 && CurrentDoctor != String.Empty)
             {
                 Doctors.Remove(doctorsName);
@@ -270,34 +382,13 @@ namespace DOfficeCore.ViewModels
         {
             _Logger.WriteLog("INFO");
 
-            if (_ViewCollection.DataCollection != null) 
+            if (_ViewCollection.DataCollection != null)
                 _DataProviderService.SaveDataToFile(_ViewCollection.DataCollection, "file1");
 
             _Logger.WriteLog("DONE");
         }
 
         private bool CanSaveDataToFileCommandExecute(object p) => true;
-        #endregion
-
-        #region Команда загрузки данных
-        /// <summary>Команда Загрузки данных</summary>
-        public ICommand LoadDataCommand { get; }
-        /// <summary>Команда Загрузки данных</summary>
-        private void OnLoadDataCommandExecuted(object parameter)
-        {
-            _Logger.WriteLog("INFO");
-
-            _ViewCollection.DataCollection = _DataProviderService.LoadDataFromFile("file.json");
-            _ViewCollectionProvider.DiagnosisFromDataToView();
-            var temp = _DataProviderService.LoadDoctorsFromFile("Doctors.json");
-            if (temp != null) Doctors = new ObservableCollection<string>(temp);
-            temp = _DataProviderService.LoadDoctorsFromFile("Position.json");
-            if (temp != null) Position = new ObservableCollection<string>(temp);
-
-            _Logger.WriteLog("DONE");
-        }
-
-        private bool CanLoadDataCommandExecute(object parameter) => true;
         #endregion
 
         #region Команда изменения отображения данных по щелчку
@@ -476,72 +567,6 @@ namespace DOfficeCore.ViewModels
         private bool CanClearDiaryBoxCommandExecute(object parameter) => true;
 
         #endregion
-
-        #endregion
-
-        #region Команды окна обработчика строк
-
-        #region Открытие файла
-        /// <summary>Открытие файла</summary>
-        public ICommand OpenFileCommand { get; }
-        /// <summary>Открытие файла</summary>
-        private void OnOpenFileCommandExecuted(object parameter)
-        {
-            var dlg = new OpenFileDialog();
-            dlg.DefaultExt = dlgDefaultExt;
-            dlg.Filter = dlgFilter;
-
-            var result = dlg.ShowDialog();
-
-            if (result == true)
-            {
-                TextForEditing = _LineEditorService.OpenDocument(dlg.FileName);
-                if (RawLines == null) RawLines = new ObservableCollection<string>();
-                foreach (var item in _LineEditorService.TextToLines(TextForEditing))
-                {
-                    RawLines.Add(item);
-                }
-            }
-        }
-
-        private bool CanOpenFileCommandExecute(object parameter) => true;
-
-        #endregion
-
-        #region Получение текста из буфера обмена
-        /// <summary>Получение текста из буфера обмена</summary>
-        public ICommand GetTextFromClipboardCommand { get; }
-        /// <summary>Получение текста из буфера обмена</summary>
-        private void OnGetTextFromClipboardCommandExecuted(object parameter)
-        {
-            if (Clipboard.ContainsText())
-            {
-                TextForEditing = Clipboard.GetText();
-                if (RawLines == null) RawLines = new ObservableCollection<string>();
-                foreach (var item in _LineEditorService.TextToLines(TextForEditing))
-                {
-                    RawLines.Add(item);
-                }
-            }
-        }
-
-        private bool CanGetTextFromClipboardCommandExecute(object parameter) => true;
-
-        #endregion
-
-        #region Удаление всех элементов необработанной таблицы
-        /// <summary>Удаление всех элементов необработанной таблицы</summary>
-        public ICommand ClearListBoxCommand { get; }
-        /// <summary>Удаление всех элементов необработанной таблицы</summary>
-        private void OnClearListBoxCommandExecuted(object parameter)
-        {
-            RawLines = null;
-        }
-
-        private bool CanClearListBoxCommandExecute(object parameter) => RawLines != null;
-
-        #endregion
-
 
         #endregion
     }
