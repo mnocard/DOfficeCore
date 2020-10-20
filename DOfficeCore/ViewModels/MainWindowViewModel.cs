@@ -57,6 +57,8 @@ namespace DOfficeCore.ViewModels
             OpenFileCommand = new LambdaCommand(OnOpenFileCommandExecuted, CanOpenFileCommandExecute);
             GetTextFromClipboardCommand = new LambdaCommand(OnGetTextFromClipboardCommandExecuted, CanGetTextFromClipboardCommandExecute);
             ClearListBoxCommand = new LambdaCommand(OnClearListBoxCommandExecuted, CanClearListBoxCommandExecute);
+            AddNewDiagnosisCommand = new LambdaCommand(OnAddNewDiagnosisCommandExecuted, CanAddNewDiagnosisCommandExecute);
+            RemoveDiagnosisCommand = new LambdaCommand(OnRemoveDiagnosisCommandExecuted, CanRemoveDiagnosisCommandExecute);
 
             #endregion
         }
@@ -73,19 +75,6 @@ namespace DOfficeCore.ViewModels
         #endregion
 
         #region Команды
-
-        #region Команда закрытия программы
-        /// <summary>Команда закрытия программы</summary>
-        public ICommand ClosingAppCommand { get; }
-        /// <summary>Команда закрытия программы</summary>
-        private void OnClosingAppCommandExecuted(object parameter)
-        {
-            _Logger.WriteLog("EXIT", "Закрытие программы.");
-        }
-
-        private bool CanClosingAppCommandExecute(object parameter) => true;
-
-        #endregion
 
         #region Команда загрузки данных
         /// <summary>Команда Загрузки данных</summary>
@@ -107,6 +96,19 @@ namespace DOfficeCore.ViewModels
 
         private bool CanLoadDataCommandExecute(object parameter) => true;
         #endregion
+        
+        #region Команда закрытия программы
+        /// <summary>Команда закрытия программы</summary>
+        public ICommand ClosingAppCommand { get; }
+        /// <summary>Команда закрытия программы</summary>
+        private void OnClosingAppCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("EXIT", "Закрытие программы.");
+        }
+
+        private bool CanClosingAppCommandExecute(object parameter) => true;
+
+        #endregion
 
         #endregion
 
@@ -114,6 +116,8 @@ namespace DOfficeCore.ViewModels
 
         #region ViewCollection : IViewCollection - Коллекция данных
         private readonly IViewCollection _ViewCollection;
+        /// <summary>Публичное свойство нужно для привязки представления к коллекции</summary>
+        public IViewCollection ViewCollection { get => _ViewCollection; }
         #endregion
 
         #region Сервис обработки строк

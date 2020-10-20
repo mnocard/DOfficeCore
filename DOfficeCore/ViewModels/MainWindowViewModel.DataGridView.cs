@@ -13,8 +13,6 @@ namespace DOfficeCore.ViewModels
     {
         #region Свойства окна дневника
 
-        
-
         #region EnableTextBox : bool - Состояние возможности редактирования текстового окна
         /// <summary>Состояние возможности редактирования текстового окна</summary>
         private bool _EnableTextBox = true;
@@ -139,7 +137,6 @@ namespace DOfficeCore.ViewModels
         #endregion
 
         #endregion
-
 
         #region Команды вкладки дневника
 

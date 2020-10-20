@@ -8,4 +8,4 @@
 
 прогресс бар загрузки и обработки файла
 
-ProgressBar.Value = streamReader.BaseStream.Position / (double) streamReader.DaseStream.Lenght;
+Дальше продолжать невозможно без рефакторинга...

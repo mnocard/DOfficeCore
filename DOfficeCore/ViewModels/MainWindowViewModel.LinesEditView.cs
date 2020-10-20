@@ -45,6 +45,34 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
+        #region DiagnosisTextBox : string - Строка диагноза
+
+        /// <summary>Строка диагноза</summary>
+        private string _DiagnosisTextBox;
+
+        /// <summary>Строка диагноза</summary>
+        public string DiagnosisTextBox
+        {
+            get => _DiagnosisTextBox;
+            set => Set(ref _DiagnosisTextBox, value);
+        }
+
+        #endregion
+
+        #region BlockTextBox : string - Строка раздела
+
+        /// <summary>Строка раздела</summary>
+        private string _BlockTextBox;
+
+        /// <summary>Строка раздела</summary>
+        public string BlockTextBox
+        {
+            get => _BlockTextBox;
+            set => Set(ref _BlockTextBox, value);
+        }
+
+        #endregion
+
         #endregion
 
         #region Команды окна обработчика строк
@@ -107,6 +135,39 @@ namespace DOfficeCore.ViewModels
         }
 
         private bool CanClearListBoxCommandExecute(object parameter) => RawLines != null;
+
+        #endregion
+
+        #region Добавление нового диагноза
+        /// <summary>Добавление нового диагноза</summary>
+        public ICommand AddNewDiagnosisCommand { get; }
+        /// <summary>Добавление нового диагноза</summary>
+        private void OnAddNewDiagnosisCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("INFO");
+
+            if (DiagnosisTextBox != null)
+            {
+                _ViewCollectionProvider.AddELement("dgCodes", DiagnosisTextBox);
+            }
+
+            _Logger.WriteLog("DONE");
+        }
+
+        private bool CanAddNewDiagnosisCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Удаление диагноза
+        /// <summary>Удаление диагноза</summary>
+        public ICommand RemoveDiagnosisCommand { get; }
+        /// <summary>Удаление диагноза</summary>
+        private void OnRemoveDiagnosisCommandExecuted(object parameter)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CanRemoveDiagnosisCommandExecute(object parameter) => true;
 
         #endregion
 
