@@ -272,6 +272,40 @@ namespace DOfficeCore.Services
 
         }
 
+        public bool EditElement(HashSet<Diagnosis> DataCollection, string MultiBox, string FocusedDataGrid, string CurrentItem)
+        {
+            _Logger.WriteLog("INFO");
+
+            if (FocusedDataGrid.Equals("Diagnosis"))
+            {
+                DataCollection.Where(t => t.Code.Equals(CurrentItem)).Select(t => t.Code = MultiBox).ToHashSet();
+                _Logger.WriteLog("Diagnosis code changed succesfully");
+                return true;
+            }
+            else if (FocusedDataGrid.Equals("Blocks"))
+            {
+                DataCollection.SelectMany(t => t.Blocks.Where(i => i.Name.Equals(CurrentItem)).Select(i => i.Name = MultiBox)).ToHashSet();
+                _Logger.WriteLog("Block's name changed succesfully");
+                return true;
+            }
+            else if (FocusedDataGrid.Equals("Lines"))
+            {
+                DataCollection.SelectMany(t => t.Blocks.Where(i => i.Lines.Contains(CurrentItem)).Select(c =>
+                {
+                    c.Lines.Remove(CurrentItem);
+                    c.Lines.Add(MultiBox);
+                    return c;
+                })).ToHashSet();
+
+                _Logger.WriteLog("Line changed succesfully");
+                return true;
+            }
+            else
+            {
+                _Logger.WriteLog($"Wrong collection. There is no \"{FocusedDataGrid}\" collection");
+                return false;
+            }
+        }
 
         /// <summary>Метод для редактирования элемента базы данных</summary>
         /// <param name="FocusedDataGrid">Имя выбранного датагрида</param>
