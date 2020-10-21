@@ -6,6 +6,7 @@ using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels.Core;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -15,21 +16,19 @@ namespace DOfficeCore.ViewModels
     {
         public MainWindowViewModel(IDataProviderService DataProviderService, 
                                     IViewCollectionProvider ViewCollectionProvider, 
-                                    IViewCollection ViewCollection,
                                     IDiaryBoxProvider DiaryBoxProvider,
                                     ILogger Logger,
                                     ILineEditorService LineEditorService)
         {
             _DataProviderService = DataProviderService;
             _ViewCollectionProvider = ViewCollectionProvider;
-            _ViewCollection = ViewCollection;
             _DiaryBoxProvider = DiaryBoxProvider;
             _LineEditorService = LineEditorService;
             _Logger = Logger;
 
             _Logger.WriteLog("INFO", "Создание MainWindowViewModel");
 
-            #region Команды
+            #region Команды окна дневника
 
             EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
             CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
@@ -54,6 +53,9 @@ namespace DOfficeCore.ViewModels
             AddDocToDiaryCommand = new LambdaCommand(OnAddDocToDiaryCommandExecuted, CanAddDocToDiaryCommandExecute);
             RandomCommand = new LambdaCommand(OnRandomCommandExecuted, CanRandomCommandExecute);
             ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
+            #endregion
+
+            #region Команды окна редактирования строк
 
             OpenFileCommand = new LambdaCommand(OnOpenFileCommandExecuted, CanOpenFileCommandExecute);
             GetTextFromClipboardCommand = new LambdaCommand(OnGetTextFromClipboardCommandExecuted, CanGetTextFromClipboardCommandExecute);
@@ -64,6 +66,8 @@ namespace DOfficeCore.ViewModels
             #endregion
         }
 
+        #region Свойства
+
         #region Заголовок окна
         /// <summary>Заголовок окна</summary>
         private string _Title = "Кабинет врача";
@@ -73,6 +77,106 @@ namespace DOfficeCore.ViewModels
             get => _Title;
             set => Set(ref _Title, value);
         }
+        #endregion
+
+        #region DataCollection : HashSet<Diagnosis> - Коллекция данных из базы данных
+
+        /// <summary>Коллекция данных из базы данных</summary>
+        private HashSet<Diagnosis> _DataCollection;
+
+        /// <summary>Коллекция данных из базы данных</summary>
+        public HashSet<Diagnosis> DataCollection
+        {
+            get => _DataCollection;
+            set => Set(ref _DataCollection, value);
+        }
+
+        #endregion
+
+        #region DiagnosisCode : ObservableCollection<string> - Коллекция кодов диагнозов
+
+        /// <summary>Коллекция кодов диагнозов</summary>
+        private ObservableCollection<string> _DiagnosisCode;
+
+        /// <summary>Коллекция кодов диагнозов</summary>
+        public ObservableCollection<string> DiagnosisCode
+        {
+            get => _DiagnosisCode;
+            set => Set(ref _DiagnosisCode, value);
+        }
+
+        #endregion
+
+        #region BlocksNames : ObservableCollection<string> - Коллекция названий блоков
+
+        /// <summary>Коллекция названий блоков</summary>
+        private ObservableCollection<string> _BlocksNames;
+
+        /// <summary>Коллекция названий блоков</summary>
+        public ObservableCollection<string> BlocksNames
+        {
+            get => _BlocksNames;
+            set => Set(ref _BlocksNames, value);
+        }
+
+        #endregion
+
+        #region LinesNames : ObservableCollection<string> - Коллекция содержимого строк
+
+        /// <summary>Коллекция содержимого строк</summary>
+        private ObservableCollection<string> _LinesNames;
+
+        /// <summary>Коллекция содержимого строк</summary>
+        public ObservableCollection<string> LinesNames
+        {
+            get => _LinesNames;
+            set => Set(ref _LinesNames, value);
+        }
+
+        #endregion
+
+        #region CurrentDiagnosis : string - Текущий выбранный диагноз
+
+        /// <summary>Текущий выбранный диагноз</summary>
+        private string _CurrentDiagnosis;
+
+        /// <summary>Текущий выбранный диагноз</summary>
+        public string CurrentDiagnosis
+        {
+            get => _CurrentDiagnosis;
+            set => _CurrentDiagnosis = value;
+        }
+
+        #endregion
+
+        #region CurrentBlock : string - Текущий выбранный блок
+
+        /// <summary>Текущий выбранный блок</summary>
+        private string _CurrentBlock;
+
+        /// <summary>Текущий выбранный блок</summary>
+        public string CurrentBlock
+        {
+            get => _CurrentBlock;
+            set => _CurrentBlock = value;
+        }
+
+        #endregion
+
+        #region CurrentLine : string - Текущая выбранная строка
+
+        /// <summary>Текущая выбранная строка</summary>
+        private string _CurrentLine;
+
+        /// <summary>Текущая выбранная строка</summary>
+        public string CurrentLine
+        {
+            get => _CurrentLine;
+            set => _CurrentLine = value;
+        }
+
+        #endregion
+
         #endregion
 
         #region Команды
@@ -91,12 +195,12 @@ namespace DOfficeCore.ViewModels
             if (temp != null) Position = new ObservableCollection<string>(temp);
 
             // Тестовые данные
-            _ViewCollection.DataCollection = TestData.Diag;
-            _ViewCollectionProvider.DiagnosisFromDataToView();
+            DataCollection = TestData.Diag;
+            DiagnosisCode = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
             // Реальные данные
-            //_ViewCollection.DataCollection = _DataProviderService.LoadDataFromFile("file.json");
-            //_ViewCollectionProvider.DiagnosisFromDataToView();
+            //DataCollection = _DataProviderService.LoadDataFromFile("file.json");
+            //DiagnosisCode = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
             _Logger.WriteLog("DONE");
         }
@@ -121,12 +225,6 @@ namespace DOfficeCore.ViewModels
 
         #region Сервисы
 
-        #region ViewCollection : IViewCollection - Коллекция данных
-        private readonly IViewCollection _ViewCollection;
-        /// <summary>Публичное свойство нужно для привязки представления к коллекции</summary>
-        public IViewCollection ViewCollection { get => _ViewCollection; }
-        #endregion
-
         #region Сервис обработки строк
         private readonly ILineEditorService _LineEditorService;
         #endregion
@@ -148,9 +246,5 @@ namespace DOfficeCore.ViewModels
         #endregion
 
         #endregion
-
-        
-
-        
     }
 }

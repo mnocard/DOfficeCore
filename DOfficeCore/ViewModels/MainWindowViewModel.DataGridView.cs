@@ -148,9 +148,9 @@ namespace DOfficeCore.ViewModels
         {
             _Logger.WriteLog("INFO");
 
-            if (_ViewCollection.CurrentDiagnosis != null)
+            if (CurrentDiagnosis != null)
             {
-                DiaryBox = _ViewCollectionProvider.RandomDiary();
+                DiaryBox = _ViewCollectionProvider.RandomDiary(CurrentDiagnosis, DataCollection);
             }
 
             _Logger.WriteLog("DONE");
@@ -379,8 +379,8 @@ namespace DOfficeCore.ViewModels
         {
             _Logger.WriteLog("INFO");
 
-            if (_ViewCollection.DataCollection != null)
-                _DataProviderService.SaveDataToFile(_ViewCollection.DataCollection, "file1");
+            if (DataCollection != null)
+                _DataProviderService.SaveDataToFile(DataCollection, "file1");
 
             _Logger.WriteLog("DONE");
         }
@@ -398,7 +398,20 @@ namespace DOfficeCore.ViewModels
 
             if ((parameter is DataGrid datagrid) && datagrid.CurrentItem != null)
             {
-                FocusedDataGrid = datagrid.Name;
+                switch (datagrid.Name)
+                {
+                    case "dgCodes":
+                        FocusedDataGrid = "Diagnosis";
+                        break;
+                    case "dgBlocksNames":
+                        FocusedDataGrid = "Blocks";
+                        break;
+                    case "dgLinesContent":
+                        FocusedDataGrid = "Lines";
+                        break;
+                    default:
+                        break;
+                }
                 _ViewCollectionProvider.SelectedData(FocusedDataGrid, (string)datagrid.CurrentItem);
             }
 
@@ -462,7 +475,9 @@ namespace DOfficeCore.ViewModels
 
             if (MultiBox != null && MultiBox != string.Empty && MultiBox.Length > 3)
             {
-                _ViewCollectionProvider.SearchElement(MultiBox);
+                DiagnosisCode = _ViewCollectionProvider.SearchDiagnosis(MultiBox, DataCollection);
+                BlocksNames = _ViewCollectionProvider.SearchBlocks(MultiBox, DataCollection);
+                LinesNames = _ViewCollectionProvider.SearchLines(MultiBox, DataCollection);
                 FocusedDataGrid = null;
             }
 
@@ -481,7 +496,14 @@ namespace DOfficeCore.ViewModels
         {
             _Logger.WriteLog("INFO");
 
-            if (FocusedDataGrid != null && MultiBox != null) _ViewCollectionProvider.RemoveElement(FocusedDataGrid, MultiBox);
+            MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes && MultiBox != null && FocusedDataGrid != null)
+            {
+                DataCollection = _ViewCollectionProvider.RemoveElement(FocusedDataGrid, MultiBox, DataCollection, CurrentDiagnosis, CurrentBlock, CurrentLine);
+                DiagnosisCode = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                BlocksNames = _ViewCollectionProvider.BlocksFromDataToView(CurrentDiagnosis, DataCollection);
+                LinesNames = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentDiagnosis, CurrentBlock);
+            }
 
             _Logger.WriteLog("DONE");
         }

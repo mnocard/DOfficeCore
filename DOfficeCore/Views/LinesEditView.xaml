@@ -51,8 +51,7 @@
             <ListBox
                 Background="#FF9E9E9E"
                 ItemsSource="{Binding RawLines, UpdateSourceTrigger=PropertyChanged}"
-                SelectionMode="Single"
-                >
+                SelectionMode="Single">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -79,15 +78,19 @@
                 Margin="3"
                 DockPanel.Dock="Top"
                 LastChildFill="True">
-                <Button Margin="3,0" DockPanel.Dock="Right" Command="{Binding RemoveDiagnosisCommand}">
+                <Button
+                    Margin="3,0"
+                    Command="{Binding RemoveDiagnosisCommand}"
+                    DockPanel.Dock="Right">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
-                        Kind="TrashCanOutline" 
-                        />
+                        Kind="TrashCanOutline" />
                 </Button>
-                <Button Margin="3,0" DockPanel.Dock="Right"
-                        Command="{Binding AddNewDiagnosisCommand}">
+                <Button
+                    Margin="3,0"
+                    Command="{Binding AddNewDiagnosisCommand}"
+                    DockPanel.Dock="Right">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
@@ -105,7 +108,7 @@
                 MinHeight="150"
                 Background="#FF9E9E9E"
                 DockPanel.Dock="Top"
-                ItemsSource="{Binding ViewCollection.DiagnosisCode}"
+                ItemsSource="{Binding DiagnosisCode}"
                 SelectionMode="Single" />
             <DockPanel
                 Margin="3"
@@ -133,7 +136,7 @@
             <ListBox
                 MinHeight="200"
                 Background="#FF9E9E9E"
-                ItemsSource="{Binding ViewCollection.BlocksNames}"
+                ItemsSource="{Binding BlocksNames}"
                 SelectionMode="Single" />
         </DockPanel>
         <GridSplitter
@@ -148,7 +151,7 @@
             Grid.Row="1"
             Grid.Column="2"
             Background="#FF9E9E9E"
-            ItemsSource="{Binding ViewCollection.LinesNames}"
+            ItemsSource="{Binding LinesNames}"
             SelectionMode="Single" />
     </Grid>
 </UserControl>
