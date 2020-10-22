@@ -79,13 +79,13 @@ namespace DOfficeCore.ViewModels
         }
         #endregion
 
-        #region DataCollection : HashSet<Diagnosis> - Коллекция данных из базы данных
+        #region DataCollection : ObservableCollection<Diagnosis> - Коллекция данных из базы данных
 
         /// <summary>Коллекция данных из базы данных</summary>
-        private HashSet<Diagnosis> _DataCollection;
+        private ObservableCollection<Section> _DataCollection;
 
         /// <summary>Коллекция данных из базы данных</summary>
-        public HashSet<Diagnosis> DataCollection
+        public ObservableCollection<Section> DataCollection
         {
             get => _DataCollection;
             set => Set(ref _DataCollection, value);
@@ -195,7 +195,7 @@ namespace DOfficeCore.ViewModels
             if (temp != null) Position = new ObservableCollection<string>(temp);
 
             // Тестовые данные
-            DataCollection = TestData.Diag;
+            DataCollection = TestData.GetCollection();
             DiagnosisCode = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
             // Реальные данные

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using DOfficeCore.Models;
 
 namespace DOfficeCore.Data
@@ -10,6 +8,7 @@ namespace DOfficeCore.Data
         public static ObservableCollection<Section> GetCollection()
         {
             var TestLines = new ObservableCollection<Section>();
+
             for (int a = 0; a < 5; a++)
             {
                 for (int b = 0; b < 5; b++)
