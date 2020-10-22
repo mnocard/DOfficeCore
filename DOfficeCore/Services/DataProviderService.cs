@@ -2,6 +2,7 @@
 using DOfficeCore.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 
 namespace DOfficeCore.Services
@@ -13,6 +14,13 @@ namespace DOfficeCore.Services
 
         public DataProviderService(ILogger Logger) => _Logger = Logger;
 
+        /// <summary>
+        /// Сохранение данных в файл
+        /// </summary>
+        /// <typeparam name="T">Тип сохраняемого списки</typeparam>
+        /// <param name="data">Собственно список сохраняемых данных</param>
+        /// <param name="fileName">Имя в файла, который будет происходить запись данных</param>
+        /// <returns></returns>
         public bool SaveDataToFile<T>(IEnumerable<T> data, string fileName)
         {
             _Logger.WriteLog("INFO");
@@ -24,12 +32,17 @@ namespace DOfficeCore.Services
                 serializer.Serialize(file, data);
                 result = true;
             }
-            
-            _Logger.WriteLog("DONE");
-            
+            if(result) _Logger.WriteLog("File saved succesfully");
+            else _Logger.WriteLog("ERROR! File save filed");
+
             return result;
         }
 
+        /// <summary>
+        /// Загрузка списка докторов из файла (применимо к должностям
+        /// </summary>
+        /// <param name="fileName">Имя файла</param>
+        /// <returns>Возвращаемый список докторов или долдностей</returns>
         public IEnumerable<string> LoadDoctorsFromFile(string fileName)
         {
             _Logger.WriteLog("INFO");
@@ -38,7 +51,7 @@ namespace DOfficeCore.Services
             {
                 using FileStream fs = File.Create(fileName);
                 
-                _Logger.WriteLog("DONE");
+                _Logger.WriteLog($"File {fileName} doesn't exist");
 
                 return new HashSet<string>();
             }
@@ -48,29 +61,36 @@ namespace DOfficeCore.Services
                 JsonSerializer serializer = new JsonSerializer();
                 var result = (IEnumerable<string>)serializer.Deserialize(file, typeof(IEnumerable<string>));
                 
-                _Logger.WriteLog("DONE");
+                _Logger.WriteLog("File loaded succesfully");
 
                 return result;
             }
         }
 
-        public HashSet<Diagnosis> LoadDataFromFile(string fileName)
+        /// <summary>
+        /// Загрузка данных из файла
+        /// </summary>
+        /// <param name="fileName">Имя файла</param>
+        /// <returns>Коллекция данных</returns>
+        public ObservableCollection<Section> LoadDataFromFile(string fileName)
         {
             _Logger.WriteLog("INFO");
 
-            HashSet<Diagnosis> result = null;
+            ObservableCollection<Section> result = null;
 
             if (!File.Exists(fileName))
             {
                 using FileStream fs = File.Create(fileName);
+                result = new ObservableCollection<Section>();
+                _Logger.WriteLog($"File {fileName} doesn't exist");
             }
             else
             {
                 using StreamReader file = File.OpenText(fileName);
                 JsonSerializer serializer = new JsonSerializer();
-                result = (HashSet<Diagnosis>)serializer.Deserialize(file, typeof(HashSet<Diagnosis>));
+                result = (ObservableCollection<Section>)serializer.Deserialize(file, typeof(ObservableCollection<Section>));
+                _Logger.WriteLog("File loaded succesfully");
             }
-            _Logger.WriteLog("DONE");
 
             return result;
         }
