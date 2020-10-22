@@ -252,7 +252,7 @@
                             AutoGenerateColumns="False"
                             Background="#FF9E9E9E"
                             IsReadOnly="True"
-                            ItemsSource="{Binding DiagnosisCode}"
+                            ItemsSource="{Binding DataCollection}"
                             SelectionMode="Single"
                             SelectionUnit="Cell">
                             <i:Interaction.Triggers>
@@ -264,7 +264,7 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=.}">
+                                <DataGridTextColumn Binding="{Binding Path=Diagnosis}">
                                     <DataGridTextColumn.Header>
                                         <TextBlock Foreground="Black" Text="Шифр" />
                                     </DataGridTextColumn.Header>

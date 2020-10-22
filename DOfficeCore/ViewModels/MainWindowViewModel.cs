@@ -29,41 +29,41 @@ namespace DOfficeCore.ViewModels
             _Logger.WriteLog("INFO", "Создание MainWindowViewModel");
 
             #region Команды окна дневника
-
-            EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
-            CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
-            SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
-            SelectedDataCommand = new LambdaCommand(OnSelectedDataCommandExecuted, CanSelectedDataCommandExecute);
-            EditElementCommand = new LambdaCommand(OnEditElementCommandExecuted, CanEditElementCommandExecute);
-            StringTransferCommand = new LambdaCommand(OnStringTransferCommandExecuted, CanStringTransferCommandExecute);
-            SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted, CanSearchElementCommandExecute);
-            RemoveElementCommand = new LambdaCommand(OnRemoveElementCommandExecuted, CanRemoveElementCommandExecute);
-            AddElementCommand = new LambdaCommand(OnAddElementCommandExecuted, CanAddElementCommandExecute);
-            AddTimeCommand = new LambdaCommand(OnAddTimeCommandExecuted, CanAddTimeCommandExecute);
-            AddDateCommand = new LambdaCommand(OnAddDateCommandExecuted, CanAddDateCommandExecute);
-            ClearDiaryBoxCommand = new LambdaCommand(OnClearDiaryBoxCommandExecuted, CanClearDiaryBoxCommandExecute);
-            AddDoctorCommand = new LambdaCommand(OnAddDoctorCommandExecuted, CanAddDoctorCommandExecute);
-            DeleteDoctorCommand = new LambdaCommand(OnDeleteDoctorCommandExecuted, CanDeleteDoctorCommandExecute);
-            EditDoctorCommand = new LambdaCommand(OnEditDoctorCommandExecuted, CanEditDoctorCommandExecute);
-            AddPositionCommand = new LambdaCommand(OnAddPositionCommandExecuted, CanAddPositionCommandExecute);
-            DeletePositionCommand = new LambdaCommand(OnDeletePositionCommandExecuted, CanDeletePositionCommandExecute);
-            EditPositionCommand = new LambdaCommand(OnEditPositionCommandExecuted, CanEditPositionCommandExecute);
-            SaveDoctorsListCommand = new LambdaCommand(OnSaveDoctorsListCommandExecuted, CanSaveDoctorsListCommandExecute);
-            AddDocToDiaryCommand = new LambdaCommand(OnAddDocToDiaryCommandExecuted, CanAddDocToDiaryCommandExecute);
-            RandomCommand = new LambdaCommand(OnRandomCommandExecuted, CanRandomCommandExecute);
-            ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
+
+            //EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
+            //CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
+            //SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
+            //SelectedDataCommand = new LambdaCommand(OnSelectedDataCommandExecuted, CanSelectedDataCommandExecute);
+            //EditElementCommand = new LambdaCommand(OnEditElementCommandExecuted, CanEditElementCommandExecute);
+            //StringTransferCommand = new LambdaCommand(OnStringTransferCommandExecuted, CanStringTransferCommandExecute);
+            //SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted, CanSearchElementCommandExecute);
+            //RemoveElementCommand = new LambdaCommand(OnRemoveElementCommandExecuted, CanRemoveElementCommandExecute);
+            //AddElementCommand = new LambdaCommand(OnAddElementCommandExecuted, CanAddElementCommandExecute);
+            //AddTimeCommand = new LambdaCommand(OnAddTimeCommandExecuted, CanAddTimeCommandExecute);
+            //AddDateCommand = new LambdaCommand(OnAddDateCommandExecuted, CanAddDateCommandExecute);
+            //ClearDiaryBoxCommand = new LambdaCommand(OnClearDiaryBoxCommandExecuted, CanClearDiaryBoxCommandExecute);
+            //AddDoctorCommand = new LambdaCommand(OnAddDoctorCommandExecuted, CanAddDoctorCommandExecute);
+            //DeleteDoctorCommand = new LambdaCommand(OnDeleteDoctorCommandExecuted, CanDeleteDoctorCommandExecute);
+            //EditDoctorCommand = new LambdaCommand(OnEditDoctorCommandExecuted, CanEditDoctorCommandExecute);
+            //AddPositionCommand = new LambdaCommand(OnAddPositionCommandExecuted, CanAddPositionCommandExecute);
+            //DeletePositionCommand = new LambdaCommand(OnDeletePositionCommandExecuted, CanDeletePositionCommandExecute);
+            //EditPositionCommand = new LambdaCommand(OnEditPositionCommandExecuted, CanEditPositionCommandExecute);
+            //SaveDoctorsListCommand = new LambdaCommand(OnSaveDoctorsListCommandExecuted, CanSaveDoctorsListCommandExecute);
+            //AddDocToDiaryCommand = new LambdaCommand(OnAddDocToDiaryCommandExecuted, CanAddDocToDiaryCommandExecute);
+            //RandomCommand = new LambdaCommand(OnRandomCommandExecuted, CanRandomCommandExecute);
+            //ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
             #endregion
 
-            #region Команды окна редактирования строк
+            //#region Команды окна редактирования строк
 
-            OpenFileCommand = new LambdaCommand(OnOpenFileCommandExecuted, CanOpenFileCommandExecute);
-            GetTextFromClipboardCommand = new LambdaCommand(OnGetTextFromClipboardCommandExecuted, CanGetTextFromClipboardCommandExecute);
-            ClearListBoxCommand = new LambdaCommand(OnClearListBoxCommandExecuted, CanClearListBoxCommandExecute);
-            AddNewDiagnosisCommand = new LambdaCommand(OnAddNewDiagnosisCommandExecuted, CanAddNewDiagnosisCommandExecute);
-            RemoveDiagnosisCommand = new LambdaCommand(OnRemoveDiagnosisCommandExecuted, CanRemoveDiagnosisCommandExecute);
+            //OpenFileCommand = new LambdaCommand(OnOpenFileCommandExecuted, CanOpenFileCommandExecute);
+            //GetTextFromClipboardCommand = new LambdaCommand(OnGetTextFromClipboardCommandExecuted, CanGetTextFromClipboardCommandExecute);
+            //ClearListBoxCommand = new LambdaCommand(OnClearListBoxCommandExecuted, CanClearListBoxCommandExecute);
+            //AddNewDiagnosisCommand = new LambdaCommand(OnAddNewDiagnosisCommandExecuted, CanAddNewDiagnosisCommandExecute);
+            //RemoveDiagnosisCommand = new LambdaCommand(OnRemoveDiagnosisCommandExecuted, CanRemoveDiagnosisCommandExecute);
 
-            #endregion
+            //#endregion
         }
 
         #region Свойства
@@ -79,7 +79,7 @@ namespace DOfficeCore.ViewModels
         }
         #endregion
 
-        #region DataCollection : ObservableCollection<Diagnosis> - Коллекция данных из базы данных
+        #region DataCollection : ObservableCollection<Section> - Коллекция данных из базы данных
 
         /// <summary>Коллекция данных из базы данных</summary>
         private ObservableCollection<Section> _DataCollection;
@@ -93,89 +93,89 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
-        #region DiagnosisCode : ObservableCollection<string> - Коллекция кодов диагнозов
+        //#region DiagnosisCode : ObservableCollection<string> - Коллекция кодов диагнозов
 
-        /// <summary>Коллекция кодов диагнозов</summary>
-        private ObservableCollection<string> _DiagnosisCode;
+        ///// <summary>Коллекция кодов диагнозов</summary>
+        //private ObservableCollection<string> _DiagnosisCode;
 
-        /// <summary>Коллекция кодов диагнозов</summary>
-        public ObservableCollection<string> DiagnosisCode
-        {
-            get => _DiagnosisCode;
-            set => Set(ref _DiagnosisCode, value);
-        }
+        ///// <summary>Коллекция кодов диагнозов</summary>
+        //public ObservableCollection<string> DiagnosisCode
+        //{
+        //    get => _DiagnosisCode;
+        //    set => Set(ref _DiagnosisCode, value);
+        //}
 
-        #endregion
+        //#endregion
 
-        #region BlocksNames : ObservableCollection<string> - Коллекция названий блоков
+        //#region BlocksNames : ObservableCollection<string> - Коллекция названий блоков
 
-        /// <summary>Коллекция названий блоков</summary>
-        private ObservableCollection<string> _BlocksNames;
+        ///// <summary>Коллекция названий блоков</summary>
+        //private ObservableCollection<string> _BlocksNames;
 
-        /// <summary>Коллекция названий блоков</summary>
-        public ObservableCollection<string> BlocksNames
-        {
-            get => _BlocksNames;
-            set => Set(ref _BlocksNames, value);
-        }
+        ///// <summary>Коллекция названий блоков</summary>
+        //public ObservableCollection<string> BlocksNames
+        //{
+        //    get => _BlocksNames;
+        //    set => Set(ref _BlocksNames, value);
+        //}
 
-        #endregion
+        //#endregion
 
-        #region LinesNames : ObservableCollection<string> - Коллекция содержимого строк
+        //#region LinesNames : ObservableCollection<string> - Коллекция содержимого строк
 
-        /// <summary>Коллекция содержимого строк</summary>
-        private ObservableCollection<string> _LinesNames;
+        ///// <summary>Коллекция содержимого строк</summary>
+        //private ObservableCollection<string> _LinesNames;
 
-        /// <summary>Коллекция содержимого строк</summary>
-        public ObservableCollection<string> LinesNames
-        {
-            get => _LinesNames;
-            set => Set(ref _LinesNames, value);
-        }
+        ///// <summary>Коллекция содержимого строк</summary>
+        //public ObservableCollection<string> LinesNames
+        //{
+        //    get => _LinesNames;
+        //    set => Set(ref _LinesNames, value);
+        //}
 
-        #endregion
+        //#endregion
 
-        #region CurrentDiagnosis : string - Текущий выбранный диагноз
+        //#region CurrentDiagnosis : string - Текущий выбранный диагноз
 
-        /// <summary>Текущий выбранный диагноз</summary>
-        private string _CurrentDiagnosis;
+        ///// <summary>Текущий выбранный диагноз</summary>
+        //private string _CurrentDiagnosis;
 
-        /// <summary>Текущий выбранный диагноз</summary>
-        public string CurrentDiagnosis
-        {
-            get => _CurrentDiagnosis;
-            set => _CurrentDiagnosis = value;
-        }
+        ///// <summary>Текущий выбранный диагноз</summary>
+        //public string CurrentDiagnosis
+        //{
+        //    get => _CurrentDiagnosis;
+        //    set => _CurrentDiagnosis = value;
+        //}
 
-        #endregion
+        //#endregion
 
-        #region CurrentBlock : string - Текущий выбранный блок
+        //#region CurrentBlock : string - Текущий выбранный блок
 
-        /// <summary>Текущий выбранный блок</summary>
-        private string _CurrentBlock;
+        ///// <summary>Текущий выбранный блок</summary>
+        //private string _CurrentBlock;
 
-        /// <summary>Текущий выбранный блок</summary>
-        public string CurrentBlock
-        {
-            get => _CurrentBlock;
-            set => _CurrentBlock = value;
-        }
+        ///// <summary>Текущий выбранный блок</summary>
+        //public string CurrentBlock
+        //{
+        //    get => _CurrentBlock;
+        //    set => _CurrentBlock = value;
+        //}
 
-        #endregion
+        //#endregion
 
-        #region CurrentLine : string - Текущая выбранная строка
+        //#region CurrentLine : string - Текущая выбранная строка
 
-        /// <summary>Текущая выбранная строка</summary>
-        private string _CurrentLine;
+        ///// <summary>Текущая выбранная строка</summary>
+        //private string _CurrentLine;
 
-        /// <summary>Текущая выбранная строка</summary>
-        public string CurrentLine
-        {
-            get => _CurrentLine;
-            set => _CurrentLine = value;
-        }
+        ///// <summary>Текущая выбранная строка</summary>
+        //public string CurrentLine
+        //{
+        //    get => _CurrentLine;
+        //    set => _CurrentLine = value;
+        //}
 
-        #endregion
+        //#endregion
 
         #endregion
 
@@ -196,10 +196,10 @@ namespace DOfficeCore.ViewModels
 
             // Тестовые данные
             DataCollection = TestData.GetCollection();
-            DiagnosisCode = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+            //DiagnosisCode = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
             // Реальные данные
-            //DataCollection = _DataProviderService.LoadDataFromFile("file.json");
+            //DataCollection = _DataProviderService.LoadDataFromFile("file");
             //DiagnosisCode = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
             _Logger.WriteLog("DONE");

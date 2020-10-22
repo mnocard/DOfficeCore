@@ -75,102 +75,102 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
-        #region Команды окна обработчика строк
+        //#region Команды окна обработчика строк
 
-        #region Открытие файла
-        /// <summary>Открытие файла</summary>
-        public ICommand OpenFileCommand { get; }
-        /// <summary>Открытие файла</summary>
-        private void OnOpenFileCommandExecuted(object parameter)
-        {
-            var dlg = new OpenFileDialog();
-            dlg.DefaultExt = dlgDefaultExt;
-            dlg.Filter = dlgFilter;
+        //#region Открытие файла
+        ///// <summary>Открытие файла</summary>
+        //public ICommand OpenFileCommand { get; }
+        ///// <summary>Открытие файла</summary>
+        //private void OnOpenFileCommandExecuted(object parameter)
+        //{
+        //    var dlg = new OpenFileDialog();
+        //    dlg.DefaultExt = dlgDefaultExt;
+        //    dlg.Filter = dlgFilter;
 
-            var result = dlg.ShowDialog();
+        //    var result = dlg.ShowDialog();
 
-            if (result == true)
-            {
-                TextForEditing = _LineEditorService.OpenDocument(dlg.FileName);
-                if (RawLines == null) RawLines = new ObservableCollection<string>();
-                foreach (var item in _LineEditorService.TextToLines(TextForEditing))
-                {
-                    RawLines.Add(item);
-                }
-            }
-        }
+        //    if (result == true)
+        //    {
+        //        TextForEditing = _LineEditorService.OpenDocument(dlg.FileName);
+        //        if (RawLines == null) RawLines = new ObservableCollection<string>();
+        //        foreach (var item in _LineEditorService.TextToLines(TextForEditing))
+        //        {
+        //            RawLines.Add(item);
+        //        }
+        //    }
+        //}
 
-        private bool CanOpenFileCommandExecute(object parameter) => true;
+        //private bool CanOpenFileCommandExecute(object parameter) => true;
 
-        #endregion
+        //#endregion
 
-        #region Получение текста из буфера обмена
-        /// <summary>Получение текста из буфера обмена</summary>
-        public ICommand GetTextFromClipboardCommand { get; }
-        /// <summary>Получение текста из буфера обмена</summary>
-        private void OnGetTextFromClipboardCommandExecuted(object parameter)
-        {
-            if (Clipboard.ContainsText())
-            {
-                TextForEditing = Clipboard.GetText();
-                if (RawLines == null) RawLines = new ObservableCollection<string>();
-                foreach (var item in _LineEditorService.TextToLines(TextForEditing))
-                {
-                    RawLines.Add(item);
-                }
-            }
-        }
+        //#region Получение текста из буфера обмена
+        ///// <summary>Получение текста из буфера обмена</summary>
+        //public ICommand GetTextFromClipboardCommand { get; }
+        ///// <summary>Получение текста из буфера обмена</summary>
+        //private void OnGetTextFromClipboardCommandExecuted(object parameter)
+        //{
+        //    if (Clipboard.ContainsText())
+        //    {
+        //        TextForEditing = Clipboard.GetText();
+        //        if (RawLines == null) RawLines = new ObservableCollection<string>();
+        //        foreach (var item in _LineEditorService.TextToLines(TextForEditing))
+        //        {
+        //            RawLines.Add(item);
+        //        }
+        //    }
+        //}
 
-        private bool CanGetTextFromClipboardCommandExecute(object parameter) => true;
+        //private bool CanGetTextFromClipboardCommandExecute(object parameter) => true;
 
-        #endregion
+        //#endregion
 
-        #region Удаление всех элементов необработанной таблицы
-        /// <summary>Удаление всех элементов необработанной таблицы</summary>
-        public ICommand ClearListBoxCommand { get; }
-        /// <summary>Удаление всех элементов необработанной таблицы</summary>
-        private void OnClearListBoxCommandExecuted(object parameter)
-        {
-            RawLines = null;
-        }
+        //#region Удаление всех элементов необработанной таблицы
+        ///// <summary>Удаление всех элементов необработанной таблицы</summary>
+        //public ICommand ClearListBoxCommand { get; }
+        ///// <summary>Удаление всех элементов необработанной таблицы</summary>
+        //private void OnClearListBoxCommandExecuted(object parameter)
+        //{
+        //    RawLines = null;
+        //}
 
-        private bool CanClearListBoxCommandExecute(object parameter) => RawLines != null;
+        //private bool CanClearListBoxCommandExecute(object parameter) => RawLines != null;
 
-        #endregion
+        //#endregion
 
-        #region Добавление нового диагноза
-        /// <summary>Добавление нового диагноза</summary>
-        public ICommand AddNewDiagnosisCommand { get; }
-        /// <summary>Добавление нового диагноза</summary>
-        private void OnAddNewDiagnosisCommandExecuted(object parameter)
-        {
-            _Logger.WriteLog("INFO");
+        //#region Добавление нового диагноза
+        ///// <summary>Добавление нового диагноза</summary>
+        //public ICommand AddNewDiagnosisCommand { get; }
+        ///// <summary>Добавление нового диагноза</summary>
+        //private void OnAddNewDiagnosisCommandExecuted(object parameter)
+        //{
+        //    _Logger.WriteLog("INFO");
 
-            if (DiagnosisTextBox != null)
-            {
-                _ViewCollectionProvider.AddELement("dgCodes", DiagnosisTextBox);
-            }
+        //    if (DiagnosisTextBox != null)
+        //    {
+        //        _ViewCollectionProvider.AddELement("dgCodes", DiagnosisTextBox);
+        //    }
 
-            _Logger.WriteLog("DONE");
-        }
+        //    _Logger.WriteLog("DONE");
+        //}
 
-        private bool CanAddNewDiagnosisCommandExecute(object parameter) => true;
+        //private bool CanAddNewDiagnosisCommandExecute(object parameter) => true;
 
-        #endregion
+        //#endregion
 
-        #region Удаление диагноза
-        /// <summary>Удаление диагноза</summary>
-        public ICommand RemoveDiagnosisCommand { get; }
-        /// <summary>Удаление диагноза</summary>
-        private void OnRemoveDiagnosisCommandExecuted(object parameter)
-        {
-            throw new NotImplementedException();
-        }
+        //#region Удаление диагноза
+        ///// <summary>Удаление диагноза</summary>
+        //public ICommand RemoveDiagnosisCommand { get; }
+        ///// <summary>Удаление диагноза</summary>
+        //private void OnRemoveDiagnosisCommandExecuted(object parameter)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        private bool CanRemoveDiagnosisCommandExecute(object parameter) => true;
+        //private bool CanRemoveDiagnosisCommandExecute(object parameter) => true;
 
-        #endregion
+        //#endregion
 
-        #endregion
+        //#endregion
     }
 }
