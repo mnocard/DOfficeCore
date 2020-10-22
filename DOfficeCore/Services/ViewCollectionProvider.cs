@@ -182,6 +182,74 @@ namespace DOfficeCore.Services
             return DataCollection;
         }
 
+        public bool RemoveDiagnosis(HashSet<Diagnosis> DataCollection, string MultiBox, string CurrentItem)
+        {
+            _Logger.WriteLog("INFO");
+            bool result = DataCollection.Remove(new Diagnosis() { Code = MultiBox });
+            if (result) _Logger.WriteLog("Diagnosis removed succesfully");
+            else _Logger.WriteLog($"Diagnosis remove failed. There is no \"{MultiBox}\" diagnosis");
+            return result;
+        }
+        public bool RemoveBlock(HashSet<Diagnosis> DataCollection, string MultiBox, string CurrentItem)
+        {
+
+        }
+        public bool EditDiagnosis(HashSet<Diagnosis> DataCollection, string MultiBox, string CurrentItem)
+        {
+            _Logger.WriteLog("INFO");
+            bool result = false;
+            DataCollection.Where(t => 
+            {
+                if (t.Code.Equals(CurrentItem))
+                {
+                    result = true;
+                    return true;
+                }
+                else return false;
+            }).Select(t => t.Code = MultiBox).ToHashSet();
+            _Logger.WriteLog("Diagnosis code changed succesfully");
+            return result;
+        }
+
+        public bool EditBlock(HashSet<Diagnosis> DataCollection, string MultiBox, string CurrentItem)
+        {
+            _Logger.WriteLog("INFO");
+            bool result = false;
+            DataCollection.SelectMany(t => t.Blocks.Where(i =>
+            {
+                if (i.Name.Equals(CurrentItem))
+                {
+                    result = true;
+                    return true;
+                }
+                else return false;
+            }).Select(i => i.Name = MultiBox)).ToHashSet();
+            _Logger.WriteLog("Block's name changed succesfully");
+            return result;
+        }
+
+        public bool EditLine(HashSet<Diagnosis> DataCollection, string MultiBox, string CurrentItem)
+        {
+            _Logger.WriteLog("INFO");
+            bool result = false;
+            DataCollection.SelectMany(t => t.Blocks.Where(i =>
+            {
+                if (i.Lines.Contains(CurrentItem))
+                {
+                    result = true;
+                    return true;
+                }
+                else return false;
+            }).Select(c =>
+            {
+                c.Lines.Remove(CurrentItem);
+                c.Lines.Add(MultiBox);
+                return c;
+            })).ToHashSet();
+
+            _Logger.WriteLog("Line changed succesfully");
+            return result;
+        }
         /// <summary>Метод поиска диагноза из базы данных</summary>
         /// <param name="MultiBox">Содержимое мультибокса</param>
         public ObservableCollection<string> SearchDiagnosis(string MultiBox, HashSet<Diagnosis> DataCollection)
@@ -272,106 +340,6 @@ namespace DOfficeCore.Services
 
         }
 
-        public bool EditElement(HashSet<Diagnosis> DataCollection, string MultiBox, string FocusedDataGrid, string CurrentItem)
-        {
-            _Logger.WriteLog("INFO");
-
-            if (FocusedDataGrid.Equals("Diagnosis"))
-            {
-                DataCollection.Where(t => t.Code.Equals(CurrentItem)).Select(t => t.Code = MultiBox).ToHashSet();
-                _Logger.WriteLog("Diagnosis code changed succesfully");
-                return true;
-            }
-            else if (FocusedDataGrid.Equals("Blocks"))
-            {
-                DataCollection.SelectMany(t => t.Blocks.Where(i => i.Name.Equals(CurrentItem)).Select(i => i.Name = MultiBox)).ToHashSet();
-                _Logger.WriteLog("Block's name changed succesfully");
-                return true;
-            }
-            else if (FocusedDataGrid.Equals("Lines"))
-            {
-                DataCollection.SelectMany(t => t.Blocks.Where(i => i.Lines.Contains(CurrentItem)).Select(c =>
-                {
-                    c.Lines.Remove(CurrentItem);
-                    c.Lines.Add(MultiBox);
-                    return c;
-                })).ToHashSet();
-
-                _Logger.WriteLog("Line changed succesfully");
-                return true;
-            }
-            else
-            {
-                _Logger.WriteLog($"Wrong collection. There is no \"{FocusedDataGrid}\" collection");
-                return false;
-            }
-        }
-
-        /// <summary>Метод для редактирования элемента базы данных</summary>
-        /// <param name="FocusedDataGrid">Имя выбранного датагрида</param>
-        /// <param name="MultiBox">Содержимое мультибокса</param>
-        public void EditElement(
-            string FocusedDataGrid, 
-            string MultiBox,
-            HashSet<Diagnosis> DataCollection,
-            string CurrentDiagnosis,
-            string CurrentBlock, 
-            string CurrentLine)
-        {
-            _Logger.WriteLog("INFO");
-
-            if (CheckForDoubles(FocusedDataGrid, MultiBox)) return;
-
-            foreach (Diagnosis diagnosis in DataCollection)
-            {
-                if (FocusedDataGrid == "Diagnosis")
-                {
-                    if (!diagnosis.Code.Equals(MultiBox) &&
-                    diagnosis.Code.Equals(CurrentDiagnosis) &&
-                    !MultiBox.Equals(CurrentDiagnosis))
-                    {
-                        diagnosis.Code = MultiBox;
-                        CurrentDiagnosis = MultiBox;
-                        DiagnosisFromDataToView();
-                        _Logger.WriteLog("DONE");
-                        return;
-                    }
-                }
-                else
-                {
-                    foreach (Block block in diagnosis.Blocks)
-                    {
-                        if (FocusedDataGrid == "Blocks")
-                        {
-                            if (!block.Name.Equals(MultiBox) &&
-                            block.Name.Equals(CurrentBlock) &&
-                            !MultiBox.Equals(CurrentBlock))
-                            {
-                                block.Name = MultiBox;
-                                CurrentBlock = MultiBox;
-                                BlocksFromDataToView();
-                                _Logger.WriteLog("DONE");
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            if (block.Lines.Contains(CurrentLine) &&
-                                !block.Lines.Contains(MultiBox) &&
-                                FocusedDataGrid == "Lines" &&
-                                !MultiBox.Equals(CurrentLine))
-                            {
-                                block.Lines.Remove(CurrentLine);
-                                block.Lines.Add(MultiBox);
-                                LinesFromDataToView();
-                                _Logger.WriteLog("DONE");
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         /// <summary>Метод изменения отображения данных по щелчку</summary>
         /// <param name="FocusedDataGrid">Имя выбранного датагрида</param>
@@ -450,52 +418,5 @@ namespace DOfficeCore.Services
         /// <param name="FocusedDataGrid">Выбранны датагрид, в котором осуществляется поиск</param>
         /// <param name="MultiBox">Выбранный для поиска элемент</param>
         /// <returns>True, если элемент найден</returns>
-        private bool CheckForDoubles(string FocusedDataGrid, string MultiBox)
-        {
-            _Logger.WriteLog("INFO");
-
-            foreach (Diagnosis diagnosis in DataCollection)
-            {
-                if (FocusedDataGrid.Equals("Diagnosis"))
-                {
-                    if (diagnosis.Code.Equals(MultiBox))
-                    {
-                        MessageBox.Show("Элемент с таким названием уже существует.");
-                        _Logger.WriteLog("DONE");
-                        return true;
-                    }
-                }
-                else
-                {
-                    foreach (Block block in diagnosis.Blocks)
-                    {
-                        if (FocusedDataGrid.Equals("Blocks"))
-                        {
-                            if (block.Name.Equals(MultiBox))
-                            {
-                                MessageBox.Show("Элемент с таким названием уже существует.");
-                                _Logger.WriteLog("DONE");
-                                return true;
-                            }
-                        }
-                        else
-                        {
-                            foreach (string line in block.Lines)
-                            {
-                                if (line.Equals(MultiBox))
-                                {
-                                    MessageBox.Show("Элемент с таким названием уже существует.");
-                                    _Logger.WriteLog("DONE");
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            _Logger.WriteLog("DONE");
-            return false;
-        }
-
     }
 }

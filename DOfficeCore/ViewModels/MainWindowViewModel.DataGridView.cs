@@ -430,7 +430,25 @@ namespace DOfficeCore.ViewModels
         {
             _Logger.WriteLog("INFO");
 
-            if (FocusedDataGrid != null && MultiBox.Length > 3) _ViewCollectionProvider.EditElement(FocusedDataGrid, MultiBox);
+            if ((parameter is DataGrid datagrid) && datagrid.CurrentItem != null &&FocusedDataGrid != null && MultiBox.Length > 3)
+            {
+                if (FocusedDataGrid.Equals("Diagnosis"))
+                {
+                    _ViewCollectionProvider.EditDiagnosis(DataCollection, MultiBox, (string)datagrid.CurrentItem);
+                }
+                else if (FocusedDataGrid.Equals("Blocks"))
+                {
+                    _ViewCollectionProvider.EditBlock(DataCollection, MultiBox, (string)datagrid.CurrentItem);
+                }
+                else if (FocusedDataGrid.Equals("Lines"))
+                {
+                    _ViewCollectionProvider.EditLine(DataCollection, MultiBox, (string)datagrid.CurrentItem);
+                }
+                else
+                {
+                    _Logger.WriteLog($"Wrong collection. There is no \"{FocusedDataGrid}\" collection");
+                }
+            }
 
             _Logger.WriteLog("DONE");
         }

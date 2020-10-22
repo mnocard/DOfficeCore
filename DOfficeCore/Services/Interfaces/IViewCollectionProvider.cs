@@ -22,7 +22,9 @@ namespace DOfficeCore.Services
             string CurrentDiagnosis,
             string CurrentBlock,
             string CurrentLine);
-        bool EditElement(HashSet<Diagnosis> DataCollection, string MultiBox, string FocusedDataGrid, string CurrentItem)
+        bool EditDiagnosis(HashSet<Diagnosis> DataCollection, string MultiBox, string CurrentItem);
+        bool EditBlock(HashSet<Diagnosis> DataCollection, string MultiBox, string CurrentItem);
+        bool EditLine(HashSet<Diagnosis> DataCollection, string MultiBox, string CurrentItem);
         void SelectedData(string FocusedDataGrid, string CurrentItem);
         void AddELement(string FocusedDataGrid, string MultiBox);
     }
