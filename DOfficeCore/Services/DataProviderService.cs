@@ -72,23 +72,23 @@ namespace DOfficeCore.Services
         /// </summary>
         /// <param name="fileName">Имя файла</param>
         /// <returns>Коллекция данных</returns>
-        public ObservableCollection<Section> LoadDataFromFile(string fileName)
+        public HashSet<Section> LoadDataFromFile(string fileName)
         {
             _Logger.WriteLog("INFO");
 
-            ObservableCollection<Section> result = null;
+            HashSet<Section> result = null;
 
             if (!File.Exists(fileName))
             {
                 using FileStream fs = File.Create(fileName);
-                result = new ObservableCollection<Section>();
+                result = new HashSet<Section>();
                 _Logger.WriteLog($"File {fileName} doesn't exist");
             }
             else
             {
                 using StreamReader file = File.OpenText(fileName);
                 JsonSerializer serializer = new JsonSerializer();
-                result = (ObservableCollection<Section>)serializer.Deserialize(file, typeof(ObservableCollection<Section>));
+                result = (HashSet<Section>)serializer.Deserialize(file, typeof(HashSet<Section>));
                 _Logger.WriteLog("File loaded succesfully");
             }
 

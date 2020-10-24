@@ -138,7 +138,39 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
-        //#region Команды вкладки дневника
+        #region Команды вкладки дневника
+
+        #region Команда изменения отображения данных по щелчку
+        /// <summary>Команда изменения отображения данных по щелчку</summary>
+        public ICommand SelectedDataCommand { get; }
+        /// <summary>Команда изменения отображения данных по щелчку</summary>
+        private void OnSelectedDataCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("INFO");
+
+            if ((parameter is DataGrid datagrid) && datagrid.CurrentItem != null)
+            {
+                switch (datagrid.Name)
+                {
+                    case "dgCodes":
+                        DiagnosisList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, (Section)datagrid.CurrentItem);
+                        break;
+                    case "dgBlocksNames":
+                        BlocksList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, (Section)datagrid.CurrentItem);
+                        break;
+                    case "dgLinesContent":
+                        //TODO ???
+                        break;
+                    default:
+                        break;
+                }
+            }
+            _Logger.WriteLog("DONE");
+        }
+
+        private bool CanSelectedDataCommandExecute(object parameter) => parameter != null;
+
+        #endregion
 
         //#region Создание случайного дневника
         ///// <summary>Создание случайного дневника</summary>
@@ -388,39 +420,7 @@ namespace DOfficeCore.ViewModels
         //private bool CanSaveDataToFileCommandExecute(object p) => true;
         //#endregion
 
-        //#region Команда изменения отображения данных по щелчку
-        ///// <summary>Команда изменения отображения данных по щелчку</summary>
-        //public ICommand SelectedDataCommand { get; }
-        ///// <summary>Команда изменения отображения данных по щелчку</summary>
-        //private void OnSelectedDataCommandExecuted(object parameter)
-        //{
-        //    _Logger.WriteLog("INFO");
 
-        //    if ((parameter is DataGrid datagrid) && datagrid.CurrentItem != null)
-        //    {
-        //        switch (datagrid.Name)
-        //        {
-        //            case "dgCodes":
-        //                FocusedDataGrid = "Diagnosis";
-        //                break;
-        //            case "dgBlocksNames":
-        //                FocusedDataGrid = "Blocks";
-        //                break;
-        //            case "dgLinesContent":
-        //                FocusedDataGrid = "Lines";
-        //                break;
-        //            default:
-        //                break;
-        //        }
-        //        _ViewCollectionProvider.SelectedData(FocusedDataGrid, (string)datagrid.CurrentItem);
-        //    }
-
-        //    _Logger.WriteLog("DONE");
-        //}
-
-        //private bool CanSelectedDataCommandExecute(object parameter) => parameter != null;
-
-        //#endregion
 
         //#region Команда редактирования выбранного элемента
         ///// <summary>Команда редактирования выбранного элемента</summary>
@@ -493,9 +493,9 @@ namespace DOfficeCore.ViewModels
 
         //    if (MultiBox != null && MultiBox != string.Empty && MultiBox.Length > 3)
         //    {
-        //        DiagnosisCode = _ViewCollectionProvider.SearchDiagnosis(MultiBox, DataCollection);
-        //        BlocksNames = _ViewCollectionProvider.SearchBlocks(MultiBox, DataCollection);
-        //        LinesNames = _ViewCollectionProvider.SearchLines(MultiBox, DataCollection);
+        //        DiagnosisList = _ViewCollectionProvider.SearchDiagnosis(MultiBox, DataCollection);
+        //        BlocksList = _ViewCollectionProvider.SearchBlocks(MultiBox, DataCollection);
+        //        LinesList = _ViewCollectionProvider.SearchLines(MultiBox, DataCollection);
         //        FocusedDataGrid = null;
         //    }
 
@@ -518,9 +518,9 @@ namespace DOfficeCore.ViewModels
         //    if (result == MessageBoxResult.Yes && MultiBox != null && FocusedDataGrid != null)
         //    {
         //        DataCollection = _ViewCollectionProvider.RemoveElement(FocusedDataGrid, MultiBox, DataCollection, CurrentDiagnosis, CurrentBlock, CurrentLine);
-        //        DiagnosisCode = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
-        //        BlocksNames = _ViewCollectionProvider.BlocksFromDataToView(CurrentDiagnosis, DataCollection);
-        //        LinesNames = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentDiagnosis, CurrentBlock);
+        //        DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+        //        BlocksList = _ViewCollectionProvider.BlocksFromDataToView(CurrentDiagnosis, DataCollection);
+        //        LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentDiagnosis, CurrentBlock);
         //    }
 
         //    _Logger.WriteLog("DONE");
@@ -605,6 +605,6 @@ namespace DOfficeCore.ViewModels
 
         //#endregion
 
-        //#endregion
+        #endregion
     }
 }

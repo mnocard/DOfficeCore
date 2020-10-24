@@ -30,11 +30,13 @@ namespace DOfficeCore.ViewModels
 
             #region Команды окна дневника
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
+            ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
+
+            SelectedDataCommand = new LambdaCommand(OnSelectedDataCommandExecuted, CanSelectedDataCommandExecute);
 
             //EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
             //CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
             //SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
-            //SelectedDataCommand = new LambdaCommand(OnSelectedDataCommandExecuted, CanSelectedDataCommandExecute);
             //EditElementCommand = new LambdaCommand(OnEditElementCommandExecuted, CanEditElementCommandExecute);
             //StringTransferCommand = new LambdaCommand(OnStringTransferCommandExecuted, CanStringTransferCommandExecute);
             //SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted, CanSearchElementCommandExecute);
@@ -52,7 +54,6 @@ namespace DOfficeCore.ViewModels
             //SaveDoctorsListCommand = new LambdaCommand(OnSaveDoctorsListCommandExecuted, CanSaveDoctorsListCommandExecute);
             //AddDocToDiaryCommand = new LambdaCommand(OnAddDocToDiaryCommandExecuted, CanAddDocToDiaryCommandExecute);
             //RandomCommand = new LambdaCommand(OnRandomCommandExecuted, CanRandomCommandExecute);
-            //ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
             #endregion
 
             //#region Команды окна редактирования строк
@@ -82,10 +83,10 @@ namespace DOfficeCore.ViewModels
         #region DataCollection : ObservableCollection<Section> - Коллекция данных из базы данных
 
         /// <summary>Коллекция данных из базы данных</summary>
-        private ObservableCollection<Section> _DataCollection;
+        private HashSet<Section> _DataCollection;
 
         /// <summary>Коллекция данных из базы данных</summary>
-        public ObservableCollection<Section> DataCollection
+        public HashSet<Section> DataCollection
         {
             get => _DataCollection;
             set => Set(ref _DataCollection, value);
@@ -93,89 +94,47 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
-        //#region DiagnosisCode : ObservableCollection<string> - Коллекция кодов диагнозов
+        #region DiagnosisList : ObservableCollection<Section> - Коллекция кодов диагнозов
 
-        ///// <summary>Коллекция кодов диагнозов</summary>
-        //private ObservableCollection<string> _DiagnosisCode;
+        /// <summary>Коллекция кодов диагнозов</summary>
+        private ObservableCollection<Section> _DiagnosisList;
 
-        ///// <summary>Коллекция кодов диагнозов</summary>
-        //public ObservableCollection<string> DiagnosisCode
-        //{
-        //    get => _DiagnosisCode;
-        //    set => Set(ref _DiagnosisCode, value);
-        //}
+        /// <summary>Коллекция кодов диагнозов</summary>
+        public ObservableCollection<Section> DiagnosisList
+        {
+            get => _DiagnosisList;
+            set => Set(ref _DiagnosisList, value);
+        }
 
-        //#endregion
+        #endregion
 
-        //#region BlocksNames : ObservableCollection<string> - Коллекция названий блоков
+        #region BlocksList : ObservableCollection<Section> - Коллекция названий блоков
 
-        ///// <summary>Коллекция названий блоков</summary>
-        //private ObservableCollection<string> _BlocksNames;
+        /// <summary>Коллекция названий блоков</summary>
+        private ObservableCollection<Section> _BlocksList;
 
-        ///// <summary>Коллекция названий блоков</summary>
-        //public ObservableCollection<string> BlocksNames
-        //{
-        //    get => _BlocksNames;
-        //    set => Set(ref _BlocksNames, value);
-        //}
+        /// <summary>Коллекция названий блоков</summary>
+        public ObservableCollection<Section> BlocksList
+        {
+            get => _BlocksList;
+            set => Set(ref _BlocksList, value);
+        }
 
-        //#endregion
+        #endregion
 
-        //#region LinesNames : ObservableCollection<string> - Коллекция содержимого строк
+        #region LinesList : ObservableCollection<Section> - Коллекция содержимого строк
 
-        ///// <summary>Коллекция содержимого строк</summary>
-        //private ObservableCollection<string> _LinesNames;
+        /// <summary>Коллекция содержимого строк</summary>
+        private ObservableCollection<Section> _LinesList;
 
-        ///// <summary>Коллекция содержимого строк</summary>
-        //public ObservableCollection<string> LinesNames
-        //{
-        //    get => _LinesNames;
-        //    set => Set(ref _LinesNames, value);
-        //}
+        /// <summary>Коллекция содержимого строк</summary>
+        public ObservableCollection<Section> LinesList
+        {
+            get => _LinesList;
+            set => Set(ref _LinesList, value);
+        }
 
-        //#endregion
-
-        //#region CurrentDiagnosis : string - Текущий выбранный диагноз
-
-        ///// <summary>Текущий выбранный диагноз</summary>
-        //private string _CurrentDiagnosis;
-
-        ///// <summary>Текущий выбранный диагноз</summary>
-        //public string CurrentDiagnosis
-        //{
-        //    get => _CurrentDiagnosis;
-        //    set => _CurrentDiagnosis = value;
-        //}
-
-        //#endregion
-
-        //#region CurrentBlock : string - Текущий выбранный блок
-
-        ///// <summary>Текущий выбранный блок</summary>
-        //private string _CurrentBlock;
-
-        ///// <summary>Текущий выбранный блок</summary>
-        //public string CurrentBlock
-        //{
-        //    get => _CurrentBlock;
-        //    set => _CurrentBlock = value;
-        //}
-
-        //#endregion
-
-        //#region CurrentLine : string - Текущая выбранная строка
-
-        ///// <summary>Текущая выбранная строка</summary>
-        //private string _CurrentLine;
-
-        ///// <summary>Текущая выбранная строка</summary>
-        //public string CurrentLine
-        //{
-        //    get => _CurrentLine;
-        //    set => _CurrentLine = value;
-        //}
-
-        //#endregion
+        #endregion
 
         #endregion
 
@@ -196,11 +155,11 @@ namespace DOfficeCore.ViewModels
 
             // Тестовые данные
             DataCollection = TestData.GetCollection();
-            //DiagnosisCode = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+            DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
             // Реальные данные
             //DataCollection = _DataProviderService.LoadDataFromFile("file");
-            //DiagnosisCode = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+            //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
             _Logger.WriteLog("DONE");
         }

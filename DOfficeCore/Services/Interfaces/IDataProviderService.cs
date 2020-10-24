@@ -1,6 +1,5 @@
-﻿using DOfficeCore.Models;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using DOfficeCore.Models;
 
 namespace DOfficeCore.Services
 {
@@ -8,6 +7,6 @@ namespace DOfficeCore.Services
     {
         bool SaveDataToFile<T>(IEnumerable<T> data, string fileName);
         IEnumerable<string> LoadDoctorsFromFile(string fileName);
-        ObservableCollection<Section> LoadDataFromFile(string fileName);
+        HashSet<Section> LoadDataFromFile(string fileName);
     }
 }

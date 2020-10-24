@@ -6,26 +6,23 @@ namespace DOfficeCore.Services
 {
      interface IViewCollectionProvider
     {
+        ObservableCollection<Section> DiagnosisFromDataToView(IEnumerable<Section> DataCollection);
+        ObservableCollection<Section> BlocksFromDataToView(IEnumerable<Section> DataCollection, Section CurrentSection);
+        ObservableCollection<Section> LinesFromDataToView(IEnumerable<Section> DataCollection, Section CurrentSection);
+
+        bool RemoveDiagnosis(HashSet<Section> DataCollection, Section CurrentSection);
+        bool RemoveBlock(HashSet<Section> DataCollection, Section CurrentSection);
+        bool RemoveLine(HashSet<Section> DataCollection, Section CurrentSection);
+
+        bool EditDiagnosis(HashSet<Section> DataCollection, Section CurrentItem, string MultiBox);
+        bool EditBlock(HashSet<Section> DataCollection, Section CurrentItem, string MultiBox);
+        bool EditLine(HashSet<Section> DataCollection, Section CurrentItem, string MultiBox);
+
+        ObservableCollection<Section> SearchDiagnosis(HashSet<Section> DataCollection, string MultiBox);
+        ObservableCollection<Section> SearchBlocks(HashSet<Section> DataCollection, string MultiBox);
+        ObservableCollection<Section> SearchLines(HashSet<Section> DataCollection, string MultiBox);
+
         //string RandomDiary(string CurrentDiagnosis, HashSet<Diagnosis> DataCollection);
-        //ObservableCollection<string> DiagnosisFromDataToView(HashSet<Diagnosis> DataCollection);
-        //ObservableCollection<string> BlocksFromDataToView(string CurrentDiagnosis, HashSet<Diagnosis> DataCollection);
-        //ObservableCollection<string> LinesFromDataToView(HashSet<Diagnosis> DataCollection, string CurrentDiagnosis, string CurrentBlock);
-
-        //public ObservableCollection<string> SearchDiagnosis(string MultiBox, HashSet<Diagnosis> DataCollection);
-        //public ObservableCollection<string> SearchBlocks(string MultiBox, HashSet<Diagnosis> DataCollection);
-        //public ObservableCollection<string> SearchLines(string MultiBox, HashSet<Diagnosis> DataCollection);
-
-        //HashSet<Diagnosis> RemoveElement(
-        //    string FocusedDataGrid,
-        //    string MultiBox,
-        //    HashSet<Diagnosis> DataCollection,
-        //    string CurrentDiagnosis,
-        //    string CurrentBlock,
-        //    string CurrentLine);
-        //bool EditDiagnosis(HashSet<Diagnosis> DataCollection, string MultiBox, string CurrentItem);
-        //bool EditBlock(HashSet<Diagnosis> DataCollection, string MultiBox, string CurrentItem);
-        //bool EditLine(HashSet<Diagnosis> DataCollection, string MultiBox, string CurrentItem);
-        //void SelectedData(string FocusedDataGrid, string CurrentItem);
         //void AddELement(string FocusedDataGrid, string MultiBox);
     }
 }

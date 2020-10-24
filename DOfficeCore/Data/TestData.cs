@@ -1,13 +1,13 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using DOfficeCore.Models;
 
 namespace DOfficeCore.Data
 {
     class TestData
     {
-        public static ObservableCollection<Section> GetCollection()
+        public static HashSet<Section> GetCollection()
         {
-            var TestLines = new ObservableCollection<Section>();
+            var TestLines = new HashSet<Section>();
 
             for (int a = 1; a <= 5; a++)
             {
