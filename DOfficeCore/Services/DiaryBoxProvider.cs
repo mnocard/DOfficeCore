@@ -62,6 +62,7 @@ namespace DOfficeCore.Services
                 return result;
             }
         }
+        
         /// <summary>
         /// Добавление даты в начало дневника с возможностью удаления вместо повторного добавления
         /// </summary>
@@ -88,6 +89,7 @@ namespace DOfficeCore.Services
                 return result;
             }
         }
+        
         /// <summary>
         /// Добавление времени в дневник с возможностью удаления вместо повторного добавления
         /// </summary>

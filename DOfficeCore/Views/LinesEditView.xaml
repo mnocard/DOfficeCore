@@ -28,13 +28,34 @@
             <Button
                 Margin="10,0"
                 Command="{Binding OpenFileCommand}"
-                Content="Выбрать файл"
-                ToolTip="Выбрать документ docx" />
+                ToolTip="Выбрать документ docx">
+                <materialDesign:PackIcon
+                    Width="24"
+                    Height="24"
+                    FlowDirection="RightToLeft"
+                    Kind="FileDocumentOutline" />
+            </Button>
             <Button
                 Margin="10,0"
                 Command="{Binding GetTextFromClipboardCommand}"
-                Content="Вставить текст"
-                ToolTip="Вставить скопированный текст из буфера обмена" />
+                ToolTip="Вставить скопированный текст из буфера обмена">
+                <materialDesign:PackIcon
+                    Width="24"
+                    Height="24"
+                    FlowDirection="RightToLeft"
+                    Kind="InsertComment" />
+            </Button>
+            <Button
+                x:Name="btnSaveXML"
+                Margin="10,0"
+                Command="{Binding SaveDataToFileCommand, UpdateSourceTrigger=PropertyChanged}"
+                DockPanel.Dock="Right"
+                ToolTip="Сохранить коллекцию">
+                <materialDesign:PackIcon
+                    Width="24"
+                    Height="24"
+                    Kind="ContentSaveAllOutline" />
+            </Button>
         </StackPanel>
         <DockPanel
             Grid.Row="1"
@@ -78,29 +99,37 @@
                 Margin="3"
                 DockPanel.Dock="Top"
                 LastChildFill="True">
-                <Button
-                    Margin="3,0"
-                    Command="{Binding RemoveDiagnosisCommand}"
-                    DockPanel.Dock="Right">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="TrashCanOutline" />
-                </Button>
-                <Button
-                    Margin="3,0"
-                    Command="{Binding AddNewDiagnosisCommand}"
-                    DockPanel.Dock="Right">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="AddCircleOutline" />
-                </Button>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                    <Button Margin="3,0" Command="{Binding AddNewDiagnosisCommand}">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="AddCircleOutline" />
+                    </Button>
+                    <Button
+                        x:Name="btnEditDiagnosis"
+                        Command="{Binding EditElementCommand, UpdateSourceTrigger=PropertyChanged}"
+                        CommandTarget="{Binding ElementName=tbDiagnosis, Path=Text}"
+                        Cursor="Hand"
+                        ToolTip="Редактировать выбранный элемент">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="PencilOutline" />
+                    </Button>
+                    <Button Margin="3,0" Command="{Binding RemoveDiagnosisCommand}">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="TrashCanOutline" />
+                    </Button>
+                </StackPanel>
                 <TextBox
                     x:Name="tbDiagnosis"
-                    Margin="3,0"
+                    Margin="3,5"
                     VerticalContentAlignment="Center"
                     materialDesign:HintAssist.Hint="Введите диагноз"
+                    DockPanel.Dock="Bottom"
                     Text="{Binding DiagnosisTextBox, UpdateSourceTrigger=PropertyChanged}" />
             </DockPanel>
             <ListBox
@@ -115,20 +144,33 @@
                 Background="#FF9E9E9E"
                 DockPanel.Dock="Top"
                 LastChildFill="True">
-                <Button Margin="3,0" DockPanel.Dock="Right">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="TrashCanOutline" />
-                </Button>
-                <Button Margin="3,0" DockPanel.Dock="Right">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="AddCircleOutline" />
-                </Button>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                    <Button Margin="3,0">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="AddCircleOutline" />
+                    </Button>
+                    <Button
+                        x:Name="btnEditBlock"
+                        Command="{Binding EditElementCommand, UpdateSourceTrigger=PropertyChanged}"
+                        CommandTarget="{Binding ElementName=tbDiagnosis, Path=Text}"
+                        Cursor="Hand"
+                        ToolTip="Редактировать выбранный элемент">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="PencilOutline" />
+                    </Button>
+                    <Button Margin="3,0">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="TrashCanOutline" />
+                    </Button>
+                </StackPanel>
                 <TextBox
-                    Margin="3,0"
+                    Margin="3,5"
                     VerticalContentAlignment="Center"
                     materialDesign:HintAssist.Hint="Введите раздел"
                     Text="{Binding BlockTextBox, UpdateSourceTrigger=PropertyChanged}" />
@@ -147,11 +189,57 @@
             VerticalAlignment="Stretch"
             Background="#FF686868"
             ShowsPreview="False" />
-        <ListBox
+        <DockPanel
             Grid.Row="1"
             Grid.Column="2"
-            Background="#FF9E9E9E"
-            ItemsSource="{Binding LinesNames}"
-            SelectionMode="Single" />
+            Background="#FF9E9E9E">
+            <DockPanel
+                Margin="3"
+                DockPanel.Dock="Top"
+                LastChildFill="True">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                    <Button
+                        Margin="3,0"
+                        Command="{Binding AddNewDiagnosisCommand}"
+                        DockPanel.Dock="Right">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="AddCircleOutline" />
+                    </Button>
+                    <Button
+                        x:Name="btnEditLine"
+                        Command="{Binding EditElementCommand, UpdateSourceTrigger=PropertyChanged}"
+                        CommandTarget="{Binding ElementName=tbDiagnosis, Path=Text}"
+                        Cursor="Hand"
+                        ToolTip="Редактировать выбранный элемент">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="PencilOutline" />
+                    </Button>
+                    <Button
+                        Margin="3,0"
+                        Command="{Binding RemoveDiagnosisCommand}"
+                        DockPanel.Dock="Right">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="TrashCanOutline" />
+                    </Button>
+                </StackPanel>
+                <TextBox
+                    Margin="3,0"
+                    VerticalContentAlignment="Center"
+                    materialDesign:HintAssist.Hint="Введите предложение"
+                    Text="{Binding DiagnosisTextBox, UpdateSourceTrigger=PropertyChanged}" />
+            </DockPanel>
+            <ListBox
+                Grid.Row="1"
+                Grid.Column="2"
+                Background="#FF9E9E9E"
+                ItemsSource="{Binding LinesNames}"
+                SelectionMode="Single" />
+        </DockPanel>
     </Grid>
 </UserControl>

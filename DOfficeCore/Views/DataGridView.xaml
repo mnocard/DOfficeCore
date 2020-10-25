@@ -157,46 +157,6 @@
                 <GroupBox>
                     <GroupBox.Header>
                         <DockPanel LastChildFill="True">
-                            <materialDesign:PopupBox
-                                Width="56"
-                                Padding="16,4,16,4"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center"
-                                DockPanel.Dock="Left"
-                                ToolTip="Добавить элемент">
-                                <materialDesign:PopupBox.ToggleContent>
-                                    <materialDesign:PackIcon
-                                        Width="32"
-                                        Height="28"
-                                        Kind="PlusBoxOutline" />
-                                </materialDesign:PopupBox.ToggleContent>
-                                <StackPanel>
-                                    <Button
-                                        Command="{Binding AddElementCommand}"
-                                        CommandParameter="dgCodes"
-                                        Content="Добавить диагноз" />
-                                    <Button
-                                        Command="{Binding AddElementCommand}"
-                                        CommandParameter="dgBlocksNames"
-                                        Content="Добавить раздел" />
-                                    <Button
-                                        Command="{Binding AddElementCommand}"
-                                        CommandParameter="dgLinesContent"
-                                        Content="Добавить предложение" />
-                                </StackPanel>
-                            </materialDesign:PopupBox>
-                            <Button
-                                x:Name="btnEditNode"
-                                Command="{Binding EditElementCommand, UpdateSourceTrigger=PropertyChanged}"
-                                CommandTarget="{Binding ElementName=tbMultiBox, Path=Text}"
-                                Cursor="Hand"
-                                ToolTip="Редактировать выбранный элемент">
-                                <materialDesign:PackIcon
-                                    Width="24"
-                                    Height="24"
-                                    Kind="PencilOutline" />
-                            </Button>
                             <Button
                                 x:Name="btnSearchNode"
                                 Command="{Binding SearchElementCommand, UpdateSourceTrigger=PropertyChanged}"
@@ -207,26 +167,6 @@
                                     Width="24"
                                     Height="24"
                                     Kind="Magnify" />
-                            </Button>
-                            <Button
-                                x:Name="btnDeleteNode"
-                                Command="{Binding RemoveElementCommand, UpdateSourceTrigger=PropertyChanged}"
-                                DockPanel.Dock="Left"
-                                ToolTip="Удалить выбранный элемент">
-                                <materialDesign:PackIcon
-                                    Width="24"
-                                    Height="24"
-                                    Kind="TrashCanOutline" />
-                            </Button>
-                            <Button
-                                x:Name="btnSaveXML"
-                                Command="{Binding SaveDataToFileCommand, UpdateSourceTrigger=PropertyChanged}"
-                                DockPanel.Dock="Right"
-                                ToolTip="Сохранить коллекцию">
-                                <materialDesign:PackIcon
-                                    Width="24"
-                                    Height="24"
-                                    Kind="ContentSaveAllOutline" />
                             </Button>
                             <TextBox
                                 x:Name="tbMultiBox"
@@ -252,15 +192,12 @@
                             AutoGenerateColumns="False"
                             Background="#FF9E9E9E"
                             IsReadOnly="True"
-                            ItemsSource="{Binding DataCollection}"
+                            ItemsSource="{Binding DiagnosisList}"
                             SelectionMode="Single"
                             SelectionUnit="Cell">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectedCellsChanged">
                                     <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="MouseDoubleClick">
-                                    <i:InvokeCommandAction Command="{Binding StringTransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <DataGrid.Columns>
@@ -284,19 +221,16 @@
                             AutoGenerateColumns="False"
                             Background="#FF9E9E9E"
                             IsReadOnly="True"
-                            ItemsSource="{Binding BlocksNames}"
+                            ItemsSource="{Binding BlocksList}"
                             SelectionMode="Single"
                             SelectionUnit="Cell">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectedCellsChanged">
                                     <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
                                 </i:EventTrigger>
-                                <i:EventTrigger EventName="MouseDoubleClick">
-                                    <i:InvokeCommandAction Command="{Binding StringTransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
-                                </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=.}">
+                                <DataGridTextColumn Binding="{Binding Path=Block}">
                                     <DataGridTextColumn.Header>
                                         <TextBlock Foreground="Black" Text="Раздел" />
                                     </DataGridTextColumn.Header>
@@ -315,19 +249,16 @@
                             AutoGenerateColumns="False"
                             Background="#FF9E9E9E"
                             IsReadOnly="True"
-                            ItemsSource="{Binding LinesNames}"
+                            ItemsSource="{Binding LinesList}"
                             SelectionMode="Single"
                             SelectionUnit="Cell">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectedCellsChanged">
                                     <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
                                 </i:EventTrigger>
-                                <i:EventTrigger EventName="MouseDoubleClick">
-                                    <i:InvokeCommandAction Command="{Binding StringTransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
-                                </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=.}">
+                                <DataGridTextColumn Binding="{Binding Path=Line}">
                                     <DataGridTextColumn.Header>
                                         <TextBlock Foreground="Black" Text="Данные" />
                                     </DataGridTextColumn.Header>

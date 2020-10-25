@@ -268,7 +268,7 @@ namespace DOfficeCore.Services
 
             foreach (Section item in DataCollection)
             {
-                if (item.Diagnosis.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase))
+                if (item.Diagnosis.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase) && !DiagnosisList.Any(t => t.Diagnosis.Equals(item.Diagnosis)))
                 {
                     DiagnosisList.Add(item);
                     result = true;
