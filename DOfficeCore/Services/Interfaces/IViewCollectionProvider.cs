@@ -4,7 +4,7 @@ using DOfficeCore.Models;
 
 namespace DOfficeCore.Services
 {
-     interface IViewCollectionProvider
+    interface IViewCollectionProvider
     {
         ObservableCollection<Section> DiagnosisFromDataToView(IEnumerable<Section> DataCollection);
         ObservableCollection<Section> BlocksFromDataToView(IEnumerable<Section> DataCollection, Section CurrentSection);
@@ -22,7 +22,10 @@ namespace DOfficeCore.Services
         ObservableCollection<Section> SearchBlocks(HashSet<Section> DataCollection, string MultiBox);
         ObservableCollection<Section> SearchLines(HashSet<Section> DataCollection, string MultiBox);
 
-        //string RandomDiary(string CurrentDiagnosis, HashSet<Diagnosis> DataCollection);
-        //void AddELement(string FocusedDataGrid, string MultiBox);
+        bool AddDiagnosis(HashSet<Section> DataCollection, string MultiBox);
+        bool AddBlock(HashSet<Section> DataCollection, Section CurrentSection, string MultiBox);
+        bool AddLine(HashSet<Section> DataCollection, Section CurrentSection, string MultiBox);
+        
+        string RandomDiary(HashSet<Section> DataCollection, Section CurrentSection);
     }
 }
