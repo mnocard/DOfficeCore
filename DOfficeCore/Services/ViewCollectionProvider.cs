@@ -339,6 +339,12 @@ namespace DOfficeCore.Services
             _Logger.WriteLog("INFO");
             if (MultiBox != null && MultiBox != "")
             {
+                if (DataCollection.Count == 0)
+                {
+                    DataCollection.Add(new Section() { Diagnosis = MultiBox });
+                    _Logger.WriteLog($"Diagnosis {MultiBox} added succcesfully.");
+                    return true;
+                }
                 foreach (var _ in DataCollection.Where(item => item.Diagnosis.Equals(MultiBox)).Select(item => new { }))
                 {
                     _Logger.WriteLog($"Diagnosis {MultiBox} already exist.");

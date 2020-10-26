@@ -73,6 +73,7 @@ namespace DOfficeCore.ViewModels
             RemoveBlockCommand = new LambdaCommand(OnRemoveBlockCommandExecuted, CanRemoveBlockCommandExecute);
             RemoveLineCommand = new LambdaCommand(OnRemoveLineCommandExecuted, CanRemoveLineCommandExecute);
 
+            ReturnLineCommand = new LambdaCommand(OnReturnLineCommandExecuted, CanReturnLineCommandExecute);
             #endregion
         }
 

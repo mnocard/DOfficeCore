@@ -253,7 +253,7 @@
                             SelectionMode="Single"
                             SelectionUnit="Cell">
                             <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectedCellsChanged">
+                                <i:EventTrigger EventName="MouseDoubleClick">
                                     <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>

@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using DOfficeCore.Models;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -173,10 +175,39 @@ namespace DOfficeCore.ViewModels
         {
             _Logger.WriteLog("INFO");
 
-            if ((parameter is ListBox datagrid) && datagrid.SelectedItem is string CurrentItem && CurrentSection != null)
+            if (parameter is ListBox listBox)
             {
-                _ViewCollectionProvider.AddLine(DataCollection, CurrentSection, CurrentItem);
-                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+                if (listBox.Name.Equals("lbRawLines") && CurrentSection != null)
+                {
+                    _ViewCollectionProvider.AddLine(DataCollection, CurrentSection, (string)listBox.SelectedItem);
+                    LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+                    RawLines.Remove((string)listBox.SelectedItem);
+
+                }
+                else if (listBox.SelectedItem is Section CurrentItem)
+                {
+                    CurrentSection = CurrentItem;
+                    switch (listBox.Name)
+                    {
+                        case "dgDiagnosisLineEditView":
+                            BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
+                            LinesList = new ObservableCollection<Section>();
+                            DiagnosisMultiBox = CurrentSection.Diagnosis;
+                            BlockMultiBox = null;
+                            LineMultiBox = null;
+                            break;
+                        case "dgBlocksLineEditView":
+                            LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+                            BlockMultiBox = CurrentSection.Block;
+                            LineMultiBox = null;
+                            break;
+                        case "dgLinesLineEditView":
+                            LineMultiBox = CurrentSection.Line;
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
             _Logger.WriteLog("DONE");
         }
@@ -194,8 +225,8 @@ namespace DOfficeCore.ViewModels
         private void OnAddDiagnosisCommandExecuted(object parameter)
         {
             _Logger.WriteLog("INFO");
-
-            if(DataCollection != null && DiagnosisMultiBox != null)
+            if (DataCollection == null) DataCollection = new HashSet<Section>();
+            if(DiagnosisMultiBox != null)
             {
                 _ViewCollectionProvider.AddDiagnosis(DataCollection, DiagnosisMultiBox);
                 DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
@@ -386,6 +417,29 @@ namespace DOfficeCore.ViewModels
         private bool CanRemoveLineCommandExecute(object parameter) => true;
 
         #endregion
+
+        #endregion
+
+        #region Возврат строки в необработанную коллекцию
+        /// <summary>Возврат строки в необработанную коллекцию</summary>
+        public ICommand ReturnLineCommand { get; }
+        /// <summary>Возврат строки в необработанную коллекцию</summary>
+        private void OnReturnLineCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("INFO");
+            if (RawLines == null) RawLines = new ObservableCollection<string>();
+            if (LineMultiBox != null)
+            {
+                _ViewCollectionProvider.RemoveLine(DataCollection, CurrentSection);
+                LinesList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                RawLines.Add(CurrentSection.Line);
+                CurrentSection = null;
+            }
+
+            _Logger.WriteLog("DONE");
+        }
+
+        private bool CanReturnLineCommandExecute(object parameter) => true;
 
         #endregion
     }

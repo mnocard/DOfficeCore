@@ -70,8 +70,9 @@
                 DockPanel.Dock="Bottom"
                 ToolTip="Удалить все элементы из первой таблицы" />
             <ListBox
+                x:Name="lbRawLines"
                 Background="#FF9E9E9E"
-                ItemsSource="{Binding RawLines}"
+                ItemsSource="{Binding RawLines, UpdateSourceTrigger=PropertyChanged}"
                 SelectionMode="Single">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -81,9 +82,8 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding TransferCommand}" 
-                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                    <i:EventTrigger EventName="MouseUp">
+                        <i:InvokeCommandAction Command="{Binding TransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListBox>
@@ -113,6 +113,7 @@
                     VerticalContentAlignment="Center"
                     materialDesign:HintAssist.Hint="Введите текст"
                     materialDesign:TextFieldAssist.HasClearButton="True"
+                    CaretBrush="White"
                     DockPanel.Dock="Bottom"
                     Text="{Binding DiagnosisMultiBox}" />
                 <StackPanel Orientation="Horizontal">
@@ -138,33 +139,26 @@
                             Kind="TrashCanOutline" />
                     </Button>
                 </StackPanel>
-                <DataGrid
+                <ListBox
                     x:Name="dgDiagnosisLineEditView"
-                    AutoGenerateColumns="False"
                     Background="#FF9E9E9E"
-                    CanUserAddRows="False"
-                    CanUserDeleteRows="False"
                     DockPanel.Dock="Top"
-                    HeadersVisibility="None"
-                    IsReadOnly="True"
                     ItemsSource="{Binding DiagnosisList}"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
                     SelectionMode="Single">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Path=Diagnosis}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="TextWrapping" Value="Wrap" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                    </DataGrid.Columns>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock Text="{Binding Path=Diagnosis}" TextWrapping="Wrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                     <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectedCellsChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" 
-                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        <i:EventTrigger EventName="MouseUp">
+                            <i:InvokeCommandAction Command="{Binding TransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                </DataGrid>
+                </ListBox>
             </StackPanel>
             <GridSplitter
                 Grid.Row="1"
@@ -181,6 +175,7 @@
                     VerticalContentAlignment="Center"
                     materialDesign:HintAssist.Hint="Введите текст"
                     materialDesign:TextFieldAssist.HasClearButton="True"
+                    CaretBrush="White"
                     DockPanel.Dock="Bottom"
                     Text="{Binding BlockMultiBox}" />
                 <StackPanel Orientation="Horizontal">
@@ -206,33 +201,27 @@
                             Kind="TrashCanOutline" />
                     </Button>
                 </StackPanel>
-                <DataGrid
+                <ListBox
                     x:Name="dgBlocksLineEditView"
                     Grid.Row="1"
                     Margin="0,5,0,0"
-                    AutoGenerateColumns="False"
                     Background="#FF9E9E9E"
-                    CanUserAddRows="False"
-                    CanUserDeleteRows="False"
-                    HeadersVisibility="None"
-                    IsReadOnly="True"
                     ItemsSource="{Binding BlocksList}"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
                     SelectionMode="Single">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Path=Block}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="TextWrapping" Value="Wrap" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                    </DataGrid.Columns>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock Text="{Binding Path=Block}" TextWrapping="Wrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                     <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectedCellsChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        <i:EventTrigger EventName="MouseUp">
+                            <i:InvokeCommandAction Command="{Binding TransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                </DataGrid>
+                </ListBox>
             </StackPanel>
         </Grid>
         <GridSplitter
@@ -255,6 +244,7 @@
                     VerticalContentAlignment="Center"
                     materialDesign:HintAssist.Hint="Введите текст"
                     materialDesign:TextFieldAssist.HasClearButton="True"
+                    CaretBrush="White"
                     DockPanel.Dock="Bottom"
                     Text="{Binding LineMultiBox}" />
                 <StackPanel Orientation="Horizontal">
@@ -279,34 +269,34 @@
                             Height="24"
                             Kind="TrashCanOutline" />
                     </Button>
+                    <Button Margin="3,0" Command="{Binding ReturnLineCommand}">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="ArrowLeftBoldBoxOutline" />
+                    </Button>
                 </StackPanel>
-                <DataGrid
+                <ListBox
                     x:Name="dgLinesLineEditView"
                     Grid.Row="1"
                     Grid.Column="2"
-                    AutoGenerateColumns="False"
                     Background="#FF9E9E9E"
-                    CanUserAddRows="False"
-                    CanUserDeleteRows="False"
-                    HeadersVisibility="None"
-                    IsReadOnly="True"
                     ItemsSource="{Binding LinesList}"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
                     SelectionMode="Single">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Path=Line}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="TextWrapping" Value="Wrap" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                    </DataGrid.Columns>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock Text="{Binding Path=Line}" TextWrapping="Wrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                     <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectedCellsChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        <i:EventTrigger EventName="MouseUp">
+                            <i:InvokeCommandAction Command="{Binding TransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                </DataGrid>
+                </ListBox>
             </StackPanel>
         </DockPanel>
     </Grid>

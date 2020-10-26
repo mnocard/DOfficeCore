@@ -153,31 +153,19 @@ namespace DOfficeCore.ViewModels
                 CurrentSection = CurrentItem;
                 switch (datagrid.Name)
                 {
-                    case "dgDiagnosisLineEditView":
-                        BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
-                        LinesList = new ObservableCollection<Section>();
-                        DiagnosisMultiBox = CurrentItem.Diagnosis;
-                        BlockMultiBox = null;
-                        LineMultiBox = null;
-                        break;
+                    
                     case "dgCodes": 
                         BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
                         LinesList = new ObservableCollection<Section>();
                         break;
-                    case "dgBlocksLineEditView":
-                        LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
-                        BlockMultiBox = CurrentItem.Block;
-                        LineMultiBox = null;
-                        break;
+                    
                     case "dgBlocksNames":
                         LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
                         break;
                     case "dgLinesContent":
                         DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, CurrentSection.Line);
                         break;
-                    case "dgLinesLineEditView":
-                        LineMultiBox = CurrentItem.Line;
-                        break;
+                    
                     default:
                         break;
                 }
