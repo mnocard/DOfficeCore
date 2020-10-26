@@ -1,4 +1,5 @@
-﻿using DOfficeCore.Logger;
+﻿using DocumentFormat.OpenXml.Office.CustomUI;
+using DOfficeCore.Logger;
 using DOfficeCore.Models;
 using System;
 using System.Collections.Generic;
@@ -336,15 +337,23 @@ namespace DOfficeCore.Services
         public bool AddDiagnosis(HashSet<Section> DataCollection, string MultiBox)
         {
             _Logger.WriteLog("INFO");
-            foreach (var _ in DataCollection.Where(item => item.Diagnosis.Equals(MultiBox)).Select(item => new { }))
+            if (MultiBox != null && MultiBox != "")
             {
-                _Logger.WriteLog($"Diagnosis {MultiBox} already exist.");
+                foreach (var _ in DataCollection.Where(item => item.Diagnosis.Equals(MultiBox)).Select(item => new { }))
+                {
+                    _Logger.WriteLog($"Diagnosis {MultiBox} already exist.");
+                    return false;
+                }
+
+                DataCollection.Add(new Section() { Diagnosis = MultiBox });
+                _Logger.WriteLog($"Diagnosis {MultiBox} added succcesfully.");
+                return true;
+            }
+            else
+            {
+                _Logger.WriteLog($"MultiBox is null.");
                 return false;
             }
-
-            DataCollection.Add(new Section() { Diagnosis = MultiBox });
-            _Logger.WriteLog($"Diagnosis {MultiBox} added succcesfully.");
-            return true;
         }
 
         /// <summary>
@@ -357,18 +366,32 @@ namespace DOfficeCore.Services
         public bool AddBlock(HashSet<Section> DataCollection, Section CurrentSection, string MultiBox)
         {
             _Logger.WriteLog("INFO");
-            if (CurrentSection.Diagnosis != null && CurrentSection.Block != null)
+            if (CurrentSection.Diagnosis != null && MultiBox != null && MultiBox != "")
             {
-                foreach (var _ in DataCollection.Where(item => item.Diagnosis.Equals(CurrentSection.Diagnosis)).Where(item => item.Block.Equals(MultiBox)).Select(item => new { }))
+                foreach (Section item in DataCollection)
                 {
-                    _Logger.WriteLog($"Block {MultiBox} already exist.");
-                    return false;
+                    if (item.Diagnosis.Equals(CurrentSection.Diagnosis))
+                    {
+                        if (item.Block == null)
+                        {
+                            item.Block = MultiBox;
+                            _Logger.WriteLog($"Block {MultiBox} added succcesfully.");
+                            return true;
+                        }
+                        else if (item.Block.Equals(MultiBox))
+                        {
+                            _Logger.WriteLog($"Block {MultiBox} already exist.");
+                            return false;
+                        }
+                    }
                 }
-            }
 
-            DataCollection.Add(new Section() { Diagnosis = CurrentSection.Diagnosis, Block = MultiBox });
-            _Logger.WriteLog($"Block {MultiBox} added succcesfully.");
-            return true;
+                DataCollection.Add(new Section() { Diagnosis = CurrentSection.Diagnosis, Block = MultiBox });
+                _Logger.WriteLog($"Block {MultiBox} added succcesfully.");
+                return true;
+            }
+            _Logger.WriteLog($"Cann't add block {MultiBox}.");
+            return false;
         }
 
         /// <summary>
@@ -382,8 +405,19 @@ namespace DOfficeCore.Services
         {
             _Logger.WriteLog("INFO");
             if (CurrentSection.Diagnosis != null && CurrentSection.Block != null)
-                DataCollection.Add(new Section() { Diagnosis = CurrentSection.Diagnosis, Block = CurrentSection.Block, Line = MultiBox });
-            
+            {
+                foreach (Section item in DataCollection)
+                {
+                    if(item.Diagnosis.Equals(CurrentSection.Diagnosis) && item.Block.Equals(CurrentSection.Block) && item.Line == null)
+                    {
+                        item.Line = MultiBox;
+                        _Logger.WriteLog($"Line added succcesfully.");
+                        return true;
+                    }
+                }
+            }
+
+            DataCollection.Add(new Section() { Diagnosis = CurrentSection.Diagnosis, Block = CurrentSection.Block, Line = MultiBox });
             _Logger.WriteLog($"Line added succcesfully.");
             return true;
         }

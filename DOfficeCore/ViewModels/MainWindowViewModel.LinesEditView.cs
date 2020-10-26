@@ -45,254 +45,323 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
-        #region DiagnosisTextBox : string - Строка диагноза
+        #region DiagnosisMultiBox : string - Поле ввода диагноза
 
-        /// <summary>Строка диагноза</summary>
-        private string _DiagnosisTextBox;
+        /// <summary>Поле ввода диагноза</summary>
+        private string _DiagnosisMultiBox;
 
-        /// <summary>Строка диагноза</summary>
-        public string DiagnosisTextBox
+        /// <summary>Поле ввода диагноза</summary>
+        public string DiagnosisMultiBox
         {
-            get => _DiagnosisTextBox;
-            set => Set(ref _DiagnosisTextBox, value);
+            get => _DiagnosisMultiBox;
+            set => Set(ref _DiagnosisMultiBox, value);
         }
 
         #endregion
 
-        #region BlockTextBox : string - Строка раздела
+        #region BlockMultiBox : string - Поле ввода разделов
 
-        /// <summary>Строка раздела</summary>
-        private string _BlockTextBox;
+        /// <summary>Поле ввода разделов</summary>
+        private string _BlockMultiBox;
 
-        /// <summary>Строка раздела</summary>
-        public string BlockTextBox
+        /// <summary>Поле ввода разделов</summary>
+        public string BlockMultiBox
         {
-            get => _BlockTextBox;
-            set => Set(ref _BlockTextBox, value);
+            get => _BlockMultiBox;
+            set => Set(ref _BlockMultiBox, value);
+        }
+
+        #endregion
+
+        #region LineMultiBox : string - Поле ввода предложений
+
+        /// <summary>Поле ввода предложений</summary>
+        private string _LineMultiBox;
+
+        /// <summary>Поле ввода предложений</summary>
+        public string LineMultiBox
+        {
+            get => _LineMultiBox;
+            set => Set(ref _LineMultiBox, value);
         }
 
         #endregion
 
         #endregion
 
+        #region Открытие файла
+        /// <summary>Открытие файла</summary>
+        public ICommand OpenFileCommand { get; }
+        /// <summary>Открытие файла</summary>
+        private void OnOpenFileCommandExecuted(object parameter)
+        {
+            var dlg = new OpenFileDialog();
+            dlg.DefaultExt = dlgDefaultExt;
+            dlg.Filter = dlgFilter;
 
-        //#region Команды окна обработчика строк
+            var result = dlg.ShowDialog();
 
-        //-------------------------------------------------------------------------------------------------
+            if (result == true)
+            {
+                TextForEditing = _LineEditorService.OpenDocument(dlg.FileName);
+                if (RawLines == null) RawLines = new ObservableCollection<string>();
+                foreach (var item in _LineEditorService.TextToLines(TextForEditing))
+                {
+                    RawLines.Add(item);
+                }
+            }
+        }
 
-        //#region Команда сохранения данных в файл
-        ///// <summary>Команда сохранения данных в файл</summary>
-        //public ICommand SaveDataToFileCommand { get; }
-        ///// <summary>Команда сохранения данных в файл</summary>
-        //private void OnSaveDataToFileCommandExecuted(object p)
-        //{
-        //    _Logger.WriteLog("INFO");
+        private bool CanOpenFileCommandExecute(object parameter) => true;
 
-        //    if (DataCollection != null)
-        //        _DataProviderService.SaveDataToFile(DataCollection, "file1");
+        #endregion
 
-        //    _Logger.WriteLog("DONE");
-        //}
+        #region Получение текста из буфера обмена
+        /// <summary>Получение текста из буфера обмена</summary>
+        public ICommand GetTextFromClipboardCommand { get; }
+        /// <summary>Получение текста из буфера обмена</summary>
+        private void OnGetTextFromClipboardCommandExecuted(object parameter)
+        {
+            if (Clipboard.ContainsText())
+            {
+                TextForEditing = Clipboard.GetText();
+                if (RawLines == null) RawLines = new ObservableCollection<string>();
+                foreach (var item in _LineEditorService.TextToLines(TextForEditing))
+                {
+                    RawLines.Add(item);
+                }
+            }
+        }
 
-        //private bool CanSaveDataToFileCommandExecute(object p) => true;
-        //#endregion
+        private bool CanGetTextFromClipboardCommandExecute(object parameter) => true;
 
-        //-------------------------------------------------------------------------------------------------
+        #endregion
 
-        //#region Команда редактирования выбранного элемента
-        ///// <summary>Команда редактирования выбранного элемента</summary>
-        //public ICommand EditElementCommand { get; }
-        ///// <summary>Команда редактирования выбранного элемента</summary>
-        //private void OnEditElementCommandExecuted(object parameter)
-        //{
-        //    _Logger.WriteLog("INFO");
+        #region Сохранение данных в файл
+        /// <summary>Сохранение данных в файл</summary>
+        public ICommand SaveDataToFileCommand { get; }
+        /// <summary>Сохранение данных в файл</summary>
+        private void OnSaveDataToFileCommandExecuted(object p)
+        {
+            _Logger.WriteLog("INFO");
 
-        //    if ((parameter is DataGrid datagrid) && datagrid.CurrentItem != null && FocusedDataGrid != null && MultiBox.Length > 3)
-        //    {
-        //        if (FocusedDataGrid.Equals("Diagnosis"))
-        //        {
-        //            _ViewCollectionProvider.EditDiagnosis(DataCollection, MultiBox, (string)datagrid.CurrentItem);
-        //        }
-        //        else if (FocusedDataGrid.Equals("Blocks"))
-        //        {
-        //            _ViewCollectionProvider.EditBlock(DataCollection, MultiBox, (string)datagrid.CurrentItem);
-        //        }
-        //        else if (FocusedDataGrid.Equals("Lines"))
-        //        {
-        //            _ViewCollectionProvider.EditLine(DataCollection, MultiBox, (string)datagrid.CurrentItem);
-        //        }
-        //        else
-        //        {
-        //            _Logger.WriteLog($"Wrong collection. There is no \"{FocusedDataGrid}\" collection");
-        //        }
-        //    }
+            if (DataCollection != null)
+                _DataProviderService.SaveDataToFile(DataCollection, "file1");
 
-        //    _Logger.WriteLog("DONE");
-        //}
+            _Logger.WriteLog("DONE");
+        }
 
-        //private bool CanEditElementCommandExecute(object parameter) => true;
+        private bool CanSaveDataToFileCommandExecute(object p) => true;
+        #endregion
 
-        //#endregion
+        #region Очистка необработанной таблицы
+        /// <summary>Очистка необработанной таблицы</summary>
+        public ICommand ClearListBoxCommand { get; }
+        /// <summary>Очистка необработанной таблицы</summary>
+        private void OnClearListBoxCommandExecuted(object parameter)
+        {
+            RawLines = null;
+        }
 
-        //-------------------------------------------------------------------------------------------------
+        private bool CanClearListBoxCommandExecute(object parameter) => RawLines != null;
 
-        //#region Команда удаления элементов из списка
-        ///// <summary>Команда удаления элементов из списка</summary>
-        //public ICommand RemoveElementCommand { get; }
-        ///// <summary>Команда удаления элементов из списка</summary>
-        //private void OnRemoveElementCommandExecuted(object parameter)
-        //{
-        //    _Logger.WriteLog("INFO");
+        #endregion
 
-        //    MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
-        //    if (result == MessageBoxResult.Yes && MultiBox != null && FocusedDataGrid != null)
-        //    {
-        //        DataCollection = _ViewCollectionProvider.RemoveElement(FocusedDataGrid, MultiBox, DataCollection, CurrentDiagnosis, CurrentBlock, CurrentLine);
-        //        DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
-        //        BlocksList = _ViewCollectionProvider.BlocksFromDataToView(CurrentDiagnosis, DataCollection);
-        //        LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentDiagnosis, CurrentBlock);
-        //    }
+        #region Добавление нового диагноза в коллекцию
+        /// <summary>Добавление нового диагноза в коллекцию</summary>
+        public ICommand AddDiagnosisCommand { get; }
+        /// <summary>Добавление нового диагноза в коллекцию</summary>
+        private void OnAddDiagnosisCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("INFO");
 
-        //    _Logger.WriteLog("DONE");
-        //}
+            if(DataCollection != null && DiagnosisMultiBox != null)
+            {
+                _ViewCollectionProvider.AddDiagnosis(DataCollection, DiagnosisMultiBox);
+                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+            }
 
-        //private bool CanRemoveElementCommandExecute(object parameter) => true;
+            _Logger.WriteLog("DONE");
+        }
 
-        //#endregion
+        private bool CanAddDiagnosisCommandExecute(object parameter) => true;
 
-        //-------------------------------------------------------------------------------------------------
+        #endregion
 
-        //#region Команда добавления элемента
-        ///// <summary>Команда добавления элемента</summary>
-        //public ICommand AddElementCommand { get; }
-        ///// <summary>Команда добавления элемента</summary>
-        //private void OnAddElementCommandExecuted(object parameter)
-        //{
-        //    _Logger.WriteLog("INFO");
+        #region Добавление раздела в коллекцию
+        /// <summary>Добавление раздела в коллекцию</summary>
+        public ICommand AddBlockCommand { get; }
+        /// <summary>Добавление раздела в коллекцию</summary>
+        private void OnAddBlockCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("INFO");
 
-        //    if (parameter != null && MultiBox != null)
-        //    {
-        //        FocusedDataGrid = parameter as string;
-        //        _ViewCollectionProvider.AddELement(FocusedDataGrid, MultiBox);
-        //    }
+            if (DataCollection != null && CurrentSection != null && BlockMultiBox != null)
+            {
+                _ViewCollectionProvider.AddBlock(DataCollection, CurrentSection, BlockMultiBox);
+                BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
+            }
 
-        //    _Logger.WriteLog("DONE");
-        //}
+            _Logger.WriteLog("DONE");
+        }
 
-        //private bool CanAddElementCommandExecute(object parameter) => true;
+        private bool CanAddBlockCommandExecute(object parameter) => true;
 
-        //#endregion
+        #endregion
 
-        //-------------------------------------------------------------------------------------------------
+        #region Добавление нового предложения в коллекцию
+        /// <summary>Добавление нового предложения в коллекцию</summary>
+        public ICommand AddLineCommand { get; }
+        /// <summary>Добавление нового предложения в коллекцию</summary>
+        private void OnAddLineCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("INFO");
 
-        //Свойства под вопросом(нужны ли)
-        //#region FocusedDataGrid : DataGrid - Имя датагрида, который сейчас находится в фокусе
+            if (DataCollection != null && CurrentSection != null && LineMultiBox != null)
+            {
+                _ViewCollectionProvider.AddLine(DataCollection, CurrentSection, LineMultiBox);
+                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+            }
 
-        ///// <summary>Имя датагрида, который сейчас находится в фокусе</summary>
-        //private string _FocusedDataGrid;
+            _Logger.WriteLog("DONE");
+        }
 
-        ///// <summary>Имя датагрида, который сейчас находится в фокусе</summary>
-        //public string FocusedDataGrid
-        //{
-        //    get => _FocusedDataGrid;
-        //    set => Set(ref _FocusedDataGrid, value);
-        //}
+        private bool CanAddLineCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Редактирование названия диагноза
+        /// <summary>Редактирование названия диагноза</summary>
+        public ICommand EditDiagnosisCommand { get; }
+        /// <summary>Редактирование названия диагноза</summary>
+        private void OnEditDiagnosisCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("INFO");
+
+            if (DataCollection != null && CurrentSection != null && DiagnosisMultiBox != null)
+            {
+                _ViewCollectionProvider.EditDiagnosis(DataCollection, CurrentSection, DiagnosisMultiBox);
+            }
+
+            _Logger.WriteLog("DONE");
+        }
+
+        private bool CanEditDiagnosisCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Редактирование названия раздела
+        /// <summary>Редактирование названия раздела</summary>
+        public ICommand EditBlockCommand { get; }
+        /// <summary>Редактирование названия раздела</summary>
+        private void OnEditBlockCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("INFO");
+
+            if (DataCollection != null && CurrentSection != null && BlockMultiBox != null)
+            {
+                _ViewCollectionProvider.EditBlock(DataCollection, CurrentSection, BlockMultiBox);
+            }
+
+            _Logger.WriteLog("DONE");
+        }
+
+        private bool CanEditBlockCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Редактирование строки
+        /// <summary>Редактирование строки</summary>
+        public ICommand EditLineCommand { get; }
+        /// <summary>Редактирование строки</summary>
+        private void OnEditLineCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("INFO");
+
+            if (DataCollection != null && CurrentSection != null && LineMultiBox != null)
+            {
+                _ViewCollectionProvider.EditLine(DataCollection, CurrentSection, LineMultiBox);
+            }
+
+            _Logger.WriteLog("DONE");
+        }
+
+        private bool CanEditLineCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Удаление диагноза
+        /// <summary>Удаление диагноза</summary>
+        public ICommand RemoveDiagnosisCommand { get; }
+        /// <summary>Удаление диагноза</summary>
+        private void OnRemoveDiagnosisCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("INFO");
+
+            MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить диагноз \"{DiagnosisMultiBox}\"? Все элементы, относящиеся к этому диагнозу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes && DataCollection != null && CurrentSection != null)
+            {
+                _ViewCollectionProvider.RemoveDiagnosis(DataCollection, CurrentSection);
+                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                BlocksList = null;
+                LinesList = null;
+            }
+
+            _Logger.WriteLog("DONE");
+        }
+
+        private bool CanRemoveDiagnosisCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Удаление раздела
+        /// <summary>Удаление раздела</summary>
+        public ICommand RemoveBlockCommand { get; }
+        /// <summary>Удаление раздела</summary>
+        private void OnRemoveBlockCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("INFO");
+
+            MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить раздел \"{BlockMultiBox}\"? Все элементы также относящиеся к этому разделу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes && DataCollection != null && CurrentSection != null)
+            {
+                _ViewCollectionProvider.RemoveBlock(DataCollection, CurrentSection);
+                BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
+                LinesList = null;
+            }
+
+            _Logger.WriteLog("DONE");
+        }
+
+        private bool CanRemoveBlockCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Удаление строки
+        /// <summary>Удаление строки</summary>
+        public ICommand RemoveLineCommand { get; }
+        /// <summary>Удаление строки</summary>
+        private void OnRemoveLineCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("INFO");
+
+            MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить строку \"{LineMultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes && DataCollection != null && CurrentSection != null)
+            {
+                _ViewCollectionProvider.RemoveLine(DataCollection, CurrentSection);
+                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+            }
+
+            _Logger.WriteLog("DONE");
+        }
+
+        private bool CanRemoveLineCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Команды окна обработчика строк
 
 
-        //#region Открытие файла
-        ///// <summary>Открытие файла</summary>
-        //public ICommand OpenFileCommand { get; }
-        ///// <summary>Открытие файла</summary>
-        //private void OnOpenFileCommandExecuted(object parameter)
-        //{
-        //    var dlg = new OpenFileDialog();
-        //    dlg.DefaultExt = dlgDefaultExt;
-        //    dlg.Filter = dlgFilter;
-
-        //    var result = dlg.ShowDialog();
-
-        //    if (result == true)
-        //    {
-        //        TextForEditing = _LineEditorService.OpenDocument(dlg.FileName);
-        //        if (RawLines == null) RawLines = new ObservableCollection<string>();
-        //        foreach (var item in _LineEditorService.TextToLines(TextForEditing))
-        //        {
-        //            RawLines.Add(item);
-        //        }
-        //    }
-        //}
-
-        //private bool CanOpenFileCommandExecute(object parameter) => true;
-
-        //#endregion
-
-        //#region Получение текста из буфера обмена
-        ///// <summary>Получение текста из буфера обмена</summary>
-        //public ICommand GetTextFromClipboardCommand { get; }
-        ///// <summary>Получение текста из буфера обмена</summary>
-        //private void OnGetTextFromClipboardCommandExecuted(object parameter)
-        //{
-        //    if (Clipboard.ContainsText())
-        //    {
-        //        TextForEditing = Clipboard.GetText();
-        //        if (RawLines == null) RawLines = new ObservableCollection<string>();
-        //        foreach (var item in _LineEditorService.TextToLines(TextForEditing))
-        //        {
-        //            RawLines.Add(item);
-        //        }
-        //    }
-        //}
-
-        //private bool CanGetTextFromClipboardCommandExecute(object parameter) => true;
-
-        //#endregion
-
-        //#region Удаление всех элементов необработанной таблицы
-        ///// <summary>Удаление всех элементов необработанной таблицы</summary>
-        //public ICommand ClearListBoxCommand { get; }
-        ///// <summary>Удаление всех элементов необработанной таблицы</summary>
-        //private void OnClearListBoxCommandExecuted(object parameter)
-        //{
-        //    RawLines = null;
-        //}
-
-        //private bool CanClearListBoxCommandExecute(object parameter) => RawLines != null;
-
-        //#endregion
-
-        //#region Добавление нового диагноза
-        ///// <summary>Добавление нового диагноза</summary>
-        //public ICommand AddNewDiagnosisCommand { get; }
-        ///// <summary>Добавление нового диагноза</summary>
-        //private void OnAddNewDiagnosisCommandExecuted(object parameter)
-        //{
-        //    _Logger.WriteLog("INFO");
-
-        //    if (DiagnosisTextBox != null)
-        //    {
-        //        _ViewCollectionProvider.AddELement("dgCodes", DiagnosisTextBox);
-        //    }
-
-        //    _Logger.WriteLog("DONE");
-        //}
-
-        //private bool CanAddNewDiagnosisCommandExecute(object parameter) => true;
-
-        //#endregion
-
-        //#region Удаление диагноза
-        ///// <summary>Удаление диагноза</summary>
-        //public ICommand RemoveDiagnosisCommand { get; }
-        ///// <summary>Удаление диагноза</summary>
-        //private void OnRemoveDiagnosisCommandExecuted(object parameter)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //private bool CanRemoveDiagnosisCommandExecute(object parameter) => true;
-
-        //#endregion
-
-        //#endregion
+        #endregion
     }
 }
