@@ -159,7 +159,7 @@
                         <DockPanel LastChildFill="True">
                             <Button
                                 x:Name="btnSearchNode"
-                                Command="{Binding SearchElementCommand, UpdateSourceTrigger=PropertyChanged}"
+                                Command="{Binding SearchElementCommand}"
                                 Cursor="Hand"
                                 DockPanel.Dock="Left"
                                 ToolTip="Найти элемент">
@@ -260,7 +260,7 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding Path=Line}">
                                     <DataGridTextColumn.Header>
-                                        <TextBlock Foreground="Black" Text="Данные" />
+                                        <TextBlock Foreground="Black" Text="Предложения" />
                                     </DataGridTextColumn.Header>
                                 </DataGridTextColumn>
                             </DataGrid.Columns>
@@ -278,7 +278,7 @@
             <GroupBox Grid.Column="1" MinWidth="300">
                 <GroupBox.Header>
                     <UniformGrid Rows="1">
-                        <Button Command="{Binding RandomCommand}">
+                        <Button Command="{Binding RandomCommand}" CommandParameter="{Binding ElementName=dgCodes}">
                             <materialDesign:PackIcon
                                 Width="24"
                                 Height="24"

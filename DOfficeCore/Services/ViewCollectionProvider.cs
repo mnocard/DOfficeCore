@@ -61,7 +61,7 @@ namespace DOfficeCore.Services
         {
             _Logger.WriteLog("INFO");
 
-            if (CurrentSection.Block == null)
+            if (CurrentSection == null || CurrentSection.Block == null)
             {
                 _Logger.WriteLog("Current section is null");
                 return new ObservableCollection<Section>();
@@ -89,7 +89,7 @@ namespace DOfficeCore.Services
         {
             _Logger.WriteLog("INFO");
 
-            if (CurrentSection.Line == null)
+            if (CurrentSection == null || CurrentSection.Line == null)
             {
                 _Logger.WriteLog("Current section is null");
                 return new ObservableCollection<Section>();

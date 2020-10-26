@@ -75,7 +75,129 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
+
         //#region Команды окна обработчика строк
+
+        //-------------------------------------------------------------------------------------------------
+
+        //#region Команда сохранения данных в файл
+        ///// <summary>Команда сохранения данных в файл</summary>
+        //public ICommand SaveDataToFileCommand { get; }
+        ///// <summary>Команда сохранения данных в файл</summary>
+        //private void OnSaveDataToFileCommandExecuted(object p)
+        //{
+        //    _Logger.WriteLog("INFO");
+
+        //    if (DataCollection != null)
+        //        _DataProviderService.SaveDataToFile(DataCollection, "file1");
+
+        //    _Logger.WriteLog("DONE");
+        //}
+
+        //private bool CanSaveDataToFileCommandExecute(object p) => true;
+        //#endregion
+
+        //-------------------------------------------------------------------------------------------------
+
+        //#region Команда редактирования выбранного элемента
+        ///// <summary>Команда редактирования выбранного элемента</summary>
+        //public ICommand EditElementCommand { get; }
+        ///// <summary>Команда редактирования выбранного элемента</summary>
+        //private void OnEditElementCommandExecuted(object parameter)
+        //{
+        //    _Logger.WriteLog("INFO");
+
+        //    if ((parameter is DataGrid datagrid) && datagrid.CurrentItem != null && FocusedDataGrid != null && MultiBox.Length > 3)
+        //    {
+        //        if (FocusedDataGrid.Equals("Diagnosis"))
+        //        {
+        //            _ViewCollectionProvider.EditDiagnosis(DataCollection, MultiBox, (string)datagrid.CurrentItem);
+        //        }
+        //        else if (FocusedDataGrid.Equals("Blocks"))
+        //        {
+        //            _ViewCollectionProvider.EditBlock(DataCollection, MultiBox, (string)datagrid.CurrentItem);
+        //        }
+        //        else if (FocusedDataGrid.Equals("Lines"))
+        //        {
+        //            _ViewCollectionProvider.EditLine(DataCollection, MultiBox, (string)datagrid.CurrentItem);
+        //        }
+        //        else
+        //        {
+        //            _Logger.WriteLog($"Wrong collection. There is no \"{FocusedDataGrid}\" collection");
+        //        }
+        //    }
+
+        //    _Logger.WriteLog("DONE");
+        //}
+
+        //private bool CanEditElementCommandExecute(object parameter) => true;
+
+        //#endregion
+
+        //-------------------------------------------------------------------------------------------------
+
+        //#region Команда удаления элементов из списка
+        ///// <summary>Команда удаления элементов из списка</summary>
+        //public ICommand RemoveElementCommand { get; }
+        ///// <summary>Команда удаления элементов из списка</summary>
+        //private void OnRemoveElementCommandExecuted(object parameter)
+        //{
+        //    _Logger.WriteLog("INFO");
+
+        //    MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
+        //    if (result == MessageBoxResult.Yes && MultiBox != null && FocusedDataGrid != null)
+        //    {
+        //        DataCollection = _ViewCollectionProvider.RemoveElement(FocusedDataGrid, MultiBox, DataCollection, CurrentDiagnosis, CurrentBlock, CurrentLine);
+        //        DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+        //        BlocksList = _ViewCollectionProvider.BlocksFromDataToView(CurrentDiagnosis, DataCollection);
+        //        LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentDiagnosis, CurrentBlock);
+        //    }
+
+        //    _Logger.WriteLog("DONE");
+        //}
+
+        //private bool CanRemoveElementCommandExecute(object parameter) => true;
+
+        //#endregion
+
+        //-------------------------------------------------------------------------------------------------
+
+        //#region Команда добавления элемента
+        ///// <summary>Команда добавления элемента</summary>
+        //public ICommand AddElementCommand { get; }
+        ///// <summary>Команда добавления элемента</summary>
+        //private void OnAddElementCommandExecuted(object parameter)
+        //{
+        //    _Logger.WriteLog("INFO");
+
+        //    if (parameter != null && MultiBox != null)
+        //    {
+        //        FocusedDataGrid = parameter as string;
+        //        _ViewCollectionProvider.AddELement(FocusedDataGrid, MultiBox);
+        //    }
+
+        //    _Logger.WriteLog("DONE");
+        //}
+
+        //private bool CanAddElementCommandExecute(object parameter) => true;
+
+        //#endregion
+
+        //-------------------------------------------------------------------------------------------------
+
+        //Свойства под вопросом(нужны ли)
+        //#region FocusedDataGrid : DataGrid - Имя датагрида, который сейчас находится в фокусе
+
+        ///// <summary>Имя датагрида, который сейчас находится в фокусе</summary>
+        //private string _FocusedDataGrid;
+
+        ///// <summary>Имя датагрида, который сейчас находится в фокусе</summary>
+        //public string FocusedDataGrid
+        //{
+        //    get => _FocusedDataGrid;
+        //    set => Set(ref _FocusedDataGrid, value);
+        //}
+
 
         //#region Открытие файла
         ///// <summary>Открытие файла</summary>
