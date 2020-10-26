@@ -1,5 +1,5 @@
-﻿using DOfficeCore.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using DOfficeCore.Models;
 
 namespace DOfficeCore.Services
 {
@@ -7,6 +7,6 @@ namespace DOfficeCore.Services
     {
         bool SaveDataToFile<T>(IEnumerable<T> data, string fileName);
         IEnumerable<string> LoadDoctorsFromFile(string fileName);
-        List<Diagnosis> LoadDataFromFile(string fileName);
+        HashSet<Section> LoadDataFromFile(string fileName);
     }
 }

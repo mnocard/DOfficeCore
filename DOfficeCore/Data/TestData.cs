@@ -1,40 +1,30 @@
-﻿using DOfficeCore.Models;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using DOfficeCore.Models;
 
 namespace DOfficeCore.Data
 {
     class TestData
     {
-        private static List<string> blockList = Enumerable.Range(1, 5)
-            .Select(i => $"Line {i}")
-            .ToList();
+        public static HashSet<Section> GetCollection()
+        {
+            var TestLines = new HashSet<Section>();
 
-        public static List<string> BlockList { get => blockList; set => blockList = value; }
-
-
-        private static List<Block> blocks = Enumerable.Range(1, 5)
-            .Select(i => new Block
+            for (int a = 1; a <= 5; a++)
             {
-                Name = $"Block {i}",
-                Lines = new List<string>(BlockList),
-            }).ToList();
-
-        internal static List<Block> Blocks { get => blocks; set => blocks = value; }
-
-
-        private static List<Diagnosis> diag = Enumerable.Range(1, 5)
-            .Select(i => new Diagnosis
-            {
-                Code = $"Diagnosis {i}",
-                Blocks = new List<Block>(Blocks),
-            }).ToList();
-
-        internal static List<Diagnosis> Diag { get => diag; set => diag = value; }
-
-        public static ObservableCollection<Diagnosis> Diagnoses { get; set; } = new ObservableCollection<Diagnosis>(Diag);
+                for (int b = 1; b <= 5; b++)
+                {
+                    for (int c = 1; c <= 5; c++)
+                    {
+                        TestLines.Add(new Section()
+                        {
+                            Diagnosis = $"Diagnosis {a}",
+                            Block = $"Block {b} in diagnosis {a}",
+                            Line = $"Line {c} in block {b} in diagnosis {a}"
+                        });
+                    }
+                }
+            }
+            return TestLines;
+        }
     }
 }

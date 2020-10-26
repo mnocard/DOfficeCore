@@ -79,7 +79,7 @@
                         </materialDesign:PackIcon.Background>
                     </materialDesign:PackIcon>
                 </TabItem.Header>
-                <views:DataGridView/>
+                <views:DataGridView />
             </TabItem>
             <TabItem>
                 <TabItem.Header>

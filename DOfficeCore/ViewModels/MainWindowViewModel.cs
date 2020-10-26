@@ -1,10 +1,12 @@
-﻿using DOfficeCore.Infrastructure.Commands;
+﻿using DOfficeCore.Data;
+using DOfficeCore.Infrastructure.Commands;
 using DOfficeCore.Logger;
 using DOfficeCore.Models;
 using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels.Core;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -14,54 +16,57 @@ namespace DOfficeCore.ViewModels
     {
         public MainWindowViewModel(IDataProviderService DataProviderService, 
                                     IViewCollectionProvider ViewCollectionProvider, 
-                                    IViewCollection ViewCollection,
                                     IDiaryBoxProvider DiaryBoxProvider,
                                     ILogger Logger,
                                     ILineEditorService LineEditorService)
         {
             _DataProviderService = DataProviderService;
             _ViewCollectionProvider = ViewCollectionProvider;
-            _ViewCollection = ViewCollection;
             _DiaryBoxProvider = DiaryBoxProvider;
             _LineEditorService = LineEditorService;
             _Logger = Logger;
 
             _Logger.WriteLog("INFO", "Создание MainWindowViewModel");
 
-            #region Команды
-
-            EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
-            CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
-            SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
+            #region Команды окна дневника
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
-            SelectedDataCommand = new LambdaCommand(OnSelectedDataCommandExecuted, CanSelectedDataCommandExecute);
-            EditElementCommand = new LambdaCommand(OnEditElementCommandExecuted, CanEditElementCommandExecute);
-            StringTransferCommand = new LambdaCommand(OnStringTransferCommandExecuted, CanStringTransferCommandExecute);
-            SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted, CanSearchElementCommandExecute);
-            RemoveElementCommand = new LambdaCommand(OnRemoveElementCommandExecuted, CanRemoveElementCommandExecute);
-            AddElementCommand = new LambdaCommand(OnAddElementCommandExecuted, CanAddElementCommandExecute);
-            AddTimeCommand = new LambdaCommand(OnAddTimeCommandExecuted, CanAddTimeCommandExecute);
-            AddDateCommand = new LambdaCommand(OnAddDateCommandExecuted, CanAddDateCommandExecute);
-            ClearDiaryBoxCommand = new LambdaCommand(OnClearDiaryBoxCommandExecuted, CanClearDiaryBoxCommandExecute);
-            AddDoctorCommand = new LambdaCommand(OnAddDoctorCommandExecuted, CanAddDoctorCommandExecute);
-            DeleteDoctorCommand = new LambdaCommand(OnDeleteDoctorCommandExecuted, CanDeleteDoctorCommandExecute);
-            EditDoctorCommand = new LambdaCommand(OnEditDoctorCommandExecuted, CanEditDoctorCommandExecute);
-            AddPositionCommand = new LambdaCommand(OnAddPositionCommandExecuted, CanAddPositionCommandExecute);
-            DeletePositionCommand = new LambdaCommand(OnDeletePositionCommandExecuted, CanDeletePositionCommandExecute);
-            EditPositionCommand = new LambdaCommand(OnEditPositionCommandExecuted, CanEditPositionCommandExecute);
-            SaveDoctorsListCommand = new LambdaCommand(OnSaveDoctorsListCommandExecuted, CanSaveDoctorsListCommandExecute);
-            AddDocToDiaryCommand = new LambdaCommand(OnAddDocToDiaryCommandExecuted, CanAddDocToDiaryCommandExecute);
-            RandomCommand = new LambdaCommand(OnRandomCommandExecuted, CanRandomCommandExecute);
             ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
 
-            OpenFileCommand = new LambdaCommand(OnOpenFileCommandExecuted, CanOpenFileCommandExecute);
-            GetTextFromClipboardCommand = new LambdaCommand(OnGetTextFromClipboardCommandExecuted, CanGetTextFromClipboardCommandExecute);
-            ClearListBoxCommand = new LambdaCommand(OnClearListBoxCommandExecuted, CanClearListBoxCommandExecute);
-            AddNewDiagnosisCommand = new LambdaCommand(OnAddNewDiagnosisCommandExecuted, CanAddNewDiagnosisCommandExecute);
-            RemoveDiagnosisCommand = new LambdaCommand(OnRemoveDiagnosisCommandExecuted, CanRemoveDiagnosisCommandExecute);
+            SelectedDataCommand = new LambdaCommand(OnSelectedDataCommandExecuted, CanSelectedDataCommandExecute);
+            AddDateCommand = new LambdaCommand(OnAddDateCommandExecuted, CanAddDateCommandExecute);
+            AddTimeCommand = new LambdaCommand(OnAddTimeCommandExecuted, CanAddTimeCommandExecute);
+            AddDocToDiaryCommand = new LambdaCommand(OnAddDocToDiaryCommandExecuted, CanAddDocToDiaryCommandExecute);
+            AddPositionCommand = new LambdaCommand(OnAddPositionCommandExecuted, CanAddPositionCommandExecute);
+            EditPositionCommand = new LambdaCommand(OnEditPositionCommandExecuted, CanEditPositionCommandExecute);
+            DeletePositionCommand = new LambdaCommand(OnDeletePositionCommandExecuted, CanDeletePositionCommandExecute); 
+            AddDoctorCommand = new LambdaCommand(OnAddDoctorCommandExecuted, CanAddDoctorCommandExecute);
+            EditDoctorCommand = new LambdaCommand(OnEditDoctorCommandExecuted, CanEditDoctorCommandExecute);
+            DeleteDoctorCommand = new LambdaCommand(OnDeleteDoctorCommandExecuted, CanDeleteDoctorCommandExecute);
+            SaveDoctorsListCommand = new LambdaCommand(OnSaveDoctorsListCommandExecuted, CanSaveDoctorsListCommandExecute);
+            SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted, CanSearchElementCommandExecute);
+            RandomCommand = new LambdaCommand(OnRandomCommandExecuted, CanRandomCommandExecute);
+            CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
+            EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
+            ClearDiaryBoxCommand = new LambdaCommand(OnClearDiaryBoxCommandExecuted, CanClearDiaryBoxCommandExecute);
+            #endregion
+
+
+            #region Команды окна редактирования строк
+
+            //SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
+            //EditElementCommand = new LambdaCommand(OnEditElementCommandExecuted, CanEditElementCommandExecute);
+            //RemoveElementCommand = new LambdaCommand(OnRemoveElementCommandExecuted, CanRemoveElementCommandExecute);
+            //AddElementCommand = new LambdaCommand(OnAddElementCommandExecuted, CanAddElementCommandExecute);
+            //OpenFileCommand = new LambdaCommand(OnOpenFileCommandExecuted, CanOpenFileCommandExecute);
+            //GetTextFromClipboardCommand = new LambdaCommand(OnGetTextFromClipboardCommandExecuted, CanGetTextFromClipboardCommandExecute);
+            //ClearListBoxCommand = new LambdaCommand(OnClearListBoxCommandExecuted, CanClearListBoxCommandExecute);
+            //AddNewDiagnosisCommand = new LambdaCommand(OnAddNewDiagnosisCommandExecuted, CanAddNewDiagnosisCommandExecute);
+            //RemoveDiagnosisCommand = new LambdaCommand(OnRemoveDiagnosisCommandExecuted, CanRemoveDiagnosisCommandExecute);
 
             #endregion
         }
+
+        #region Свойства
 
         #region Заголовок окна
         /// <summary>Заголовок окна</summary>
@@ -74,6 +79,64 @@ namespace DOfficeCore.ViewModels
         }
         #endregion
 
+        #region DataCollection : ObservableCollection<Section> - Коллекция данных из базы данных
+
+        /// <summary>Коллекция данных из базы данных</summary>
+        private HashSet<Section> _DataCollection;
+
+        /// <summary>Коллекция данных из базы данных</summary>
+        public HashSet<Section> DataCollection
+        {
+            get => _DataCollection;
+            set => Set(ref _DataCollection, value);
+        }
+
+        #endregion
+
+        #region DiagnosisList : ObservableCollection<Section> - Коллекция кодов диагнозов
+
+        /// <summary>Коллекция кодов диагнозов</summary>
+        private ObservableCollection<Section> _DiagnosisList;
+
+        /// <summary>Коллекция кодов диагнозов</summary>
+        public ObservableCollection<Section> DiagnosisList
+        {
+            get => _DiagnosisList;
+            set => Set(ref _DiagnosisList, value);
+        }
+
+        #endregion
+
+        #region BlocksList : ObservableCollection<Section> - Коллекция названий блоков
+
+        /// <summary>Коллекция названий блоков</summary>
+        private ObservableCollection<Section> _BlocksList;
+
+        /// <summary>Коллекция названий блоков</summary>
+        public ObservableCollection<Section> BlocksList
+        {
+            get => _BlocksList;
+            set => Set(ref _BlocksList, value);
+        }
+
+        #endregion
+
+        #region LinesList : ObservableCollection<Section> - Коллекция содержимого строк
+
+        /// <summary>Коллекция содержимого строк</summary>
+        private ObservableCollection<Section> _LinesList;
+
+        /// <summary>Коллекция содержимого строк</summary>
+        public ObservableCollection<Section> LinesList
+        {
+            get => _LinesList;
+            set => Set(ref _LinesList, value);
+        }
+
+        #endregion
+
+        #endregion
+
         #region Команды
 
         #region Команда загрузки данных
@@ -83,13 +146,19 @@ namespace DOfficeCore.ViewModels
         private void OnLoadDataCommandExecuted(object parameter)
         {
             _Logger.WriteLog("INFO");
-
-            _ViewCollection.DataCollection = _DataProviderService.LoadDataFromFile("file.json");
-            _ViewCollectionProvider.DiagnosisFromDataToView();
+            
             var temp = _DataProviderService.LoadDoctorsFromFile("Doctors.json");
             if (temp != null) Doctors = new ObservableCollection<string>(temp);
             temp = _DataProviderService.LoadDoctorsFromFile("Position.json");
             if (temp != null) Position = new ObservableCollection<string>(temp);
+
+            // Тестовые данные
+            DataCollection = TestData.GetCollection();
+            DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+
+            // Реальные данные
+            //DataCollection = _DataProviderService.LoadDataFromFile("file");
+            //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
             _Logger.WriteLog("DONE");
         }
@@ -114,12 +183,6 @@ namespace DOfficeCore.ViewModels
 
         #region Сервисы
 
-        #region ViewCollection : IViewCollection - Коллекция данных
-        private readonly IViewCollection _ViewCollection;
-        /// <summary>Публичное свойство нужно для привязки представления к коллекции</summary>
-        public IViewCollection ViewCollection { get => _ViewCollection; }
-        #endregion
-
         #region Сервис обработки строк
         private readonly ILineEditorService _LineEditorService;
         #endregion
@@ -141,9 +204,5 @@ namespace DOfficeCore.ViewModels
         #endregion
 
         #endregion
-
-        
-
-        
     }
 }

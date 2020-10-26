@@ -36,7 +36,6 @@ namespace DOfficeCore
             services.AddSingleton<MainWindowViewModel>();
             services.AddTransient<IDataProviderService, DataProviderService>();
             services.AddSingleton<IViewCollectionProvider, ViewCollectionProvider>();
-            services.AddSingleton<IViewCollection, ViewCollection>();
             services.AddSingleton<IDiaryBoxProvider, DiaryBoxProvider>();
             services.AddSingleton<ILogger, Logger.Logger>();
             services.AddSingleton<ILineEditorService, LineEditorService>();

@@ -1,7 +1,6 @@
 ﻿using DOfficeCore.Logger;
 using DOfficeCore.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -12,406 +11,411 @@ namespace DOfficeCore.Services
     /// <summary>Класс для обеспечения взаимодействия между ViewCollection и коллекцией диагнозов</summary>
     class ViewCollectionProvider : IViewCollectionProvider
     {
-        public ViewCollectionProvider(IViewCollection ViewCollection, ILogger Logger)
+        public ViewCollectionProvider(ILogger Logger)
         {
             _Logger = Logger;
-            _ViewCollection = ViewCollection;
         }
 
-        #region 
+        #region Сервисы
         private readonly ILogger _Logger;
-        private readonly IViewCollection _ViewCollection;
         #endregion
 
-        #region Методы
-        
-        /// <summary>Метод создание случайного дневника </summary>
-        /// <returns>Случайный дневник</returns>
-        public string RandomDiary()
+        #region Получение списков
+
+        /// <summary>
+        /// Получение списка диагнозов для модели представления
+        /// </summary>
+        /// <param name="DataCollection">Коллекция элементов базы данных</param>
+        /// <returns>Список диагнозов</returns>
+        public ObservableCollection<Section> DiagnosisFromDataToView(IEnumerable<Section> DataCollection)
         {
             _Logger.WriteLog("INFO");
 
-            string result = "";
-            Random rnd = new Random();
-            if (_ViewCollection.CurrentDiagnosis != null)
+            if (DataCollection == null)
             {
-                foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
-                {
-                    if(diagnosis.Code.Equals(_ViewCollection.CurrentDiagnosis))
-                    {
-                        foreach (Block block in diagnosis.Blocks)
-                        {
-                            result += block.Lines[rnd.Next(block.Lines.Count)] + " ";
-                        }
-                    }
-                }
+                _Logger.WriteLog("DataCollection is null");
+                DataCollection = new HashSet<Section>();
+                return new ObservableCollection<Section>();
             }
-            _Logger.WriteLog("DONE");
 
-            return result;
+            var DiagnosisList = new ObservableCollection<Section>();
+
+            foreach (Section item in DataCollection)
+            {
+                if (DiagnosisList.Count == 0) DiagnosisList.Add(item);
+                else if (!DiagnosisList.Any(t => t.Diagnosis.Equals(item.Diagnosis))) DiagnosisList.Add(item);
+            }
+
+            if (DiagnosisList.Count > 0) _Logger.WriteLog("DiagnosisList returned succesfully");
+            else _Logger.WriteLog("DiagnosisList is empty");
+            return DiagnosisList;
         }
 
-        /// <summary>Метод для отображения списка диагнозов в таблице</summary>
-        public void DiagnosisFromDataToView()
+        /// <summary>
+        /// Получение списка разделов для модели представления
+        /// </summary>
+        /// <param name="DataCollection">Коллекция элементов базы данных</param>
+        /// <param name="CurrentSection">Выбранная секция базы данных</param>
+        /// <returns>Список разделов</returns>
+        public ObservableCollection<Section> BlocksFromDataToView(IEnumerable<Section> DataCollection, Section CurrentSection)
         {
             _Logger.WriteLog("INFO");
 
-            if (_ViewCollection.DataCollection == null) _ViewCollection.DataCollection = new List<Diagnosis>();
-            _ViewCollection.DiagnosisCode = new ObservableCollection<string>(_ViewCollection.DataCollection.
-                Select(t => t.Code));
-            _Logger.WriteLog("DONE");
+            if (CurrentSection == null || CurrentSection.Block == null)
+            {
+                _Logger.WriteLog("Current section is null");
+                return new ObservableCollection<Section>();
+            }
+            var BlockList = new ObservableCollection<Section>();
 
+            foreach (Section item in DataCollection)
+            {
+                if (BlockList.Count == 0 && item.Diagnosis.Equals(CurrentSection.Diagnosis)) BlockList.Add(item);
+                else if (item.Diagnosis.Equals(CurrentSection.Diagnosis) && !BlockList.Any(t => t.Block.Equals(item.Block))) BlockList.Add(item);
+            }
+
+            if (BlockList.Count > 0) _Logger.WriteLog("BlocksList returned succesfully");
+            else _Logger.WriteLog("BlocksList is empty");
+            return BlockList;
         }
 
-        /// <summary>Метод для отображения списка блоков в таблице</summary>
-        public void BlocksFromDataToView()
+        /// <summary>
+        /// Получение списка строк для модели представления
+        /// </summary>
+        /// <param name="DataCollection">Коллекция элементов базы данных</param>
+        /// <param name="CurrentSection">Выбранная секция</param>
+        /// <returns>Список строк</returns>
+        public ObservableCollection<Section> LinesFromDataToView(IEnumerable<Section> DataCollection, Section CurrentSection)
         {
             _Logger.WriteLog("INFO");
 
-            if (_ViewCollection.CurrentDiagnosis == null) return;
-            _ViewCollection.BlocksNames = new ObservableCollection<string>();
-
-            foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
+            if (CurrentSection == null || CurrentSection.Line == null)
             {
-                if(diagnosis.Code.Equals(_ViewCollection.CurrentDiagnosis))
-                {
-                    foreach (Block block in diagnosis.Blocks)
-                    {
-                        _ViewCollection.BlocksNames.Add(block.Name);
-                    }
-                    return;
-                }
-            }
-            _Logger.WriteLog("DONE");
-
-        }
-
-        /// <summary>Метод для отображения списка строк в таблице</summary>
-        public void LinesFromDataToView()
-        {
-            _Logger.WriteLog("INFO");
-
-            if (_ViewCollection.BlocksNames == null ||
-                _ViewCollection.CurrentDiagnosis == null ||
-                _ViewCollection.CurrentBlock == null)
-            {
-                _Logger.WriteLog("DONE");
-                return;
+                _Logger.WriteLog("Current section is null");
+                return new ObservableCollection<Section>();
             }
 
-            _ViewCollection.LinesNames = null;
+            var LineList = new ObservableCollection<Section>();
 
-            foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
+            foreach (Section item in DataCollection)
             {
-                if (diagnosis.Code.Equals(_ViewCollection.CurrentDiagnosis))
-                {
-                    foreach (Block block in diagnosis.Blocks)
-                    {
-                        if(block.Name.Equals(_ViewCollection.CurrentBlock))
-                        {
-                            _ViewCollection.LinesNames = new ObservableCollection<string>(block.Lines);
-                            _Logger.WriteLog("DONE");
-                            return;
-                        }
-                    }
-                }
+                if (item.Block.Equals(CurrentSection.Block) && item.Diagnosis.Equals(CurrentSection.Diagnosis)) LineList.Add(item);
             }
-        }
 
-        /// <summary>Метод для удаления элемента из базы данных</summary>
-        /// <param name="FocusedDataGrid">Имя выбранного датагрида</param>
-        /// <param name="MultiBox">Содержимое мультибокса</param>
-        public void RemoveElement(string FocusedDataGrid,string MultiBox)
-        {
-            _Logger.WriteLog("INFO");
-
-            MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить элемент с названием: \"{MultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
-            {
-                foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
-                {
-                    if (FocusedDataGrid.Equals("dgCodes"))
-                    {
-                        if (MultiBox.Equals(_ViewCollection.CurrentDiagnosis) &&
-                            MultiBox.Equals(diagnosis.Code))
-                        {
-                            _ViewCollection.DataCollection.Remove(diagnosis);
-                            DiagnosisFromDataToView();
-                            _ViewCollection.BlocksNames = null;
-                            _ViewCollection.LinesNames = null;
-                            _Logger.WriteLog("DONE");
-                            return;
-                        }
-                    }
-                    else 
-                    {
-                        foreach (Block block in diagnosis.Blocks)
-                        {
-                            if (FocusedDataGrid.Equals("dgBlocksNames") )
-                            {
-                                if (MultiBox.Equals(_ViewCollection.CurrentBlock) &&
-                                    MultiBox.Equals(block.Name))
-                                {
-                                    diagnosis.Blocks.Remove(block);
-                                    BlocksFromDataToView();
-                                    _ViewCollection.LinesNames = null;
-                                    _Logger.WriteLog("DONE");
-                                    return;
-                                }
-                            }
-                            else
-                            {
-                                foreach (string line in block.Lines)
-                                {
-                                    if(FocusedDataGrid.Equals("dgLinesContent") &&
-                                        line.Equals(MultiBox) &&
-                                        line.Equals(_ViewCollection.CurrentLine))
-                                    {
-                                        block.Lines.Remove(line);
-                                        LinesFromDataToView();
-                                        _Logger.WriteLog("DONE");
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>Метод поиска элемента из базы данных</summary>
-        /// <param name="MultiBox">Содержимое мультибокса</param>
-        public void SearchElement(string MultiBox)
-        {
-            _Logger.WriteLog("INFO");
-
-            _ViewCollection.DiagnosisCode = null;
-            _ViewCollection.DiagnosisCode = new ObservableCollection<string>();
-            _ViewCollection.BlocksNames = null;
-            _ViewCollection.BlocksNames = new ObservableCollection<string>();
-            _ViewCollection.LinesNames = null;
-            _ViewCollection.LinesNames = new ObservableCollection<string>();
-
-            foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
-            {
-                if (diagnosis.Code.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    _ViewCollection.DiagnosisCode.Add(diagnosis.Code);
-                }
-                else
-                {
-                    foreach (Block block in diagnosis.Blocks)
-                    {
-                        if (block.Name.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            _ViewCollection.BlocksNames.Add(block.Name);
-                        }
-                        else
-                        {
-                            foreach (string line in block.Lines)
-                            {
-                                if (line.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase))
-                                {
-                                    _ViewCollection.LinesNames.Add(line);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (_ViewCollection.DiagnosisCode.Count == 0) DiagnosisFromDataToView();
-            if (_ViewCollection.BlocksNames.Count == 0) BlocksFromDataToView();
-            if (_ViewCollection.LinesNames.Count == 0) LinesFromDataToView();
-            _Logger.WriteLog("DONE");
-        }
-
-        /// <summary>Метод для редактирования элемента базы данных</summary>
-        /// <param name="FocusedDataGrid">Имя выбранного датагрида</param>
-        /// <param name="MultiBox">Содержимое мультибокса</param>
-        public void EditElement(string FocusedDataGrid, string MultiBox)
-        {
-            _Logger.WriteLog("INFO");
-
-            if (CheckForDoubles(FocusedDataGrid, MultiBox)) return;
-
-            foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
-            {
-                if (FocusedDataGrid == "dgCodes")
-                {
-                    if (!diagnosis.Code.Equals(MultiBox) &&
-                    diagnosis.Code.Equals(_ViewCollection.CurrentDiagnosis) &&
-                    !MultiBox.Equals(_ViewCollection.CurrentDiagnosis))
-                    {
-                        diagnosis.Code = MultiBox;
-                        _ViewCollection.CurrentDiagnosis = MultiBox;
-                        DiagnosisFromDataToView();
-                        _Logger.WriteLog("DONE");
-                        return;
-                    }
-                }
-                else
-                {
-                    foreach (Block block in diagnosis.Blocks)
-                    {
-                        if (FocusedDataGrid == "dgBlocksNames")
-                        {
-                            if (!block.Name.Equals(MultiBox) &&
-                            block.Name.Equals(_ViewCollection.CurrentBlock) &&
-                            !MultiBox.Equals(_ViewCollection.CurrentBlock))
-                            {
-                                block.Name = MultiBox;
-                                _ViewCollection.CurrentBlock = MultiBox;
-                                BlocksFromDataToView();
-                                _Logger.WriteLog("DONE");
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            for (int i = 0; i < block.Lines.Count; i++)
-                            {
-                                if (!block.Lines[i].Equals(MultiBox) &&
-                                    block.Lines[i].Equals(_ViewCollection.CurrentLine) &&
-                                    FocusedDataGrid == "dgLinesContent" &&
-                                    !MultiBox.Equals(_ViewCollection.CurrentLine))
-                                {
-                                    block.Lines.RemoveAt(i);
-                                    block.Lines.Add(MultiBox);
-                                    LinesFromDataToView();
-                                    _Logger.WriteLog("DONE");
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>Метод изменения отображения данных по щелчку</summary>
-        /// <param name="FocusedDataGrid">Имя выбранного датагрида</param>
-        /// <param name="CurrentItem">Содержимое выбранного элемента</param>
-        public void SelectedData(string FocusedDataGrid, string CurrentItem)
-        {
-            _Logger.WriteLog("INFO");
-
-            switch (FocusedDataGrid)
-            {
-                case "dgCodes":
-                    _ViewCollection.CurrentDiagnosis = CurrentItem;
-                    BlocksFromDataToView();
-                    break;
-                case "dgBlocksNames":
-                    _ViewCollection.CurrentBlock = CurrentItem;
-                    LinesFromDataToView();
-                    break;
-                case "dgLinesContent":
-                    _ViewCollection.CurrentLine = CurrentItem;
-                    break;
-            }
-            _Logger.WriteLog("DONE");
+            if (LineList.Count > 0) _Logger.WriteLog("LineList returned succesfully");
+            else _Logger.WriteLog("LineList is empty");
+            return LineList;
         }
         #endregion
 
-        /// <summary>Метод для добавления нового элемента</summary>
-        /// <param name="FocusedDataGrid">Датагрида, в который добавляется элемент</param>
-        /// <param name="MultiBox">Элемент, который нужно добавить</param>
-        public void AddELement(string FocusedDataGrid, string MultiBox)
+        #region Удаление элементов
+
+        /// <summary>
+        /// Удаление всех элементов диагноза
+        /// </summary>
+        /// <param name="DataCollection">Коллекция элемента</param>
+        /// <param name="CurrentSection">Секция, из которого берется диагноз</param>
+        /// <returns>True если удаление прошло успешно</returns>
+        public bool RemoveDiagnosis(HashSet<Section> DataCollection, Section CurrentSection)
         {
             _Logger.WriteLog("INFO");
 
-            if (CheckForDoubles(FocusedDataGrid, MultiBox)) return;
+            var result = DataCollection.RemoveWhere(t => t.Diagnosis.Equals(CurrentSection.Diagnosis));
 
-            if(FocusedDataGrid.Equals("dgCodes"))
+            if (result > 0)
             {
-                _ViewCollection.DataCollection.Add(new Diagnosis { Code = MultiBox, Blocks = new List<Block>() });
-                DiagnosisFromDataToView();
-                return;
+                _Logger.WriteLog($"({result}) items in diagnosis {CurrentSection.Diagnosis} removed succesfully.");
+                return true;
             }
             else
             {
-                foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
-                {
-                    if(FocusedDataGrid.Equals("dgBlocksNames"))
-                    {
-                        if (diagnosis.Code.Equals(_ViewCollection.CurrentDiagnosis))
-                        {
-                            diagnosis.Blocks.Add(new Block { Name = MultiBox, Lines = new List<string>() });
-                            BlocksFromDataToView();
-                            _Logger.WriteLog("DONE");
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        foreach (Block block in diagnosis.Blocks)
-                        {
-                            if (block.Name.Equals(_ViewCollection.CurrentBlock))
-                            {
-                                block.Lines.Add(MultiBox);
-                                LinesFromDataToView();
-                                _Logger.WriteLog("DONE");
-                                return;
-                            }
-                        }
-                    }
-                }
+                _Logger.WriteLog("Nothing to remove.");
+                return false;
             }
         }
 
         /// <summary>
-        /// Метод для поиска двойника
+        /// Удаление всех элементов раздела
         /// </summary>
-        /// <param name="FocusedDataGrid">Выбранны датагрид, в котором осуществляется поиск</param>
-        /// <param name="MultiBox">Выбранный для поиска элемент</param>
-        /// <returns>True, если элемент найден</returns>
-        private bool CheckForDoubles(string FocusedDataGrid, string MultiBox)
+        /// <param name="DataCollection">Коллекция из которой происходит удаление</param>
+        /// <param name="CurrentSection">Секция, из которой берутся данные о диагнозе и разделе</param>
+        /// <returns>True если удаление прошло успешно</returns>
+        public bool RemoveBlock(HashSet<Section> DataCollection, Section CurrentSection)
         {
             _Logger.WriteLog("INFO");
 
-            foreach (Diagnosis diagnosis in _ViewCollection.DataCollection)
+            var result = DataCollection.RemoveWhere(t => t.Diagnosis.Equals(CurrentSection.Diagnosis) && t.Block.Equals(CurrentSection.Block));
+
+            if (result > 0)
             {
-                if (FocusedDataGrid.Equals("dgCodes"))
+                _Logger.WriteLog($"({result}) items in block {CurrentSection.Block} in diagnosis {CurrentSection.Diagnosis} removed succesfully.");
+                return true;
+            }
+            else
+            {
+                _Logger.WriteLog("Nothing to remove.");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Удаление строки
+        /// </summary>
+        /// <param name="DataCollection">Коллекция из которой происходит удаление</param>
+        /// <param name="CurrentSection">Секция, содержащая строку</param>
+        /// <returns>True если удаление прошло успешно</returns>
+        public bool RemoveLine(HashSet<Section> DataCollection, Section CurrentSection)
+        {
+            _Logger.WriteLog("INFO");
+
+            var result = DataCollection.Remove(CurrentSection);
+            _Logger.WriteLog($"Result of removing element is ({result}).");
+            return result;
+        }
+        #endregion
+
+        #region Переименовывание
+
+        /// <summary>
+        /// Переименовывание диагноза
+        /// </summary>
+        /// <param name="DataCollection">Коллекция данных</param>
+        /// <param name="CurrentSection">Секция, из которой берется старое название диагноз</param>
+        /// <param name="MultiBox">Новое название диагноза</param>
+        /// <returns>True если успешно переименовано</returns>
+        public bool EditDiagnosis(HashSet<Section> DataCollection, Section CurrentSection, string MultiBox)
+        {
+            _Logger.WriteLog("INFO");
+            bool result = false;
+
+            foreach (Section item in DataCollection)
+            {
+                if (item.Diagnosis.Equals(CurrentSection.Diagnosis))
                 {
-                    if (diagnosis.Code.Equals(MultiBox))
-                    {
-                        MessageBox.Show("Элемент с таким названием уже существует.");
-                        _Logger.WriteLog("DONE");
-                        return true;
-                    }
-                }
-                else
-                {
-                    foreach (Block block in diagnosis.Blocks)
-                    {
-                        if (FocusedDataGrid.Equals("dgBlocksNames"))
-                        {
-                            if (block.Name.Equals(MultiBox))
-                            {
-                                MessageBox.Show("Элемент с таким названием уже существует.");
-                                _Logger.WriteLog("DONE");
-                                return true;
-                            }
-                        }
-                        else
-                        {
-                            foreach (string line in block.Lines)
-                            {
-                                if (line.Equals(MultiBox))
-                                {
-                                    MessageBox.Show("Элемент с таким названием уже существует.");
-                                    _Logger.WriteLog("DONE");
-                                    return true;
-                                }
-                            }
-                        }
-                    }
+                    item.Diagnosis = MultiBox;
+                    result = true;
                 }
             }
-            _Logger.WriteLog("DONE");
-            return false;
+
+            _Logger.WriteLog($"Trying to change diagnosis code, result: {result}");
+            return result;
         }
+
+        /// <summary>
+        /// Переименовывание раздела
+        /// </summary>
+        /// <param name="DataCollection">Коллекция данных</param>
+        /// <param name="CurrentSection">Секция, из которой берется старое название блока и диагноза, в котором блок находится</param>
+        /// <param name="MultiBox">Новое название блока</param>
+        /// <returns>True если успешно переименовано</returns>
+        public bool EditBlock(HashSet<Section> DataCollection, Section CurrentSection, string MultiBox)
+        {
+            _Logger.WriteLog("INFO");
+            bool result = false;
+
+            foreach (Section item in DataCollection)
+            {
+                if (item.Diagnosis.Equals(CurrentSection.Diagnosis) && item.Block.Equals(CurrentSection.Block))
+                {
+                    item.Block = MultiBox;
+                    result = true;
+                }
+            }
+
+            _Logger.WriteLog($"Trying to change block name, result: {result}");
+            return result;
+        }
+
+        /// <summary>
+        /// Переименовывание строки
+        /// </summary>
+        /// <param name="DataCollection">Коллекция данных</param>
+        /// <param name="CurrentSection">Секция, из которой берется название блока и диагноза, в которой находится строка</param>
+        /// <param name="MultiBox">Новая строка</param>
+        /// <returns>True если успешно переименовано</returns>
+        public bool EditLine(HashSet<Section> DataCollection, Section CurrentSection, string MultiBox)
+        {
+            _Logger.WriteLog("INFO");
+            bool result = false;
+
+            foreach (Section item in DataCollection)
+            {
+                if (item.Equals(CurrentSection))
+                {
+                    item.Line = MultiBox;
+                    result = true;
+                }
+            }
+
+            _Logger.WriteLog($"Trying to change line, result: {result}");
+            return result;
+        }
+        #endregion
+
+        #region Поиск
+
+        /// <summary>
+        /// Поиск текста в названиях диагнозов
+        /// </summary>
+        /// <param name="DataCollection">Коллекция данных</param>
+        /// <param name="MultiBox">Искомый текст</param>
+        /// <returns>Список найденных диагнозов</returns>
+        public ObservableCollection<Section> SearchDiagnosis(HashSet<Section> DataCollection, string MultiBox)
+        {
+            _Logger.WriteLog("INFO");
+            bool result = false;
+            var DiagnosisList = new ObservableCollection<Section>();
+
+            foreach (Section item in DataCollection)
+            {
+                if (item.Diagnosis.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase) && !DiagnosisList.Any(t => t.Diagnosis.Equals(item.Diagnosis)))
+                {
+                    DiagnosisList.Add(item);
+                    result = true;
+                }
+            }
+
+            _Logger.WriteLog($"Search result: {result}");
+            return DiagnosisList;
+        }
+
+        /// <summary>
+        /// Поиск текста в названиях разделов
+        /// </summary>
+        /// <param name="DataCollection">Коллекция данных</param>
+        /// <param name="MultiBox">Искомый текст</param>
+        /// <returns>Список найденных разделов</returns>
+        public ObservableCollection<Section> SearchBlocks(HashSet<Section> DataCollection, string MultiBox)
+        {
+            _Logger.WriteLog("INFO");
+            bool result = false;
+            var BlocksList = new ObservableCollection<Section>();
+
+            foreach (Section item in DataCollection)
+            {
+                if (item.Block.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase) &&
+                    !BlocksList.Any(t => t.Diagnosis.Equals(item.Diagnosis) && t.Block.Equals(item.Block)))
+                {
+                    BlocksList.Add(item);
+                    result = true;
+                }
+            }
+
+            _Logger.WriteLog($"Search result: {result}");
+            return BlocksList;
+        }
+
+        /// <summary>
+        /// Поиск текста в строках
+        /// </summary>
+        /// <param name="DataCollection">Коллекция данных</param>
+        /// <param name="MultiBox">Искомый текст</param>
+        /// <returns>Список найденных строк</returns>
+        public ObservableCollection<Section> SearchLines(HashSet<Section> DataCollection, string MultiBox)
+        {
+            _Logger.WriteLog("INFO");
+            bool result = false;
+
+            var LinesList = new ObservableCollection<Section>(DataCollection
+                .Where(t => t.Line.Contains(MultiBox, StringComparison.CurrentCultureIgnoreCase))
+                .Select(t => t));
+
+            result = LinesList.Count > 0;
+            _Logger.WriteLog($"Search result: {result}");
+            return LinesList;
+        }
+        #endregion
+
+        #region Добавление
+        /// <summary>
+        /// Добавление диагноза в коллекцию данных
+        /// </summary>
+        /// <param name="DataCollection">Коллекция, в которую происходит добавление</param>
+        /// <param name="MultiBox">Диагноз, который необходимо добавить</param>
+        /// <returns>True если успешно добавлено</returns>
+        public bool AddDiagnosis(HashSet<Section> DataCollection, string MultiBox)
+        {
+            _Logger.WriteLog("INFO");
+            foreach (var _ in DataCollection.Where(item => item.Diagnosis.Equals(MultiBox)).Select(item => new { }))
+            {
+                _Logger.WriteLog($"Diagnosis {MultiBox} already exist.");
+                return false;
+            }
+
+            DataCollection.Add(new Section() { Diagnosis = MultiBox });
+            _Logger.WriteLog($"Diagnosis {MultiBox} added succcesfully.");
+            return true;
+        }
+
+        /// <summary>
+        /// Добавление раздела в коллекцию данных
+        /// </summary>
+        /// <param name="DataCollection">Коллекция, в которую происходит добавление</param>
+        /// <param name="CurrentSection">Секция, предназначенная для получения диагноза, в которой будет находится раздел</param>
+        /// <param name="MultiBox">Раздел, который необходимо добавить</param>
+        /// <returns>True если успешно добавлено</returns>
+        public bool AddBlock(HashSet<Section> DataCollection, Section CurrentSection, string MultiBox)
+        {
+            _Logger.WriteLog("INFO");
+            if (CurrentSection.Diagnosis != null && CurrentSection.Block != null)
+            {
+                foreach (var _ in DataCollection.Where(item => item.Diagnosis.Equals(CurrentSection.Diagnosis)).Where(item => item.Block.Equals(MultiBox)).Select(item => new { }))
+                {
+                    _Logger.WriteLog($"Block {MultiBox} already exist.");
+                    return false;
+                }
+            }
+
+            DataCollection.Add(new Section() { Diagnosis = CurrentSection.Diagnosis, Block = MultiBox });
+            _Logger.WriteLog($"Block {MultiBox} added succcesfully.");
+            return true;
+        }
+
+        /// <summary>
+        /// Добавление строки в коллекцию данных
+        /// </summary>
+        /// <param name="DataCollection">Коллекция, в которую происходит добавление</param>
+        /// <param name="CurrentSection">Секция, предназначенная для получения диагноза и раздела, в которой будет находится строка</param>
+        /// <param name="MultiBox">Строка, которую необходимо добавить</param>
+        /// <returns>True если успешно добавлено</returns>
+        public bool AddLine(HashSet<Section> DataCollection, Section CurrentSection, string MultiBox)
+        {
+            _Logger.WriteLog("INFO");
+            if (CurrentSection.Diagnosis != null && CurrentSection.Block != null)
+                DataCollection.Add(new Section() { Diagnosis = CurrentSection.Diagnosis, Block = CurrentSection.Block, Line = MultiBox });
+            
+            _Logger.WriteLog($"Line added succcesfully.");
+            return true;
+        }
+        #endregion
+
+        #region Создание случайного дневника
+
+        /// <summary>
+        /// Создание дневника, по одной случайной строке из каждого раздела определенного диагноза
+        /// </summary>
+        /// <param name="DataCollection">Коллекция элементов базы данных</param>
+        /// <param name="CurrentSection">Выбранная секция базы данных</param>
+        /// <returns>Случайный дневник</returns>
+        public string RandomDiary(HashSet<Section> DataCollection, Section CurrentSection)
+        {
+            _Logger.WriteLog("INFO");
+
+            string result = "";
+            var rnd = new Random();
+
+            var BlockList = BlocksFromDataToView(DataCollection, CurrentSection);
+
+            foreach (Section item in BlockList)
+            {
+                var LineList = LinesFromDataToView(DataCollection, item);
+                if (LineList.Count > 0) result += LineList[rnd.Next(LineList.Count)].Line + " ";
+            }
+
+            _Logger.WriteLog("RandomDiary created succesfully");
+            return result;
+        }
+        #endregion
 
     }
 }
