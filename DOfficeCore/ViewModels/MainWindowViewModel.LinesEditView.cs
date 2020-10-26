@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Win32;
 
@@ -146,7 +144,7 @@ namespace DOfficeCore.ViewModels
             _Logger.WriteLog("INFO");
 
             if (DataCollection != null)
-                _DataProviderService.SaveDataToFile(DataCollection, "file1");
+                _DataProviderService.SaveDataToFile(DataCollection, "lines");
 
             _Logger.WriteLog("DONE");
         }
@@ -166,6 +164,28 @@ namespace DOfficeCore.ViewModels
         private bool CanClearListBoxCommandExecute(object parameter) => RawLines != null;
 
         #endregion
+
+        #region Перенос строки из необработанной коллекции
+        /// <summary>Перенос строки из необработанной коллекции</summary>
+        public ICommand TransferCommand { get; }
+        /// <summary>Перенос строки из необработанной коллекции</summary>
+        private void OnTransferCommandExecuted(object parameter)
+        {
+            _Logger.WriteLog("INFO");
+
+            if ((parameter is ListBox datagrid) && datagrid.SelectedItem is string CurrentItem && CurrentSection != null)
+            {
+                _ViewCollectionProvider.AddLine(DataCollection, CurrentSection, CurrentItem);
+                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+            }
+            _Logger.WriteLog("DONE");
+        }
+
+        private bool CanTransferCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Добавление
 
         #region Добавление нового диагноза в коллекцию
         /// <summary>Добавление нового диагноза в коллекцию</summary>
@@ -230,6 +250,10 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
+        #endregion
+
+        #region Редактирование
+
         #region Редактирование названия диагноза
         /// <summary>Редактирование названия диагноза</summary>
         public ICommand EditDiagnosisCommand { get; }
@@ -289,6 +313,10 @@ namespace DOfficeCore.ViewModels
         private bool CanEditLineCommandExecute(object parameter) => true;
 
         #endregion
+
+        #endregion
+
+        #region Удаление
 
         #region Удаление диагноза
         /// <summary>Удаление диагноза</summary>
@@ -358,9 +386,6 @@ namespace DOfficeCore.ViewModels
         private bool CanRemoveLineCommandExecute(object parameter) => true;
 
         #endregion
-
-        #region Команды окна обработчика строк
-
 
         #endregion
     }

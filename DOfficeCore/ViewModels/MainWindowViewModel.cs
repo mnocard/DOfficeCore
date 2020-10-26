@@ -5,7 +5,6 @@ using DOfficeCore.Models;
 using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels.Core;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -60,7 +59,8 @@ namespace DOfficeCore.ViewModels
             GetTextFromClipboardCommand = new LambdaCommand(OnGetTextFromClipboardCommandExecuted, CanGetTextFromClipboardCommandExecute); 
             SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
             ClearListBoxCommand = new LambdaCommand(OnClearListBoxCommandExecuted, CanClearListBoxCommandExecute);
-            
+            TransferCommand = new LambdaCommand(OnTransferCommandExecuted, CanTransferCommandExecute);
+
             AddDiagnosisCommand = new LambdaCommand(OnAddDiagnosisCommandExecuted, CanAddDiagnosisCommandExecute);
             AddBlockCommand = new LambdaCommand(OnAddBlockCommandExecuted, CanAddBlockCommandExecute);
             AddLineCommand = new LambdaCommand(OnAddLineCommandExecuted, CanAddLineCommandExecute);
@@ -163,12 +163,12 @@ namespace DOfficeCore.ViewModels
             if (temp != null) Position = new ObservableCollection<string>(temp);
 
             // Тестовые данные
-            DataCollection = TestData.GetCollection();
-            DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+            //DataCollection = TestData.GetCollection();
+            //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
             // Реальные данные
-            //DataCollection = _DataProviderService.LoadDataFromFile("file");
-            //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+            DataCollection = _DataProviderService.LoadDataFromFile("file1");
+            DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
             _Logger.WriteLog("DONE");
         }
