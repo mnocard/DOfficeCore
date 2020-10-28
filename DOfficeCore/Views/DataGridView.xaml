@@ -258,10 +258,15 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=Line}">
+                                <DataGridTextColumn Width="{Binding Source=, Path=ActualWidth}" Binding="{Binding Path=Line}">
                                     <DataGridTextColumn.Header>
                                         <TextBlock Foreground="Black" Text="Предложения" />
                                     </DataGridTextColumn.Header>
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
