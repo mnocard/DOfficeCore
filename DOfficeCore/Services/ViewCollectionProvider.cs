@@ -12,10 +12,7 @@ namespace DOfficeCore.Services
     /// <summary>Класс для обеспечения взаимодействия между ViewCollection и коллекцией диагнозов</summary>
     class ViewCollectionProvider : IViewCollectionProvider
     {
-        public ViewCollectionProvider(ILogger Logger)
-        {
-            _Logger = Logger;
-        }
+        public ViewCollectionProvider(ILogger Logger) => _Logger = Logger;
 
         #region Сервисы
         private readonly ILogger _Logger;
@@ -90,7 +87,7 @@ namespace DOfficeCore.Services
         {
             _Logger.WriteLog("INFO");
 
-            if (CurrentSection == null || CurrentSection.Line == null)
+            if (CurrentSection == null || CurrentSection.Block == null || CurrentSection.Line == null)
             {
                 _Logger.WriteLog("Current section is null");
                 return new ObservableCollection<Section>();
@@ -100,7 +97,7 @@ namespace DOfficeCore.Services
 
             foreach (Section item in DataCollection)
             {
-                if (item.Block.Equals(CurrentSection.Block) && item.Diagnosis.Equals(CurrentSection.Diagnosis)) LineList.Add(item);
+                if (item.Block != null && item.Block.Equals(CurrentSection.Block) && item.Diagnosis.Equals(CurrentSection.Diagnosis)) LineList.Add(item);
             }
 
             if (LineList.Count > 0) _Logger.WriteLog("LineList returned succesfully");

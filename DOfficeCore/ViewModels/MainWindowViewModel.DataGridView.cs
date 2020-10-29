@@ -148,10 +148,10 @@ namespace DOfficeCore.ViewModels
         {
             _Logger.WriteLog("INFO");
 
-            if ((parameter is DataGrid datagrid) && datagrid.CurrentItem is Section CurrentItem)
+            if ((parameter is ListBox listBox) && listBox.SelectedItem is Section CurrentItem)
             {
                 CurrentSection = CurrentItem;
-                switch (datagrid.Name)
+                switch (listBox.Name)
                 {
                     
                     case "dgCodes": 
@@ -417,7 +417,7 @@ namespace DOfficeCore.ViewModels
         private void OnRandomCommandExecuted(object parameter)
         {
             _Logger.WriteLog("INFO");
-            if ((parameter is DataGrid datagrid) && CurrentSection != null)
+            if ((parameter is ListBox) && CurrentSection != null)
             {
                 DiaryBox = _ViewCollectionProvider.RandomDiary(DataCollection, CurrentSection);
             }

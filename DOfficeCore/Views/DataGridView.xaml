@@ -181,90 +181,81 @@
                     </GroupBox.Header>
                     <Grid ShowGridLines="False">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" MinWidth="100" />
-                            <ColumnDefinition Width="Auto" MinWidth="100" />
-                            <ColumnDefinition Width="*" MinWidth="100" />
+                            <ColumnDefinition Width="Auto" MinWidth="100"/>
+                            <ColumnDefinition Width="Auto" MinWidth="100"/>
+                            <ColumnDefinition Width="*" MinWidth="100"/>
                         </Grid.ColumnDefinitions>
-                        <DataGrid
+                        <ListBox
                             x:Name="dgCodes"
                             Grid.Column="0"
-                            Margin="0,0,5,0"
-                            AutoGenerateColumns="False"
+                            Margin="0,0,5,0" MaxWidth="200"
                             Background="#FF9E9E9E"
-                            IsReadOnly="True"
                             ItemsSource="{Binding DiagnosisList}"
-                            SelectionMode="Single"
-                            SelectionUnit="Cell">
+                            SelectionMode="Single">
                             <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectedCellsChanged">
-                                    <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                <i:EventTrigger EventName="MouseUp">
+                                    <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=Diagnosis}">
-                                    <DataGridTextColumn.Header>
-                                        <TextBlock Foreground="Black" Text="Шифр" />
-                                    </DataGridTextColumn.Header>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Text="{Binding Path=Diagnosis}" TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                         <GridSplitter
                             Grid.Column="0"
                             MinWidth="5"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Stretch"
                             Opacity="0" />
-                        <DataGrid
+                        <ListBox
                             x:Name="dgBlocksNames"
                             Grid.Column="1"
-                            Margin="0,0,5,0"
-                            AutoGenerateColumns="False"
+                            Margin="0,0,5,0" MaxWidth="200"
                             Background="#FF9E9E9E"
-                            IsReadOnly="True"
                             ItemsSource="{Binding BlocksList}"
-                            SelectionMode="Single"
-                            SelectionUnit="Cell">
+                            SelectionMode="Single">
                             <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectedCellsChanged">
-                                    <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                <i:EventTrigger EventName="MouseUp">
+                                    <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=Block}">
-                                    <DataGridTextColumn.Header>
-                                        <TextBlock Foreground="Black" Text="Раздел" />
-                                    </DataGridTextColumn.Header>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Text="{Binding Path=Block}" TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                         <GridSplitter
                             Grid.Column="1"
                             MinWidth="5"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Stretch"
                             Opacity="0" />
-                        <DataGrid
+                        <ListBox
                             x:Name="dgLinesContent"
                             Grid.Column="2"
-                            AutoGenerateColumns="False"
                             Background="#FF9E9E9E"
-                            IsReadOnly="True"
                             ItemsSource="{Binding LinesList}"
-                            SelectionMode="Single"
-                            SelectionUnit="Cell">
+                            SelectionMode="Single">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseDoubleClick">
-                                    <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                    <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=Line}">
-                                    <DataGridTextColumn.Header>
-                                        <TextBlock Foreground="Black" Text="Предложения" />
-                                    </DataGridTextColumn.Header>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Text="{Binding Path=Line}" TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </Grid>
                 </GroupBox>
             </DockPanel>

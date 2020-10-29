@@ -168,7 +168,7 @@ namespace DOfficeCore.ViewModels
             //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
             // Реальные данные
-            DataCollection = _DataProviderService.LoadDataFromFile("file1");
+            DataCollection = _DataProviderService.LoadDataFromFile("lines");
             DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
             _Logger.WriteLog("DONE");

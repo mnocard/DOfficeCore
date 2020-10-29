@@ -95,9 +95,11 @@ namespace DOfficeCore.ViewModels
         /// <summary>Открытие файла</summary>
         private void OnOpenFileCommandExecuted(object parameter)
         {
-            var dlg = new OpenFileDialog();
-            dlg.DefaultExt = dlgDefaultExt;
-            dlg.Filter = dlgFilter;
+            var dlg = new OpenFileDialog
+            {
+                DefaultExt = dlgDefaultExt,
+                Filter = dlgFilter
+            };
 
             var result = dlg.ShowDialog();
 
@@ -158,10 +160,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Очистка необработанной таблицы</summary>
         public ICommand ClearListBoxCommand { get; }
         /// <summary>Очистка необработанной таблицы</summary>
-        private void OnClearListBoxCommandExecuted(object parameter)
-        {
-            RawLines = null;
-        }
+        private void OnClearListBoxCommandExecuted(object parameter) => RawLines = null;
 
         private bool CanClearListBoxCommandExecute(object parameter) => RawLines != null;
 
