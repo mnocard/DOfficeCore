@@ -33,7 +33,7 @@
                     Width="24"
                     Height="24"
                     FlowDirection="RightToLeft"
-                    Kind="FileDocumentOutline" />
+                    Kind="FolderOutline" />
             </Button>
             <Button
                 Margin="3,0,0,0"
