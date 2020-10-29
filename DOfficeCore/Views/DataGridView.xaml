@@ -181,81 +181,94 @@
                     </GroupBox.Header>
                     <Grid ShowGridLines="False">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" MinWidth="100"/>
-                            <ColumnDefinition Width="Auto" MinWidth="100"/>
-                            <ColumnDefinition Width="*" MinWidth="100"/>
+                            <ColumnDefinition Width="Auto" MinWidth="100" />
+                            <ColumnDefinition Width="Auto" MinWidth="100" />
+                            <ColumnDefinition Width="*" MinWidth="100" />
                         </Grid.ColumnDefinitions>
-                        <ListBox
+                        <DockPanel LastChildFill="True" Grid.Column="0" MaxWidth="200">
+                            <TextBlock Background="#FF9E9E9E" DockPanel.Dock="Top" Text="Предложение" TextAlignment="Center" Padding="0, 5"/>
+                            <ListBox
                             x:Name="dgCodes"
                             Grid.Column="0"
-                            Margin="0,0,5,0" MaxWidth="200"
+                            Margin="0,0,5,0"
                             Background="#FF9E9E9E"
                             ItemsSource="{Binding DiagnosisList}"
                             SelectionMode="Single">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseUp">
-                                    <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <TextBlock Text="{Binding Path=Diagnosis}" TextWrapping="Wrap" />
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseUp">
+                                        <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock Text="{Binding Path=Diagnosis}" TextWrapping="Wrap" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
                         <GridSplitter
                             Grid.Column="0"
                             MinWidth="5"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Stretch"
                             Opacity="0" />
-                        <ListBox
+                        <DockPanel LastChildFill="True" Grid.Column="1">
+                            <TextBlock DockPanel.Dock="Top" Text="Предложение" />
+                            <ListBox
                             x:Name="dgBlocksNames"
                             Grid.Column="1"
-                            Margin="0,0,5,0" MaxWidth="200"
+                            MaxWidth="200"
+                            Margin="0,0,5,0"
                             Background="#FF9E9E9E"
                             ItemsSource="{Binding BlocksList}"
                             SelectionMode="Single">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseUp">
-                                    <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <TextBlock Text="{Binding Path=Block}" TextWrapping="Wrap" />
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseUp">
+                                        <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock Text="{Binding Path=Block}" TextWrapping="Wrap" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
                         <GridSplitter
                             Grid.Column="1"
                             MinWidth="5"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Stretch"
                             Opacity="0" />
-                        <ListBox
-                            x:Name="dgLinesContent"
-                            Grid.Column="2"
-                            Background="#FF9E9E9E"
-                            ItemsSource="{Binding LinesList}"
-                            SelectionMode="Single">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseDoubleClick">
-                                    <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <TextBlock Text="{Binding Path=Line}" TextWrapping="Wrap" />
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                        <DockPanel LastChildFill="True" Grid.Column="2">
+                            <TextBlock DockPanel.Dock="Top" Text="Предложение" />
+                            <ListBox
+                                x:Name="dgLinesContent"
+                                Grid.Column="2"
+                                Background="#FF9E9E9E"
+                                ItemsSource="{Binding LinesList}"
+                                SelectionMode="Single">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Text="{Binding Path=Line}"
+                                                TextWrapping="Wrap" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
                     </Grid>
                 </GroupBox>
             </DockPanel>
