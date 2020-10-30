@@ -78,15 +78,15 @@ namespace DOfficeCore.Services
 
             HashSet<Section> result = null;
 
-            if (!File.Exists(fileName))
+            if (!File.Exists(fileName + ".json"))
             {
-                using FileStream fs = File.Create(fileName);
+                using FileStream fs = File.Create(fileName + ".json");
                 result = new HashSet<Section>();
                 _Logger.WriteLog($"File {fileName} doesn't exist");
             }
             else
             {
-                using StreamReader file = File.OpenText(fileName);
+                using StreamReader file = File.OpenText(fileName + ".json");
                 JsonSerializer serializer = new JsonSerializer();
                 result = (HashSet<Section>)serializer.Deserialize(file, typeof(HashSet<Section>));
                 _Logger.WriteLog("File loaded succesfully");
