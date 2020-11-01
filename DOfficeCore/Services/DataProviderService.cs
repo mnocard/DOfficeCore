@@ -23,18 +23,24 @@ namespace DOfficeCore.Services
         public bool SaveDataToFile<T>(IEnumerable<T> data, string fileName)
         {
             _Logger.WriteLog("INFO");
+            if (data == null)
+            {
+                _Logger.WriteLog("Collection is null");
+                return false;
+            } 
+            else if (fileName.Length == 0)
+            {
+                _Logger.WriteLog("Filename can't be empty");
+                return false;
+            }
 
-            bool result = false;
             using (StreamWriter file = File.CreateText(fileName + ".json"))
             {
-                JsonSerializer serializer = new JsonSerializer();
+                var serializer = new JsonSerializer();
                 serializer.Serialize(file, data);
-                result = true;
             }
-            if(result) _Logger.WriteLog("File saved succesfully");
-            else _Logger.WriteLog("ERROR! File save filed");
-
-            return result;
+            _Logger.WriteLog("File saved succesfully");
+            return true;
         }
 
         /// <summary>
@@ -57,7 +63,7 @@ namespace DOfficeCore.Services
             else
             {
                 using StreamReader file = File.OpenText(fileName);
-                JsonSerializer serializer = new JsonSerializer();
+                var serializer = new JsonSerializer();
                 var result = (IEnumerable<string>)serializer.Deserialize(file, typeof(IEnumerable<string>));
                 
                 _Logger.WriteLog("File loaded succesfully");
@@ -86,7 +92,7 @@ namespace DOfficeCore.Services
             else
             {
                 using StreamReader file = File.OpenText(fileName + ".json");
-                JsonSerializer serializer = new JsonSerializer();
+                var serializer = new JsonSerializer();
                 result = (HashSet<Section>)serializer.Deserialize(file, typeof(HashSet<Section>));
                 _Logger.WriteLog("File loaded succesfully");
             }
