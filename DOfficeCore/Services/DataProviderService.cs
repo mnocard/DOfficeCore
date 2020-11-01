@@ -28,7 +28,7 @@ namespace DOfficeCore.Services
                 _Logger.WriteLog("Collection is null");
                 return false;
             } 
-            else if (fileName.Length == 0)
+            else if (fileName == null || fileName.Length == 0)
             {
                 _Logger.WriteLog("Filename can't be empty");
                 return false;
@@ -52,9 +52,15 @@ namespace DOfficeCore.Services
         {
             _Logger.WriteLog("INFO");
 
-            if (!File.Exists(fileName))
+            if (fileName == null || fileName.Length == 0)
             {
-                using FileStream fs = File.Create(fileName);
+                _Logger.WriteLog("Filename can't be empty");
+                return new HashSet<string>();
+            }
+
+            if (!File.Exists(fileName + ".json"))
+            {
+                using FileStream fs = File.Create(fileName + ".json");
                 
                 _Logger.WriteLog($"File {fileName} doesn't exist");
 
@@ -62,7 +68,7 @@ namespace DOfficeCore.Services
             }
             else
             {
-                using StreamReader file = File.OpenText(fileName);
+                using StreamReader file = File.OpenText(fileName + ".json");
                 var serializer = new JsonSerializer();
                 var result = (IEnumerable<string>)serializer.Deserialize(file, typeof(IEnumerable<string>));
                 
@@ -82,6 +88,11 @@ namespace DOfficeCore.Services
             _Logger.WriteLog("INFO");
 
             HashSet<Section> result = null;
+            if (fileName == null || fileName.Length == 0)
+            {
+                _Logger.WriteLog("Filename can't be empty");
+                return new HashSet<Section>();
+            }
 
             if (!File.Exists(fileName + ".json"))
             {
