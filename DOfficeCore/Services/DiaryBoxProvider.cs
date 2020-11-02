@@ -23,12 +23,16 @@ namespace DOfficeCore.Services
             _Logger.WriteLog($"Trying to add {position} and {doctor} the diary");
 
             if (DiaryBox == null) DiaryBox = "";
+            if (string.IsNullOrEmpty(position) || string.IsNullOrEmpty(doctor))
+            {
+                _Logger.WriteLog("Position or name is empty. Nothing to add.");
+                return DiaryBox;
+            }
             if (DiaryBox.Contains(position) && DiaryBox.Contains(doctor))
             {
                 var result =  DiaryBox.Remove(DiaryBox.IndexOf(position) - 1);
                 _Logger.WriteLog("Position and name of choosen doctor was added earlier. Now they are removed.");
                 return result;
-
             }
             else
             {
@@ -49,6 +53,11 @@ namespace DOfficeCore.Services
             _Logger.WriteLog("Trying to add line to the diary");
 
             if (DiaryBox == null) DiaryBox = "";
+            if (string.IsNullOrEmpty(Line))
+            {
+                _Logger.WriteLog("Line is empty. Nothing to add.");
+                return DiaryBox;
+            }
             if (DiaryBox.Contains(Line + " "))
             {
                 var result = DiaryBox.Remove(DiaryBox.IndexOf(Line), Line.Length + 1);

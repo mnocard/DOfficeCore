@@ -45,24 +45,6 @@ namespace DOfficeCore.Tests.Services
         }
 
         [TestMethod]
-        public void SaveDataToFile_IEnumerable_to_Json_with_FileNameEmpty()
-        {
-            var list = new List<string>()
-            {
-                "first", "second", "third"
-            };
-            const string fileName = "";
-            const bool expected_result = false;
-
-            var logger = new Logger.Logger();
-            var d = new DataProviderService(logger);
-
-            var actualResult = d.SaveDataToFile(list, fileName);
-
-            Assert.AreEqual(expected_result, actualResult);
-        }
-
-        [TestMethod]
         public void SaveDataToFile_IEnumerable_to_Json_with_FileNameNull()
         {
             var list = new List<string>()
@@ -114,18 +96,6 @@ namespace DOfficeCore.Tests.Services
 
             Assert.IsTrue(actualResult.Count() != 0);
         }
-        
-        [TestMethod]
-        public void LoadDoctorsFromFile_IEnumerable_with_FileNameEmpty()
-        {
-            const string fileName = "";
-            var logger = new Logger.Logger();
-            var d = new DataProviderService(logger);
-
-            var actualResult = d.LoadDoctorsFromFile(fileName);
-
-            Assert.IsTrue(actualResult.Count() == 0);
-        }
 
         [TestMethod]
         public void LoadDoctorsFromFile_IEnumerable_with_FileNameNull()
@@ -169,19 +139,6 @@ namespace DOfficeCore.Tests.Services
         }
 
         [TestMethod]
-        public void LoadDataFromFile_IEnumerable_with_FileNameEmpty()
-        {
-            const string fileName = "";
-
-            var logger = new Logger.Logger();
-            var d = new DataProviderService(logger);
-
-            var actualResult = d.LoadDataFromFile(fileName);
-
-            Assert.IsTrue(actualResult.Count() == 0);
-        }
-
-        [TestMethod]
         public void LoadDataFromFile_IEnumerable_with_FileNameStringEmpty()
         {
             string fileName = string.Empty;
@@ -207,6 +164,5 @@ namespace DOfficeCore.Tests.Services
             Assert.IsTrue(actualResult.Count() == 0);
         }
         #endregion
-
     }
 }

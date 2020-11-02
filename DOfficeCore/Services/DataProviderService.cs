@@ -28,7 +28,7 @@ namespace DOfficeCore.Services
                 _Logger.WriteLog("Collection is null");
                 return false;
             } 
-            else if (fileName == null || fileName.Length == 0)
+            else if (string.IsNullOrEmpty(fileName))
             {
                 _Logger.WriteLog("Filename can't be empty");
                 return false;
@@ -52,7 +52,7 @@ namespace DOfficeCore.Services
         {
             _Logger.WriteLog("INFO");
 
-            if (fileName == null || fileName.Length == 0)
+            if (string.IsNullOrEmpty(fileName))
             {
                 _Logger.WriteLog("Filename can't be empty");
                 return new HashSet<string>();
@@ -88,7 +88,7 @@ namespace DOfficeCore.Services
             _Logger.WriteLog("INFO");
 
             HashSet<Section> result = null;
-            if (fileName == null || fileName.Length == 0)
+            if (string.IsNullOrEmpty(fileName))
             {
                 _Logger.WriteLog("Filename can't be empty");
                 return new HashSet<Section>();
