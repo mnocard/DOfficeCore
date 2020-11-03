@@ -125,6 +125,12 @@ namespace DOfficeCore.Services
                 _Logger.WriteLog("Choosen time was added succesfully.");
                 return result;
             }
+            else
+            {
+                var result = DiaryBox.Insert(0, ChoosenTime.ToString("dd.MM.yyyy HH:mm") + "\n");
+                _Logger.WriteLog("Choosen date and time was added succesfully.");
+                return result;
+            }
             return DiaryBox;
         }
     }
