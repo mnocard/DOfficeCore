@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DOfficeCore.Models;
 using DOfficeCore.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -91,9 +92,11 @@ namespace DOfficeCore.Tests.Services
             const string fileName = "testFile";
             var logger = new Logger.Logger();
             var d = new DataProviderService(logger);
+            var expectedResult = new List<string>() { "first", "second", "third" };
 
-            var actualResult = d.LoadDoctorsFromFile(fileName);
+            var actualResult = new List<string>(d.LoadDoctorsFromFile(fileName));
 
+            CollectionAssert.AreEqual(expectedResult, actualResult);
             Assert.IsTrue(actualResult.Count() != 0);
         }
 
@@ -103,10 +106,11 @@ namespace DOfficeCore.Tests.Services
             const string fileName = null;
             var logger = new Logger.Logger();
             var d = new DataProviderService(logger);
+            var expectedResult = new List<string>();
 
-            var actualResult = d.LoadDoctorsFromFile(fileName);
+            var actualResult = new List<string>(d.LoadDoctorsFromFile(fileName));
 
-            Assert.IsTrue(actualResult.Count() == 0);
+            CollectionAssert.AreEqual(expectedResult, actualResult);
         }
 
         [TestMethod]
@@ -115,10 +119,11 @@ namespace DOfficeCore.Tests.Services
             string fileName = string.Empty;
             var logger = new Logger.Logger();
             var d = new DataProviderService(logger);
+            var expectedResult = new List<string>();
 
-            var actualResult = d.LoadDoctorsFromFile(fileName);
+            var actualResult = new List<string>(d.LoadDoctorsFromFile(fileName));
 
-            Assert.IsTrue(actualResult.Count() == 0);
+            CollectionAssert.AreEqual(expectedResult, actualResult);
         }
 
         #endregion
@@ -132,10 +137,25 @@ namespace DOfficeCore.Tests.Services
 
             var logger = new Logger.Logger();
             var d = new DataProviderService(logger);
+            var expectedResult = new List<Section>()
+            {
+                new Section()
+                {
+                    Diagnosis = "123",
+                    Block = "123",
+                    Line = "123"
+                },
+                new Section()
+                {
+                    Diagnosis = "123 123",
+                    Block = "123 123",
+                    Line = "123"
+                }
+            };
 
-            var actualResult = d.LoadDataFromFile(fileName);
+            var actualResult = new List<Section>(d.LoadDataFromFile(fileName));
 
-            Assert.IsTrue(actualResult.Count() != 0);
+            CollectionAssert.AreEqual(expectedResult, actualResult);
         }
 
         [TestMethod]

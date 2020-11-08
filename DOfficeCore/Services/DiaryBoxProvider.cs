@@ -131,7 +131,6 @@ namespace DOfficeCore.Services
                 _Logger.WriteLog("Choosen date and time was added succesfully.");
                 return result;
             }
-            return DiaryBox;
         }
     }
 }

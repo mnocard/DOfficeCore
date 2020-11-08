@@ -13,12 +13,16 @@ namespace DOfficeCore.Services
 
         public string OpenDocument(string filepath)
         {
+            if (string.IsNullOrEmpty(filepath)) return string.Empty;
+
             const string wordmlNamespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
 
             var textBuilder = new StringBuilder();
 
-            using (var wdDoc = WordprocessingDocument.Open(filepath, false))
+            WordprocessingDocument wdDoc = null;
+            try
             {
+                wdDoc = WordprocessingDocument.Open(filepath, false);
                 var nt = new NameTable();
                 var nsManager = new XmlNamespaceManager(nt);
                 nsManager.AddNamespace("w", wordmlNamespace);
@@ -32,6 +36,15 @@ namespace DOfficeCore.Services
                     textBuilder.Append(paragraphNode.InnerText);
                 }
             }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                wdDoc?.Dispose();
+            }
+
             return textBuilder.ToString();
         }
 

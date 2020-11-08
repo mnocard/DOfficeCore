@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Win32;
+using System;
 
 namespace DOfficeCore.ViewModels
 {
@@ -105,11 +106,18 @@ namespace DOfficeCore.ViewModels
 
             if (result == true)
             {
-                TextForEditing = _LineEditorService.OpenDocument(dlg.FileName);
-                if (RawLines == null) RawLines = new ObservableCollection<string>();
-                foreach (var item in _LineEditorService.TextToLines(TextForEditing))
+                try
                 {
-                    RawLines.Add(item);
+                    TextForEditing = _LineEditorService.OpenDocument(dlg.FileName);
+                    if (RawLines == null) RawLines = new ObservableCollection<string>();
+                    foreach (var item in _LineEditorService.TextToLines(TextForEditing))
+                    {
+                        RawLines.Add(item);
+                    }
+                }
+                catch(Exception e)
+                {
+                    MessageBox.Show("Невозможно открыть файл!\n" + e.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
