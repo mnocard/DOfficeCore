@@ -55,7 +55,7 @@ namespace DOfficeCore.Services
             if (string.IsNullOrEmpty(fileName))
             {
                 _Logger.WriteLog("Filename can't be empty");
-                return new HashSet<string>();
+                return new List<string>();
             }
 
             if (!File.Exists(fileName + ".json"))
@@ -64,7 +64,7 @@ namespace DOfficeCore.Services
                 
                 _Logger.WriteLog($"File {fileName} doesn't exist");
 
-                return new HashSet<string>();
+                return new List<string>();
             }
             else
             {
@@ -83,28 +83,28 @@ namespace DOfficeCore.Services
         /// </summary>
         /// <param name="fileName">Имя файла</param>
         /// <returns>Коллекция данных</returns>
-        public HashSet<Section> LoadDataFromFile(string fileName)
+        public List<Section> LoadDataFromFile(string fileName)
         {
             _Logger.WriteLog("INFO");
 
-            HashSet<Section> result = null;
+            List<Section> result = null;
             if (string.IsNullOrEmpty(fileName))
             {
                 _Logger.WriteLog("Filename can't be empty");
-                return new HashSet<Section>();
+                return new List<Section>();
             }
 
             if (!File.Exists(fileName + ".json"))
             {
                 using FileStream fs = File.Create(fileName + ".json");
-                result = new HashSet<Section>();
+                result = new List<Section>();
                 _Logger.WriteLog($"File {fileName} doesn't exist");
             }
             else
             {
                 using StreamReader file = File.OpenText(fileName + ".json");
                 var serializer = new JsonSerializer();
-                result = (HashSet<Section>)serializer.Deserialize(file, typeof(HashSet<Section>));
+                result = (List<Section>)serializer.Deserialize(file, typeof(List<Section>));
                 _Logger.WriteLog("File loaded succesfully");
             }
 

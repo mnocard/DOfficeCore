@@ -32,7 +32,7 @@ namespace DOfficeCore.Services
             if (DataCollection == null)
             {
                 _Logger.WriteLog("DataCollection is null");
-                DataCollection = new HashSet<Section>();
+                DataCollection = new List<Section>();
                 return new ObservableCollection<Section>();
             }
 
@@ -114,11 +114,11 @@ namespace DOfficeCore.Services
         /// <param name="DataCollection">Коллекция элемента</param>
         /// <param name="CurrentSection">Секция, из которого берется диагноз</param>
         /// <returns>True если удаление прошло успешно</returns>
-        public bool RemoveDiagnosis(HashSet<Section> DataCollection, Section CurrentSection)
+        public bool RemoveDiagnosis(List<Section> DataCollection, Section CurrentSection)
         {
             _Logger.WriteLog("INFO");
 
-            var result = DataCollection.RemoveWhere(t => t.Diagnosis.Equals(CurrentSection.Diagnosis));
+            var result = DataCollection.RemoveAll(t => t.Diagnosis.Equals(CurrentSection.Diagnosis));
 
             if (result > 0)
             {
@@ -138,11 +138,11 @@ namespace DOfficeCore.Services
         /// <param name="DataCollection">Коллекция из которой происходит удаление</param>
         /// <param name="CurrentSection">Секция, из которой берутся данные о диагнозе и разделе</param>
         /// <returns>True если удаление прошло успешно</returns>
-        public bool RemoveBlock(HashSet<Section> DataCollection, Section CurrentSection)
+        public bool RemoveBlock(List<Section> DataCollection, Section CurrentSection)
         {
             _Logger.WriteLog("INFO");
 
-            var result = DataCollection.RemoveWhere(t => t.Diagnosis.Equals(CurrentSection.Diagnosis) && t.Block.Equals(CurrentSection.Block));
+            var result = DataCollection.RemoveAll(t => t.Diagnosis.Equals(CurrentSection.Diagnosis) && t.Block.Equals(CurrentSection.Block));
 
             if (result > 0)
             {
@@ -162,7 +162,7 @@ namespace DOfficeCore.Services
         /// <param name="DataCollection">Коллекция из которой происходит удаление</param>
         /// <param name="CurrentSection">Секция, содержащая строку</param>
         /// <returns>True если удаление прошло успешно</returns>
-        public bool RemoveLine(HashSet<Section> DataCollection, Section CurrentSection)
+        public bool RemoveLine(List<Section> DataCollection, Section CurrentSection)
         {
             _Logger.WriteLog("INFO");
 
@@ -181,7 +181,7 @@ namespace DOfficeCore.Services
         /// <param name="CurrentSection">Секция, из которой берется старое название диагноз</param>
         /// <param name="MultiBox">Новое название диагноза</param>
         /// <returns>True если успешно переименовано</returns>
-        public bool EditDiagnosis(HashSet<Section> DataCollection, Section CurrentSection, string MultiBox)
+        public bool EditDiagnosis(List<Section> DataCollection, Section CurrentSection, string MultiBox)
         {
             _Logger.WriteLog("INFO");
             bool result = false;
@@ -206,7 +206,7 @@ namespace DOfficeCore.Services
         /// <param name="CurrentSection">Секция, из которой берется старое название блока и диагноза, в котором блок находится</param>
         /// <param name="MultiBox">Новое название блока</param>
         /// <returns>True если успешно переименовано</returns>
-        public bool EditBlock(HashSet<Section> DataCollection, Section CurrentSection, string MultiBox)
+        public bool EditBlock(List<Section> DataCollection, Section CurrentSection, string MultiBox)
         {
             _Logger.WriteLog("INFO");
             bool result = false;
@@ -231,7 +231,7 @@ namespace DOfficeCore.Services
         /// <param name="CurrentSection">Секция, из которой берется название блока и диагноза, в которой находится строка</param>
         /// <param name="MultiBox">Новая строка</param>
         /// <returns>True если успешно переименовано</returns>
-        public bool EditLine(HashSet<Section> DataCollection, Section CurrentSection, string MultiBox)
+        public bool EditLine(List<Section> DataCollection, Section CurrentSection, string MultiBox)
         {
             _Logger.WriteLog("INFO");
             bool result = false;
@@ -258,7 +258,7 @@ namespace DOfficeCore.Services
         /// <param name="DataCollection">Коллекция данных</param>
         /// <param name="MultiBox">Искомый текст</param>
         /// <returns>Список найденных диагнозов</returns>
-        public ObservableCollection<Section> SearchDiagnosis(HashSet<Section> DataCollection, string MultiBox)
+        public ObservableCollection<Section> SearchDiagnosis(List<Section> DataCollection, string MultiBox)
         {
             _Logger.WriteLog("INFO");
             bool result = false;
@@ -283,7 +283,7 @@ namespace DOfficeCore.Services
         /// <param name="DataCollection">Коллекция данных</param>
         /// <param name="MultiBox">Искомый текст</param>
         /// <returns>Список найденных разделов</returns>
-        public ObservableCollection<Section> SearchBlocks(HashSet<Section> DataCollection, string MultiBox)
+        public ObservableCollection<Section> SearchBlocks(List<Section> DataCollection, string MultiBox)
         {
             _Logger.WriteLog("INFO");
             bool result = false;
@@ -309,7 +309,7 @@ namespace DOfficeCore.Services
         /// <param name="DataCollection">Коллекция данных</param>
         /// <param name="MultiBox">Искомый текст</param>
         /// <returns>Список найденных строк</returns>
-        public ObservableCollection<Section> SearchLines(HashSet<Section> DataCollection, string MultiBox)
+        public ObservableCollection<Section> SearchLines(List<Section> DataCollection, string MultiBox)
         {
             _Logger.WriteLog("INFO");
             bool result = false;
@@ -331,7 +331,7 @@ namespace DOfficeCore.Services
         /// <param name="DataCollection">Коллекция, в которую происходит добавление</param>
         /// <param name="MultiBox">Диагноз, который необходимо добавить</param>
         /// <returns>True если успешно добавлено</returns>
-        public bool AddDiagnosis(HashSet<Section> DataCollection, string MultiBox)
+        public bool AddDiagnosis(List<Section> DataCollection, string MultiBox)
         {
             _Logger.WriteLog("INFO");
             if (MultiBox != null && MultiBox != "")
@@ -366,7 +366,7 @@ namespace DOfficeCore.Services
         /// <param name="CurrentSection">Секция, предназначенная для получения диагноза, в которой будет находится раздел</param>
         /// <param name="MultiBox">Раздел, который необходимо добавить</param>
         /// <returns>True если успешно добавлено</returns>
-        public bool AddBlock(HashSet<Section> DataCollection, Section CurrentSection, string MultiBox)
+        public bool AddBlock(List<Section> DataCollection, Section CurrentSection, string MultiBox)
         {
             _Logger.WriteLog("INFO");
             if (CurrentSection.Diagnosis != null && MultiBox != null && MultiBox != "")
@@ -404,7 +404,7 @@ namespace DOfficeCore.Services
         /// <param name="CurrentSection">Секция, предназначенная для получения диагноза и раздела, в которой будет находится строка</param>
         /// <param name="MultiBox">Строка, которую необходимо добавить</param>
         /// <returns>True если успешно добавлено</returns>
-        public bool AddLine(HashSet<Section> DataCollection, Section CurrentSection, string MultiBox)
+        public bool AddLine(List<Section> DataCollection, Section CurrentSection, string MultiBox)
         {
             _Logger.WriteLog("INFO");
             if (CurrentSection.Diagnosis != null && CurrentSection.Block != null)
@@ -434,7 +434,7 @@ namespace DOfficeCore.Services
         /// <param name="DataCollection">Коллекция элементов базы данных</param>
         /// <param name="CurrentSection">Выбранная секция базы данных</param>
         /// <returns>Случайный дневник</returns>
-        public string RandomDiary(HashSet<Section> DataCollection, Section CurrentSection)
+        public string RandomDiary(List<Section> DataCollection, Section CurrentSection)
         {
             _Logger.WriteLog("INFO");
 

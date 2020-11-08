@@ -12,22 +12,21 @@ namespace DOfficeCore.Tests.Services
         #region SaveDataToFile
 
         [TestMethod]
-        public void SaveDataToFile_IEnumerable_to_Json_with_FileName()
+        public void SaveAndLoadDoctors()
         {
+            const string fileName = "SaveAndLoad";
             var list = new List<string>()
             {
                 "first", "second", "third"
             };
-            const string fileName = "testFile";
-
-            const bool expected_result = true;
-
             var logger = new Logger.Logger();
             var d = new DataProviderService(logger);
-            
-            var actualResult = d.SaveDataToFile(list, fileName);
 
-            Assert.AreEqual(expected_result, actualResult);
+            d.SaveDataToFile(list, fileName);
+
+            var result = new List<string>(d.LoadDoctorsFromFile(fileName));
+
+            CollectionAssert.AreEqual(list, result);
         }
 
         [TestMethod]
@@ -87,20 +86,6 @@ namespace DOfficeCore.Tests.Services
         #region LoadDoctorsFromFile
 
         [TestMethod]
-        public void LoadDoctorsFromFile_IEnumerable_with_FileName()
-        {
-            const string fileName = "testFile";
-            var logger = new Logger.Logger();
-            var d = new DataProviderService(logger);
-            var expectedResult = new List<string>() { "first", "second", "third" };
-
-            var actualResult = new List<string>(d.LoadDoctorsFromFile(fileName));
-
-            CollectionAssert.AreEqual(expectedResult, actualResult);
-            Assert.IsTrue(actualResult.Count() != 0);
-        }
-
-        [TestMethod]
         public void LoadDoctorsFromFile_IEnumerable_with_FileNameNull()
         {
             const string fileName = null;
@@ -131,7 +116,7 @@ namespace DOfficeCore.Tests.Services
         #region LoadDataFromFile
 
         [TestMethod]
-        public void LoadDataFromFile_IEnumerable_with_FileName()
+        public void SaveAndLoadData()
         {
             const string fileName = "lines";
 
@@ -153,9 +138,11 @@ namespace DOfficeCore.Tests.Services
                 }
             };
 
-            var actualResult = new List<Section>(d.LoadDataFromFile(fileName));
+            var r = d.SaveDataToFile(expectedResult, fileName);
 
-            CollectionAssert.AreEqual(expectedResult, actualResult);
+            var actualResult = d.LoadDataFromFile(fileName);
+
+            CollectionAssert.AreEquivalent(expectedResult, actualResult);
         }
 
         [TestMethod]

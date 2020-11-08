@@ -5,9 +5,9 @@ namespace DOfficeCore.Data
 {
     class TestData
     {
-        public static HashSet<Section> GetCollection()
+        public static List<Section> GetCollection()
         {
-            var TestLines = new HashSet<Section>();
+            var TestLines = new List<Section>();
 
             for (int a = 1; a <= 5; a++)
             {

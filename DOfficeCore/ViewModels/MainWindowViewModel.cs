@@ -93,10 +93,10 @@ namespace DOfficeCore.ViewModels
         #region DataCollection : ObservableCollection<Section> - Коллекция данных из базы данных
 
         /// <summary>Коллекция данных из базы данных</summary>
-        private HashSet<Section> _DataCollection;
+        private List<Section> _DataCollection;
 
         /// <summary>Коллекция данных из базы данных</summary>
-        public HashSet<Section> DataCollection
+        public List<Section> DataCollection
         {
             get => _DataCollection;
             set => Set(ref _DataCollection, value);

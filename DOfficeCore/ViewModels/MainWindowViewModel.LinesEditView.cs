@@ -232,7 +232,7 @@ namespace DOfficeCore.ViewModels
         private void OnAddDiagnosisCommandExecuted(object parameter)
         {
             _Logger.WriteLog("INFO");
-            if (DataCollection == null) DataCollection = new HashSet<Section>();
+            if (DataCollection == null) DataCollection = new List<Section>();
             if(DiagnosisMultiBox != null)
             {
                 _ViewCollectionProvider.AddDiagnosis(DataCollection, DiagnosisMultiBox);
