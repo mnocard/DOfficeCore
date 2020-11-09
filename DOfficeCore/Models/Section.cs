@@ -3,7 +3,7 @@ using DOfficeCore.ViewModels.Core;
 
 namespace DOfficeCore.Models
 {
-    class Section : ViewModelCore
+    class Section : ViewModelCore, IEquatable<Section>
     {
         #region Diagnosis : string - Диагноз, в котором находится раздел
 
@@ -46,5 +46,27 @@ namespace DOfficeCore.Models
         }
 
         #endregion
+
+        public bool Equals(Section other)
+        {
+            if (this.Diagnosis.Equals(other.Diagnosis) &&
+                this.Block.Equals(other.Block) &&
+                this.Line.Equals(other.Line))
+                return true;
+            else
+                return false;
+        }
+
+        public override bool Equals(Object other)
+        {
+            if (this == null && other == null) return true;
+            if (this == null || other == null) return false;
+
+            if (other is Section otherSection)
+                return Equals(otherSection);
+            else
+                return false;
+        }
+        public override int GetHashCode() => HashCode.Combine(Diagnosis, Block, Line);
     }
 }

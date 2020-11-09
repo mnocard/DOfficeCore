@@ -138,11 +138,11 @@ namespace DOfficeCore.Tests.Services
                 }
             };
 
-            var r = d.SaveDataToFile(expectedResult, fileName);
+            d.SaveDataToFile(expectedResult, fileName);
 
             var actualResult = d.LoadDataFromFile(fileName);
 
-            CollectionAssert.AreEquivalent(expectedResult, actualResult);
+            CollectionAssert.AreEqual(expectedResult, actualResult);
         }
 
         [TestMethod]
