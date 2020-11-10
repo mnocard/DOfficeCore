@@ -49,6 +49,9 @@ namespace DOfficeCore.Models
 
         public bool Equals(Section other)
         {
+            if (this == null && other == null) return true;
+            if (this == null || other == null) return false;
+
             if (this.Diagnosis.Equals(other.Diagnosis) &&
                 this.Block.Equals(other.Block) &&
                 this.Line.Equals(other.Line))

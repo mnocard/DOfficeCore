@@ -36,9 +36,13 @@ namespace DOfficeCore.Services
                     textBuilder.Append(paragraphNode.InnerText);
                 }
             }
+            catch (System.IO.InvalidDataException)
+            {
+                throw new Exception($"Cannot open file \"{filepath}\"");
+            }
             catch (Exception e)
             {
-                throw e;
+                throw new Exception("Unexpected exception\n" + e.Message);
             }
             finally
             {

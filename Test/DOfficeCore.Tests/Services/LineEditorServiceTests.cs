@@ -30,13 +30,14 @@ namespace DOfficeCore.Tests.Services
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public void OpenDocument_with_wrong_ext()
         {
             var d = new LineEditorService();
 
-            var actualResult = d.OpenDocument("lines.json");
+            const string filePath = "lines.json";
 
-            Assert.IsFalse(actualResult.Length != 0);
+            var actualResult = d.OpenDocument(filePath);
         }
 
         #endregion
