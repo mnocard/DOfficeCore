@@ -14,7 +14,9 @@ namespace DOfficeCore.Tests.Services
         [TestMethod]
         public void OpenDocument_full_args_Docx()
         {
-            var d = new LineEditorService();
+            var logger = new Logger.Logger();
+
+            var d = new LineEditorService(logger);
 
             var actualResult = d.OpenDocument("example.docx");
 
@@ -24,7 +26,9 @@ namespace DOfficeCore.Tests.Services
         [TestMethod]
         public void OpenDocument_with_null()
         {
-            var d = new LineEditorService();
+            var logger = new Logger.Logger();
+
+            var d = new LineEditorService(logger);
 
             var actualResult = d.OpenDocument(null);
 
@@ -34,7 +38,9 @@ namespace DOfficeCore.Tests.Services
         [ExpectedException(typeof(Exception))]
         public void OpenDocument_with_wrong_ext()
         {
-            var d = new LineEditorService();
+            var logger = new Logger.Logger();
+
+            var d = new LineEditorService(logger);
 
             const string filePath = "lines.json";
 
@@ -48,7 +54,9 @@ namespace DOfficeCore.Tests.Services
         [TestMethod]
         public void TextToLines_full_args()
         {
-            var d = new LineEditorService();
+            var logger = new Logger.Logger();
+
+            var d = new LineEditorService(logger);
             var expectedResult = new List<string>()
             {
                 "Соматическое состояние: жалоб нет.",
@@ -74,7 +82,9 @@ namespace DOfficeCore.Tests.Services
         [ExpectedException(typeof(ArgumentNullException))]
         public void TextToLines_with_null()
         {
-            var d = new LineEditorService();
+            var logger = new Logger.Logger();
+
+            var d = new LineEditorService(logger);
 
             const string line = null;
 
