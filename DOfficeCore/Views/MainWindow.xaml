@@ -28,6 +28,11 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <DockPanel Background="#FF686868" LastChildFill="True">
+        <StatusBar DockPanel.Dock="Bottom" Background="#FF686868">
+            <StatusBarItem>
+                <TextBlock Text="{Binding Status}" Margin="70,3,0,5" Foreground="Black"/>
+            </StatusBarItem>
+        </StatusBar>
         <TabControl SelectedIndex="1" TabStripPlacement="Left">
             <TabControl.Resources>
                 <Style TargetType="{x:Type Grid}">

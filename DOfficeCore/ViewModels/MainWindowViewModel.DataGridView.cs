@@ -186,7 +186,7 @@ namespace DOfficeCore.ViewModels
             _Logger.WriteLog("INFO");
 
             DiaryBox = _DiaryBoxProvider.DateToDiaryBox(DiaryBox, ChoosenDate);
-
+            Status = "Дата добавлена (или удалена)";
             _Logger.WriteLog("DONE");
         }
 
@@ -204,6 +204,8 @@ namespace DOfficeCore.ViewModels
             _Logger.WriteLog("INFO");
 
             DiaryBox = _DiaryBoxProvider.TimeToDiaryBox(DiaryBox, ChoosenDate);
+            
+            Status = "Время добавлено (или удалено)";
 
             _Logger.WriteLog("DONE");
         }
@@ -224,6 +226,9 @@ namespace DOfficeCore.ViewModels
             {
                 DiaryBox = _DiaryBoxProvider.DocToDiary(DiaryBox, position, doctor);
             }
+
+            Status = "Сведения о докторе добавлены (или удалены)";
+
             _Logger.WriteLog("DONE");
         }
 
@@ -243,6 +248,9 @@ namespace DOfficeCore.ViewModels
             if (CurrentDoctor != null && CurrentDoctor != String.Empty)
             {
                 Doctors.Add(CurrentDoctor);
+
+                Status = "Приветствуем, " + CurrentDoctor;
+
                 CurrentDoctor = null;
             }
 
@@ -268,6 +276,7 @@ namespace DOfficeCore.ViewModels
             {
                 Doctors.Remove(doctorsName);
                 Doctors.Add(CurrentDoctor);
+                Status = "Переименовали " + doctorsName + " в " + CurrentDoctor;
                 CurrentDoctor = null;
             }
 
@@ -289,6 +298,7 @@ namespace DOfficeCore.ViewModels
             if (parameter is string doctorsName && Doctors.Contains(doctorsName))
             {
                 Doctors.Remove(doctorsName);
+                Status = "До свидания, " + doctorsName;
                 CurrentDoctor = null;
             }
 
@@ -311,6 +321,7 @@ namespace DOfficeCore.ViewModels
             if (CurrentPosition != null && CurrentPosition != String.Empty)
             {
                 Position.Add(CurrentPosition);
+                Status = "Добавлена должность: " + CurrentPosition;
                 CurrentPosition = null;
             }
 
@@ -336,6 +347,7 @@ namespace DOfficeCore.ViewModels
             {
                 Position.Remove(positionName);
                 Position.Add(CurrentPosition);
+                Status = "Должность " + positionName + " изменена на " + CurrentPosition;
                 CurrentPosition = null;
             }
 
@@ -357,6 +369,7 @@ namespace DOfficeCore.ViewModels
             if (parameter is string positionName && Position.Contains(positionName))
             {
                 Position.Remove(positionName);
+                Status = "Удалена должность: " + positionName;
                 CurrentPosition = null;
             }
 
@@ -375,10 +388,18 @@ namespace DOfficeCore.ViewModels
         {
             _Logger.WriteLog("INFO");
 
+            bool resultDoctors = false, resultPositions = false;
+
             if (Doctors != null)
-                _DataProviderService.SaveDataToFile(Doctors, "Doctors");
+                resultDoctors = _DataProviderService.SaveDataToFile(Doctors, "Doctors");
             if (Position != null)
-                _DataProviderService.SaveDataToFile(Position, "Position");
+                resultPositions = _DataProviderService.SaveDataToFile(Position, "Position");
+
+            if (resultDoctors) Status = "Список докторов сохранён. ";
+            else Status = "Список докторов почему-то не сохранён. ";
+
+            if(resultPositions) Status += "Список должностей сохранён.";
+            else Status += "Список должностей почему-то не сохранён.";
 
             _Logger.WriteLog("DONE");
         }
@@ -401,6 +422,12 @@ namespace DOfficeCore.ViewModels
                 if (DiagnosisList.Count == 0) DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
                 BlocksList = _ViewCollectionProvider.SearchBlocks(DataCollection, MultiBox);
                 LinesList = _ViewCollectionProvider.SearchLines(DataCollection, MultiBox);
+                Status = "Вот, что мы нашли по вашему запросу";
+            }
+            else
+            {
+                Status = "Введите не менее трёх символов для поиска";
+                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
             }
 
             _Logger.WriteLog("DONE");
@@ -420,6 +447,7 @@ namespace DOfficeCore.ViewModels
             if ((parameter is ListBox) && CurrentSection != null)
             {
                 DiaryBox = _ViewCollectionProvider.RandomDiary(DataCollection, CurrentSection);
+                Status = "Случайный дневник создан согласно записям диагноза: " + CurrentSection.Diagnosis;
             }
 
             _Logger.WriteLog("DONE");
@@ -441,8 +469,9 @@ namespace DOfficeCore.ViewModels
             {
                 Clipboard.SetText(temp);
                 EnableDiaryBox = true;
+                Status = "Дневник скопирован в буфер обмена";
             }
-
+            else Status = "Что-то пошло не так";
             _Logger.WriteLog("DONE");
         }
         private bool CanCopyTextCommandExecute(object parameter) => parameter is string temp && temp != string.Empty && temp != "";
@@ -456,7 +485,11 @@ namespace DOfficeCore.ViewModels
         {
             _Logger.WriteLog("INFO");
 
-            if (EnableDiaryBox) EnableDiaryBox = false;
+            if (EnableDiaryBox)
+            {
+                EnableDiaryBox = false;
+                Status = "Теперь вы можете сами отредактировать дневник";
+            }
 
             _Logger.WriteLog("DONE");
         }
@@ -474,7 +507,7 @@ namespace DOfficeCore.ViewModels
 
             DiaryBox = null;
             EnableDiaryBox = true;
-
+            Status = "Начинаем с чистого листа";
             _Logger.WriteLog("DONE");
         }
 

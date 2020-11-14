@@ -90,12 +90,15 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
+        #region Команды
+
         #region Открытие файла
         /// <summary>Открытие файла</summary>
         public ICommand OpenFileCommand { get; }
         /// <summary>Открытие файла</summary>
         private void OnOpenFileCommandExecuted(object parameter)
         {
+            Status = "Открываем файл";
             var dlg = new OpenFileDialog
             {
                 DefaultExt = dlgDefaultExt,
@@ -117,6 +120,7 @@ namespace DOfficeCore.ViewModels
                 }
                 catch(Exception e)
                 {
+                    Status = "Что-то пошло не так!";
                     MessageBox.Show("Невозможно открыть файл!\n" + e.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
@@ -132,15 +136,27 @@ namespace DOfficeCore.ViewModels
         /// <summary>Получение текста из буфера обмена</summary>
         private void OnGetTextFromClipboardCommandExecuted(object parameter)
         {
+            Status = "Обрабатываем текст из буфера обмена";
+
             if (Clipboard.ContainsText())
             {
                 TextForEditing = Clipboard.GetText();
                 if (RawLines == null) RawLines = new ObservableCollection<string>();
-                foreach (var item in _LineEditorService.TextToLines(TextForEditing))
+                try
                 {
-                    RawLines.Add(item);
+                    foreach (var item in _LineEditorService.TextToLines(TextForEditing))
+                    {
+                        RawLines.Add(item);
+                    }
+                Status = "Готово";
+                }
+                catch (ArgumentNullException e)
+                {
+                    Status = "Что-то пошло не так!";
+                    MessageBox.Show("Что-то пошло не так!\n" + e.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+            else Status = "Буфер обмена пуст";
         }
 
         private bool CanGetTextFromClipboardCommandExecute(object parameter) => true;
@@ -156,7 +172,11 @@ namespace DOfficeCore.ViewModels
             _Logger.WriteLog("INFO");
 
             if (DataCollection != null)
+            {
                 _DataProviderService.SaveDataToFile(DataCollection, "lines");
+                Status = "Ваша коллекция сохраненая";
+            }
+            else Status = "Нечего сохранять";
 
             _Logger.WriteLog("DONE");
         }
@@ -168,7 +188,11 @@ namespace DOfficeCore.ViewModels
         /// <summary>Очистка необработанной таблицы</summary>
         public ICommand ClearListBoxCommand { get; }
         /// <summary>Очистка необработанной таблицы</summary>
-        private void OnClearListBoxCommandExecuted(object parameter) => RawLines = null;
+        private void OnClearListBoxCommandExecuted(object parameter)
+        {
+            RawLines = null;
+            Status = "Таблица предложений очищена";
+        }
 
         private bool CanClearListBoxCommandExecute(object parameter) => RawLines != null;
 
@@ -189,7 +213,7 @@ namespace DOfficeCore.ViewModels
                     _ViewCollectionProvider.AddLine(DataCollection, CurrentSection, (string)listBox.SelectedItem);
                     LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
                     RawLines.Remove((string)listBox.SelectedItem);
-
+                    Status = "Выбранная строка перемещена в таблицу предложений";
                 }
                 else if (listBox.SelectedItem is Section CurrentItem)
                 {
@@ -233,11 +257,13 @@ namespace DOfficeCore.ViewModels
         {
             _Logger.WriteLog("INFO");
             if (DataCollection == null) DataCollection = new List<Section>();
-            if(DiagnosisMultiBox != null)
+            if (DiagnosisMultiBox != null)
             {
                 _ViewCollectionProvider.AddDiagnosis(DataCollection, DiagnosisMultiBox);
                 DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                Status = "Добавлен диагноз " + DiagnosisMultiBox;
             }
+            else Status = "Нечего добавлять";
 
             _Logger.WriteLog("DONE");
         }
@@ -258,7 +284,9 @@ namespace DOfficeCore.ViewModels
             {
                 _ViewCollectionProvider.AddBlock(DataCollection, CurrentSection, BlockMultiBox);
                 BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
+                Status = "Добавлен раздел " + BlockMultiBox + " в диагноз " + CurrentSection.Diagnosis;
             }
+            else Status = "Нечего добавлять";
 
             _Logger.WriteLog("DONE");
         }
@@ -279,7 +307,9 @@ namespace DOfficeCore.ViewModels
             {
                 _ViewCollectionProvider.AddLine(DataCollection, CurrentSection, LineMultiBox);
                 LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+                Status = "Добавлено предложение в раздел " + CurrentSection.Block + " в диагнозе " + CurrentSection.Diagnosis;
             }
+            else Status = "Нечего добавлять";
 
             _Logger.WriteLog("DONE");
         }
@@ -303,7 +333,9 @@ namespace DOfficeCore.ViewModels
             if (DataCollection != null && CurrentSection != null && DiagnosisMultiBox != null)
             {
                 _ViewCollectionProvider.EditDiagnosis(DataCollection, CurrentSection, DiagnosisMultiBox);
+                Status = "Диагноз " + CurrentSection.Diagnosis + " переименован в " + DiagnosisMultiBox;
             }
+            else Status = "Нечего редактировать";
 
             _Logger.WriteLog("DONE");
         }
@@ -323,7 +355,9 @@ namespace DOfficeCore.ViewModels
             if (DataCollection != null && CurrentSection != null && BlockMultiBox != null)
             {
                 _ViewCollectionProvider.EditBlock(DataCollection, CurrentSection, BlockMultiBox);
+                Status = "Раздел " + CurrentSection.Block + " переименован в " + BlockMultiBox;
             }
+            else Status = "Нечего редактировать";
 
             _Logger.WriteLog("DONE");
         }
@@ -343,7 +377,9 @@ namespace DOfficeCore.ViewModels
             if (DataCollection != null && CurrentSection != null && LineMultiBox != null)
             {
                 _ViewCollectionProvider.EditLine(DataCollection, CurrentSection, LineMultiBox);
+                Status = "Предложение изменено";
             }
+            else Status = "Нечего редактировать";
 
             _Logger.WriteLog("DONE");
         }
@@ -371,7 +407,10 @@ namespace DOfficeCore.ViewModels
                 DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
                 BlocksList = null;
                 LinesList = null;
+                Status = "Удален диагноз " + CurrentSection.Diagnosis;
+                CurrentSection = null;
             }
+            else Status = "Удаление отменено";
 
             _Logger.WriteLog("DONE");
         }
@@ -394,7 +433,10 @@ namespace DOfficeCore.ViewModels
                 _ViewCollectionProvider.RemoveBlock(DataCollection, CurrentSection);
                 BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
                 LinesList = null;
+                Status = "Удален раздел " + CurrentSection.Block;
+                CurrentSection = null;
             }
+            else Status = "Удаление отменено";
 
             _Logger.WriteLog("DONE");
         }
@@ -416,7 +458,10 @@ namespace DOfficeCore.ViewModels
             {
                 _ViewCollectionProvider.RemoveLine(DataCollection, CurrentSection);
                 LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+                Status = "Удалено предложение";
+                CurrentSection = null;
             }
+            else Status = "Удаление отменено";
 
             _Logger.WriteLog("DONE");
         }
@@ -441,12 +486,15 @@ namespace DOfficeCore.ViewModels
                 LinesList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
                 RawLines.Add(CurrentSection.Line);
                 CurrentSection = null;
+                Status = "Выбранное предложение было возвращено в таблицу предложений";
             }
 
             _Logger.WriteLog("DONE");
         }
 
         private bool CanReturnLineCommandExecute(object parameter) => true;
+
+        #endregion
 
         #endregion
     }

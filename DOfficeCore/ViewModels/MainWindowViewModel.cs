@@ -90,6 +90,20 @@ namespace DOfficeCore.ViewModels
         }
         #endregion
 
+        #region Status : string - Состояние программы
+
+        /// <summary>Состояние программы</summary>
+        private string _Status = "Привет :)";
+
+        /// <summary>Состояние программы</summary>
+        public string Status
+        {
+            get => _Status;
+            set => Set(ref _Status, value);
+        }
+
+        #endregion
+
         #region DataCollection : ObservableCollection<Section> - Коллекция данных из базы данных
 
         /// <summary>Коллекция данных из базы данных</summary>
