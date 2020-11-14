@@ -20,4 +20,19 @@
     <ProjectReference Include="..\..\DOfficeCore\DOfficeCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Files\example.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\lines.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\SaveAndLoad.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\testFile.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

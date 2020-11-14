@@ -18,8 +18,10 @@ namespace DOfficeCore.Services
             const string wordmlNamespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
 
             var textBuilder = new StringBuilder();
+            string result;
 
             WordprocessingDocument wdDoc = null;
+
             try
             {
                 wdDoc = WordprocessingDocument.Open(filepath, false);
@@ -35,6 +37,7 @@ namespace DOfficeCore.Services
                 {
                     textBuilder.Append(paragraphNode.InnerText);
                 }
+                result = textBuilder.ToString();
             }
             catch (System.IO.InvalidDataException)
             {
@@ -49,11 +52,13 @@ namespace DOfficeCore.Services
                 wdDoc?.Dispose();
             }
 
-            return textBuilder.ToString();
+            return result;
         }
 
         public List<string> TextToLines(string lines)
         {
+            if (string.IsNullOrEmpty(lines)) throw new ArgumentNullException();
+
             lines = Regex.Replace(lines, @"(\d+)([.|,])(\d+)([.|,])(\d+)([г][.|,])|(\d+)([.|,])(\d+)([г][.|,])|(\d+)([г][.|,])|(\d+)([г])|(\d+)([.|,])(\d+)([.|,])(\d+)|(\d+)([.|,])(\d+)", "");
             lines = Regex.Replace(lines, @"(\s+)", " ");
 
