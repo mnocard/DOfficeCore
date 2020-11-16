@@ -1,8 +1,8 @@
 ﻿using DOfficeCore.Logger;
 using DOfficeCore.Models;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 
 namespace DOfficeCore.Services
 {
@@ -34,11 +34,9 @@ namespace DOfficeCore.Services
                 return false;
             }
 
-            using (StreamWriter file = File.CreateText(fileName + ".json"))
-            {
-                var serializer = new JsonSerializer();
-                serializer.Serialize(file, data);
-            }
+            var json = JsonSerializer.Serialize(data);
+            File.WriteAllText(fileName + ".json", json);
+            
             _Logger.WriteLog("File saved succesfully");
             return true;
         }
@@ -68,9 +66,9 @@ namespace DOfficeCore.Services
             }
             else
             {
-                using StreamReader file = File.OpenText(fileName + ".json");
-                var serializer = new JsonSerializer();
-                var result = (IEnumerable<string>)serializer.Deserialize(file, typeof(IEnumerable<string>));
+                var jsonString = File.ReadAllText(fileName + ".json");
+
+                IEnumerable<string> result = JsonSerializer.Deserialize<IEnumerable<string>>(jsonString);
                 
                 _Logger.WriteLog("File loaded succesfully");
 
@@ -102,9 +100,10 @@ namespace DOfficeCore.Services
             }
             else
             {
-                using StreamReader file = File.OpenText(fileName + ".json");
-                var serializer = new JsonSerializer();
-                result = (List<Section>)serializer.Deserialize(file, typeof(List<Section>));
+                var jsonString = File.ReadAllText(fileName + ".json");
+
+                result = JsonSerializer.Deserialize<List<Section>>(jsonString);
+
                 _Logger.WriteLog("File loaded succesfully");
             }
 
