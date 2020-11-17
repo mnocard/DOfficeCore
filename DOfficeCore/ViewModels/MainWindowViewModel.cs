@@ -5,8 +5,10 @@ using DOfficeCore.Models;
 using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels.Core;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace DOfficeCore.ViewModels
@@ -171,19 +173,27 @@ namespace DOfficeCore.ViewModels
         private void OnLoadDataCommandExecuted(object parameter)
         {
             _Logger.WriteLog("INFO");
-            
-            var temp = _DataProviderService.LoadDoctorsFromFile("Doctors.json");
-            if (temp != null) Doctors = new ObservableCollection<string>(temp);
-            temp = _DataProviderService.LoadDoctorsFromFile("Position.json");
-            if (temp != null) Position = new ObservableCollection<string>(temp);
 
-            // Тестовые данные
-            //DataCollection = TestData.GetCollection();
-            //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+            try
+            {
+                var temp = _DataProviderService.LoadDoctorsFromFile("Doctors");
+                if (temp != null) Doctors = new ObservableCollection<string>(temp);
+                temp = _DataProviderService.LoadDoctorsFromFile("Position");
+                if (temp != null) Position = new ObservableCollection<string>(temp);
 
-            // Реальные данные
-            DataCollection = _DataProviderService.LoadDataFromFile("lines");
-            DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                // Тестовые данные
+                //DataCollection = TestData.GetCollection();
+                //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+
+                // Реальные данные
+                DataCollection = _DataProviderService.LoadDataFromFile("lines");
+                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+            }
+            catch (Exception e)
+            {
+                _Logger.WriteLog($"Unexpected error\n{e.Message}");
+                MessageBox.Show("Ошибка загрузки данных. Данные не загружены.", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
             _Logger.WriteLog("DONE");
         }
