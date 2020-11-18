@@ -483,7 +483,7 @@ namespace DOfficeCore.ViewModels
             if (LineMultiBox != null)
             {
                 _ViewCollectionProvider.RemoveLine(DataCollection, CurrentSection);
-                LinesList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
                 RawLines.Add(CurrentSection.Line);
                 CurrentSection = null;
                 Status = "Выбранное предложение было возвращено в таблицу предложений";
