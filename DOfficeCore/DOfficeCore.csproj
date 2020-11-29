@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Logger\DOfficeCore.Logger\DOfficeCore.Logger.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="C:\Users\mnoca\.nuget\packages\nlog.config\4.7.5\contentFiles\any\any\NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

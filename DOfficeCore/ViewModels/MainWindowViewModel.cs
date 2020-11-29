@@ -1,6 +1,4 @@
-﻿using DOfficeCore.Data;
-using DOfficeCore.Infrastructure.Commands;
-using DOfficeCore.Logger;
+﻿using DOfficeCore.Infrastructure.Commands;
 using DOfficeCore.Models;
 using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
@@ -16,16 +14,12 @@ namespace DOfficeCore.ViewModels
         public MainWindowViewModel(IDataProviderService DataProviderService, 
                                     IViewCollectionProvider ViewCollectionProvider, 
                                     IDiaryBoxProvider DiaryBoxProvider,
-                                    ILogger Logger,
                                     ILineEditorService LineEditorService)
         {
             _DataProviderService = DataProviderService;
             _ViewCollectionProvider = ViewCollectionProvider;
             _DiaryBoxProvider = DiaryBoxProvider;
             _LineEditorService = LineEditorService;
-            _Logger = Logger;
-
-            _Logger.WriteLog("INFO", "Создание MainWindowViewModel");
 
             #region Команды окна дневника
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
@@ -170,8 +164,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда Загрузки данных</summary>
         private void OnLoadDataCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-            
             var temp = _DataProviderService.LoadDoctorsFromFile("Doctors.json");
             if (temp != null) Doctors = new ObservableCollection<string>(temp);
             temp = _DataProviderService.LoadDoctorsFromFile("Position.json");
@@ -184,8 +176,6 @@ namespace DOfficeCore.ViewModels
             // Реальные данные
             DataCollection = _DataProviderService.LoadDataFromFile("lines");
             DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanLoadDataCommandExecute(object parameter) => true;
@@ -197,7 +187,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда закрытия программы</summary>
         private void OnClosingAppCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("EXIT", "Закрытие программы.");
+
         }
 
         private bool CanClosingAppCommandExecute(object parameter) => true;
@@ -210,10 +200,6 @@ namespace DOfficeCore.ViewModels
 
         #region Сервис обработки строк
         private readonly ILineEditorService _LineEditorService;
-        #endregion
-
-        #region Сервис логгирования
-        private readonly ILogger _Logger;
         #endregion
 
         #region Сервис работы с файлами

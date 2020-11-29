@@ -169,16 +169,12 @@ namespace DOfficeCore.ViewModels
         /// <summary>Сохранение данных в файл</summary>
         private void OnSaveDataToFileCommandExecuted(object p)
         {
-            _Logger.WriteLog("INFO");
-
             if (DataCollection != null)
             {
                 _DataProviderService.SaveDataToFile(DataCollection, "lines");
                 Status = "Ваша коллекция сохраненая";
             }
             else Status = "Нечего сохранять";
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanSaveDataToFileCommandExecute(object p) => true;
@@ -204,8 +200,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Перенос строки из необработанной коллекции</summary>
         private void OnTransferCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (parameter is ListBox listBox)
             {
                 if (listBox.Name.Equals("lbRawLines") && CurrentSection != null)
@@ -240,7 +234,6 @@ namespace DOfficeCore.ViewModels
                     }
                 }
             }
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanTransferCommandExecute(object parameter) => true;
@@ -255,7 +248,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Добавление нового диагноза в коллекцию</summary>
         private void OnAddDiagnosisCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
             if (DataCollection == null) DataCollection = new List<Section>();
             if (DiagnosisMultiBox != null)
             {
@@ -264,8 +256,6 @@ namespace DOfficeCore.ViewModels
                 Status = "Добавлен диагноз " + DiagnosisMultiBox;
             }
             else Status = "Нечего добавлять";
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanAddDiagnosisCommandExecute(object parameter) => true;
@@ -278,8 +268,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Добавление раздела в коллекцию</summary>
         private void OnAddBlockCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (DataCollection != null && CurrentSection != null && BlockMultiBox != null)
             {
                 _ViewCollectionProvider.AddBlock(DataCollection, CurrentSection, BlockMultiBox);
@@ -287,8 +275,6 @@ namespace DOfficeCore.ViewModels
                 Status = "Добавлен раздел " + BlockMultiBox + " в диагноз " + CurrentSection.Diagnosis;
             }
             else Status = "Нечего добавлять";
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanAddBlockCommandExecute(object parameter) => true;
@@ -301,8 +287,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Добавление нового предложения в коллекцию</summary>
         private void OnAddLineCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (DataCollection != null && CurrentSection != null && LineMultiBox != null)
             {
                 _ViewCollectionProvider.AddLine(DataCollection, CurrentSection, LineMultiBox);
@@ -310,8 +294,6 @@ namespace DOfficeCore.ViewModels
                 Status = "Добавлено предложение в раздел " + CurrentSection.Block + " в диагнозе " + CurrentSection.Diagnosis;
             }
             else Status = "Нечего добавлять";
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanAddLineCommandExecute(object parameter) => true;
@@ -328,16 +310,12 @@ namespace DOfficeCore.ViewModels
         /// <summary>Редактирование названия диагноза</summary>
         private void OnEditDiagnosisCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (DataCollection != null && CurrentSection != null && DiagnosisMultiBox != null)
             {
                 _ViewCollectionProvider.EditDiagnosis(DataCollection, CurrentSection, DiagnosisMultiBox);
                 Status = "Диагноз " + CurrentSection.Diagnosis + " переименован в " + DiagnosisMultiBox;
             }
             else Status = "Нечего редактировать";
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanEditDiagnosisCommandExecute(object parameter) => true;
@@ -350,16 +328,12 @@ namespace DOfficeCore.ViewModels
         /// <summary>Редактирование названия раздела</summary>
         private void OnEditBlockCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (DataCollection != null && CurrentSection != null && BlockMultiBox != null)
             {
                 _ViewCollectionProvider.EditBlock(DataCollection, CurrentSection, BlockMultiBox);
                 Status = "Раздел " + CurrentSection.Block + " переименован в " + BlockMultiBox;
             }
             else Status = "Нечего редактировать";
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanEditBlockCommandExecute(object parameter) => true;
@@ -372,16 +346,12 @@ namespace DOfficeCore.ViewModels
         /// <summary>Редактирование строки</summary>
         private void OnEditLineCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (DataCollection != null && CurrentSection != null && LineMultiBox != null)
             {
                 _ViewCollectionProvider.EditLine(DataCollection, CurrentSection, LineMultiBox);
                 Status = "Предложение изменено";
             }
             else Status = "Нечего редактировать";
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanEditLineCommandExecute(object parameter) => true;
@@ -398,9 +368,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Удаление диагноза</summary>
         private void OnRemoveDiagnosisCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
-            MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить диагноз \"{DiagnosisMultiBox}\"? Все элементы, относящиеся к этому диагнозу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
+            var result = MessageBox.Show($"Вы уверены, что хотите удалить диагноз \"{DiagnosisMultiBox}\"? Все элементы, относящиеся к этому диагнозу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes && DataCollection != null && CurrentSection != null)
             {
                 _ViewCollectionProvider.RemoveDiagnosis(DataCollection, CurrentSection);
@@ -411,8 +379,6 @@ namespace DOfficeCore.ViewModels
                 CurrentSection = null;
             }
             else Status = "Удаление отменено";
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanRemoveDiagnosisCommandExecute(object parameter) => true;
@@ -425,9 +391,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Удаление раздела</summary>
         private void OnRemoveBlockCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
-            MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить раздел \"{BlockMultiBox}\"? Все элементы также относящиеся к этому разделу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
+            var result = MessageBox.Show($"Вы уверены, что хотите удалить раздел \"{BlockMultiBox}\"? Все элементы также относящиеся к этому разделу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes && DataCollection != null && CurrentSection != null)
             {
                 _ViewCollectionProvider.RemoveBlock(DataCollection, CurrentSection);
@@ -437,8 +401,6 @@ namespace DOfficeCore.ViewModels
                 CurrentSection = null;
             }
             else Status = "Удаление отменено";
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanRemoveBlockCommandExecute(object parameter) => true;
@@ -451,9 +413,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Удаление строки</summary>
         private void OnRemoveLineCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
-            MessageBoxResult result = MessageBox.Show($"Вы уверены, что хотите удалить строку \"{LineMultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
+            var result = MessageBox.Show($"Вы уверены, что хотите удалить строку \"{LineMultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes && DataCollection != null && CurrentSection != null)
             {
                 _ViewCollectionProvider.RemoveLine(DataCollection, CurrentSection);
@@ -462,8 +422,6 @@ namespace DOfficeCore.ViewModels
                 CurrentSection = null;
             }
             else Status = "Удаление отменено";
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanRemoveLineCommandExecute(object parameter) => true;
@@ -478,7 +436,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Возврат строки в необработанную коллекцию</summary>
         private void OnReturnLineCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
             if (RawLines == null) RawLines = new ObservableCollection<string>();
             if (LineMultiBox != null)
             {
@@ -488,8 +445,6 @@ namespace DOfficeCore.ViewModels
                 CurrentSection = null;
                 Status = "Выбранное предложение было возвращено в таблицу предложений";
             }
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanReturnLineCommandExecute(object parameter) => true;
