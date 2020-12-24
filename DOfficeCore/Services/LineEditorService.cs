@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using DocumentFormat.OpenXml.Packaging;
-using DOfficeCore.Logger;
 
 namespace DOfficeCore.Services
 {
@@ -15,17 +14,12 @@ namespace DOfficeCore.Services
     class LineEditorService : ILineEditorService
     {
         private const string wordmlNamespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
-        private readonly ILogger _Logger;
-        public LineEditorService(ILogger Logger) => _Logger = Logger;
 
         ///<inheritdoc/>
         public string OpenDocument(string filepath)
         {
-            _Logger.WriteLog($"Trying to open document {filepath} and read it.");
-
             if (string.IsNullOrEmpty(filepath))
             {
-                _Logger.WriteLog($"{filepath} doesn't exist.");
                 return string.Empty;
             }
 
@@ -56,22 +50,16 @@ namespace DOfficeCore.Services
             }
             catch (System.IO.InvalidDataException e)
             {
-                _Logger.WriteLog($"Can't open {filepath}. InvalidDataException:\n{e.Message}");
-
-                throw new Exception($"Cannot open file \"{filepath}\"");
+                throw new Exception($"Cannot open file \"{filepath}\"", e);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                _Logger.WriteLog($"Can't open {filepath}. Exception:\n{e.Message}");
-
-                throw new Exception("Unexpected exception\n" + e.Message);
+                throw;
             }
             finally
             {
                 wdDoc?.Dispose();
             }
-
-            _Logger.WriteLog($"Succes.");
 
             return result;
         }
@@ -79,11 +67,8 @@ namespace DOfficeCore.Services
         ///<inheritdoc/>
         public async Task<string> OpenDocumentAsync(string filepath, CancellationToken token)
         {
-            _Logger.WriteLog($"Trying to async open document {filepath} and read it.");
-
             if (string.IsNullOrEmpty(filepath))
             {
-                _Logger.WriteLog($"{filepath} doesn't exist.");
                 return string.Empty;
             }
 
@@ -119,27 +104,20 @@ namespace DOfficeCore.Services
                 }
                 catch (System.IO.InvalidDataException e)
                 {
-                    _Logger.WriteLog($"Can't open {filepath}. InvalidDataException:\n{e.Message}");
-
                     throw new Exception($"Cannot open file \"{filepath}\"", e);
                 }
-                catch (OperationCanceledException e)
+                catch (OperationCanceledException)
                 {
-                    _Logger.WriteLog($"Operation cancelled:\n{e.Message}");
                     throw;
                 }
                 catch (Exception e)
                 {
-                    _Logger.WriteLog($"Can't open {filepath}. Exception:\n{e.Message}");
-
                     throw new Exception("Unexpected exception.", e);
                 }
                 finally
                 {
                     wdDoc?.Dispose();
                 }
-
-                _Logger.WriteLog($"Succes.");
 
                 return result;
             }).ConfigureAwait(false);
@@ -150,8 +128,6 @@ namespace DOfficeCore.Services
         ///<inheritdoc/>
         public List<string> TextToLines(string lines)
         {
-            _Logger.WriteLog($"Trying to convert text to list of lines.");
-
             if (string.IsNullOrEmpty(lines)) throw new ArgumentNullException();
 
             lines = Regex.Replace(lines, @"(\d+)([.|,])(\d+)([.|,])(\d+)([г][.|,])|(\d+)([.|,])(\d+)([г][.|,])|(\d+)([г][.|,])|(\d+)([г])|(\d+)([.|,])(\d+)([.|,])(\d+)|(\d+)([.|,])(\d+)", "");
@@ -175,16 +151,12 @@ namespace DOfficeCore.Services
                 }
             }
 
-            _Logger.WriteLog($"Converting done.");
-
             return words;
         }
 
         ///<inheritdoc/>
         public async Task<List<string>> TextToLinesAsync(string lines, CancellationToken token)
         {
-            _Logger.WriteLog($"Trying to async convert text to list of lines.");
-
             if (string.IsNullOrEmpty(lines)) throw new ArgumentNullException();
 
             var task = await Task.Run(() =>
@@ -215,8 +187,6 @@ namespace DOfficeCore.Services
                         token.ThrowIfCancellationRequested();
                     }
                 }
-
-                _Logger.WriteLog($"Converting done.");
 
                 return words;
             }).ConfigureAwait(false);
