@@ -16,7 +16,7 @@ namespace DOfficeCore.Services
         /// <param name="filepath">Путь к файлу</param>
         /// <param name="token">Токен отмены операции</param>
         /// <returns>Содержимое файла в виде текста</returns>
-        Task<string> OpenDocumentAsync(string filepath, CancellationToken token);
+        Task<string> OpenDocumentAsync(string filepath, CancellationToken token = default);
         /// <summary>
         /// Преобразование текста в список предложений с удалением всех дат
         /// </summary>
@@ -29,6 +29,6 @@ namespace DOfficeCore.Services
         /// <param name="lines">Текст для преобразования</param>
         /// <param name="token">Токен отмены</param>
         /// <returns>Список предложений, полученных из текста</returns>
-        Task<List<string>> TextToLinesAsync(string lines, CancellationToken token);
+        Task<List<string>> TextToLinesAsync(string lines, CancellationToken token = default);
     }
 }

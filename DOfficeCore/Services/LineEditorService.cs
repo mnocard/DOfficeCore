@@ -32,7 +32,6 @@ namespace DOfficeCore.Services
 
             try
             {
-
                 wdDoc = WordprocessingDocument.Open(filepath, false);
                 var nt = new NameTable();
                 var nsManager = new XmlNamespaceManager(nt);
@@ -65,7 +64,7 @@ namespace DOfficeCore.Services
         }
 
         ///<inheritdoc/>
-        public async Task<string> OpenDocumentAsync(string filepath, CancellationToken token)
+        public async Task<string> OpenDocumentAsync(string filepath, CancellationToken token = default)
         {
             if (string.IsNullOrEmpty(filepath))
             {
@@ -155,7 +154,7 @@ namespace DOfficeCore.Services
         }
 
         ///<inheritdoc/>
-        public async Task<List<string>> TextToLinesAsync(string lines, CancellationToken token)
+        public async Task<List<string>> TextToLinesAsync(string lines, CancellationToken token = default)
         {
             if (string.IsNullOrEmpty(lines)) throw new ArgumentNullException();
 

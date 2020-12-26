@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Win32;
 using System;
+using System.Threading.Tasks;
 
 namespace DOfficeCore.ViewModels
 {
@@ -111,12 +112,13 @@ namespace DOfficeCore.ViewModels
             {
                 try
                 {
-                    TextForEditing = _LineEditorService.OpenDocument(dlg.FileName);
-                    if (RawLines == null) RawLines = new ObservableCollection<string>();
-                    foreach (var item in _LineEditorService.TextToLines(TextForEditing))
+                    var task = Task.Run(() =>
                     {
-                        RawLines.Add(item);
-                    }
+                        TextForEditing =  _LineEditorService.OpenDocument(dlg.FileName);
+                        var resultLines =  _LineEditorService.TextToLines(TextForEditing);
+                        RawLines = new ObservableCollection<string>(resultLines);
+                    });
+                    if (!task.IsCompletedSuccessfully) throw task.Exception;
                 }
                 catch(Exception e)
                 {
