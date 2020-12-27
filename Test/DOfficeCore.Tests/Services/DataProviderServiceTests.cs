@@ -19,8 +19,7 @@ namespace DOfficeCore.Tests.Services
             {
                 "first", "second", "third"
             };
-            var logger = new Logger.Logger();
-            var d = new DataProviderService(logger);
+            var d = new DataProviderService();
 
             d.SaveDataToFile(list, fileName);
 
@@ -36,8 +35,7 @@ namespace DOfficeCore.Tests.Services
             const string fileName = "testFile";
             const bool expected_result = false;
 
-            var logger = new Logger.Logger();
-            var d = new DataProviderService(logger);
+            var d = new DataProviderService();
 
             var actualResult = d.SaveDataToFile(list, fileName);
 
@@ -54,8 +52,7 @@ namespace DOfficeCore.Tests.Services
             const string fileName = null;
             const bool expected_result = false;
 
-            var logger = new Logger.Logger();
-            var d = new DataProviderService(logger);
+            var d = new DataProviderService();
 
             var actualResult = d.SaveDataToFile(list, fileName);
 
@@ -73,8 +70,7 @@ namespace DOfficeCore.Tests.Services
             string fileName = string.Empty;
             const bool expected_result = false;
 
-            var logger = new Logger.Logger();
-            var d = new DataProviderService(logger);
+            var d = new DataProviderService();
 
             var actualResult = d.SaveDataToFile(list, fileName);
 
@@ -89,8 +85,7 @@ namespace DOfficeCore.Tests.Services
         public void LoadDoctorsFromFile_IEnumerable_with_FileNameNull()
         {
             const string fileName = null;
-            var logger = new Logger.Logger();
-            var d = new DataProviderService(logger);
+            var d = new DataProviderService();
             var expectedResult = new List<string>();
 
             var actualResult = new List<string>(d.LoadDoctorsFromFile(fileName));
@@ -102,8 +97,7 @@ namespace DOfficeCore.Tests.Services
         public void LoadDoctorsFromFile_IEnumerable_with_FileNameStringEmpty()
         {
             string fileName = string.Empty;
-            var logger = new Logger.Logger();
-            var d = new DataProviderService(logger);
+            var d = new DataProviderService();
             var expectedResult = new List<string>();
 
             var actualResult = new List<string>(d.LoadDoctorsFromFile(fileName));
@@ -120,8 +114,7 @@ namespace DOfficeCore.Tests.Services
         {
             const string fileName = "lines";
 
-            var logger = new Logger.Logger();
-            var d = new DataProviderService(logger);
+            var d = new DataProviderService();
             var expectedResult = new List<Section>()
             {
                 new Section()
@@ -150,8 +143,7 @@ namespace DOfficeCore.Tests.Services
         {
             string fileName = string.Empty;
 
-            var logger = new Logger.Logger();
-            var d = new DataProviderService(logger);
+            var d = new DataProviderService();
 
             var actualResult = d.LoadDataFromFile(fileName);
 
@@ -163,8 +155,7 @@ namespace DOfficeCore.Tests.Services
         {
             const string fileName = null;
 
-            var logger = new Logger.Logger();
-            var d = new DataProviderService(logger);
+            var d = new DataProviderService();
 
             var actualResult = d.LoadDataFromFile(fileName);
 

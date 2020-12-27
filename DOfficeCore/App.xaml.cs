@@ -1,6 +1,4 @@
-﻿using DOfficeCore.Logger;
-using DOfficeCore.Models;
-using DOfficeCore.Services;
+﻿using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,7 +35,6 @@ namespace DOfficeCore
             services.AddTransient<IDataProviderService, DataProviderService>();
             services.AddSingleton<IViewCollectionProvider, ViewCollectionProvider>();
             services.AddSingleton<IDiaryBoxProvider, DiaryBoxProvider>();
-            services.AddSingleton<ILogger, Logger.Logger>();
             services.AddSingleton<ILineEditorService, LineEditorService>();
 
         }

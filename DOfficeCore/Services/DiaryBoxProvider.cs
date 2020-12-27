@@ -1,16 +1,11 @@
 ﻿using System;
 using System.IO;
-using DOfficeCore.Logger;
 using DOfficeCore.Services.Interfaces;
 
 namespace DOfficeCore.Services
 {
     class DiaryBoxProvider : IDiaryBoxProvider
     {
-        private readonly ILogger _Logger;
-
-        public DiaryBoxProvider(ILogger Logger) => _Logger = Logger;
-
         /// <summary>
         /// Добавлением строки с именем и должностью врача в конец дневника с возможностью удаления вместо повторного добавления
         /// </summary>
@@ -20,26 +15,10 @@ namespace DOfficeCore.Services
         /// <returns>Измененный дневник</returns>
         public string DocToDiary(string DiaryBox, string position, string doctor)
         {
-            _Logger.WriteLog($"Trying to add {position} and {doctor} the diary");
-
             if (DiaryBox == null) DiaryBox = "";
-            if (string.IsNullOrEmpty(position) || string.IsNullOrEmpty(doctor))
-            {
-                _Logger.WriteLog("Position or name is empty. Nothing to add.");
-                return DiaryBox;
-            }
-            if (DiaryBox.Contains(position) && DiaryBox.Contains(doctor))
-            {
-                var result =  DiaryBox.Remove(DiaryBox.IndexOf(position) - 1);
-                _Logger.WriteLog("Position and name of choosen doctor was added earlier. Now they are removed.");
-                return result;
-            }
-            else
-            {
-                var result = DiaryBox +"\n" + position + "\t\t\t" + doctor;
-                _Logger.WriteLog("Position and name of choosen doctor was added succesfully.");
-                return result;
-            }
+            if (string.IsNullOrEmpty(position) || string.IsNullOrEmpty(doctor)) return DiaryBox;
+            if (DiaryBox.Contains(position) && DiaryBox.Contains(doctor)) return DiaryBox.Remove(DiaryBox.IndexOf(position) - 1);
+            else return DiaryBox + "\n" + position + "\t\t\t" + doctor;
         }
 
         /// <summary>
@@ -50,26 +29,10 @@ namespace DOfficeCore.Services
         /// <returns>Измененный дневник</returns>
         public string LineToDiaryBox(string DiaryBox, string Line)
         {
-            _Logger.WriteLog("Trying to add line to the diary");
-
             if (DiaryBox == null) DiaryBox = "";
-            if (string.IsNullOrEmpty(Line))
-            {
-                _Logger.WriteLog("Line is empty. Nothing to add.");
-                return DiaryBox;
-            }
-            if (DiaryBox.Contains(Line + " "))
-            {
-                var result = DiaryBox.Remove(DiaryBox.IndexOf(Line), Line.Length + 1);
-                _Logger.WriteLog("Choosen line was added earlier. Now it's removed.");
-                return result;
-            }
-            else
-            {
-                var result = DiaryBox + Line + " ";
-                _Logger.WriteLog("Choosen line was added succesfully.");
-                return result;
-            }
+            if (string.IsNullOrEmpty(Line)) return DiaryBox;
+            if (DiaryBox.Contains(Line + " ")) return DiaryBox.Remove(DiaryBox.IndexOf(Line), Line.Length + 1);
+            else return DiaryBox + Line + " ";
         }
         
         /// <summary>
@@ -80,23 +43,11 @@ namespace DOfficeCore.Services
         /// <returns>Измененный дневник</returns>
         public string DateToDiaryBox(string DiaryBox, DateTime ChoosenDate)
         {
-            _Logger.WriteLog($"Trying to add date {ChoosenDate:dd.MM.yyyy} to the diary");
-
             if (DiaryBox == null) DiaryBox = "";
             using var reader = new StringReader(DiaryBox);
-            string firstLine = reader.ReadLine();
-            if (DateTime.TryParse(firstLine, out _))
-            {
-                var result = DiaryBox.Replace(firstLine + "\n", "");
-                _Logger.WriteLog("Choosen date was added earlier. Now it's removed.");
-                return result;
-            }
-            else
-            {
-                var result = DiaryBox.Insert(0, ChoosenDate.ToString("dd.MM.yyyy") + "\n");
-                _Logger.WriteLog("Choosen date was added succesfully.");
-                return result;
-            }
+            var firstLine = reader.ReadLine();
+            if (DateTime.TryParse(firstLine, out _)) return DiaryBox.Replace(firstLine + "\n", "");
+            else return DiaryBox.Insert(0, ChoosenDate.ToString("dd.MM.yyyy") + "\n");
         }
         
         /// <summary>
@@ -107,30 +58,13 @@ namespace DOfficeCore.Services
         /// <returns>Измененный дневник</returns>
         public string TimeToDiaryBox(string DiaryBox, DateTime ChoosenTime)
         {
-            _Logger.WriteLog($"Trying to add time {ChoosenTime:HH: mm}  to the diary");
-
             if (DiaryBox == null) DiaryBox = "";
             using var reader = new StringReader(DiaryBox);
-            string firstLine = reader.ReadLine();
+            var firstLine = reader.ReadLine();
 
-            if (DateTime.TryParse(firstLine, out _) && firstLine.Length == 10)
-            {
-                var result = DiaryBox.Replace(firstLine, firstLine + " " + ChoosenTime.ToString("HH:mm"));
-                _Logger.WriteLog("Choosen time was added earlier. Now it's removed.");
-                return result;
-            }
-            else if (DateTime.TryParse(firstLine, out _) && firstLine.Length == 16)
-            {
-                var result = DiaryBox.Replace(firstLine, ChoosenTime.ToString("dd.MM.yyyy"));
-                _Logger.WriteLog("Choosen time was added succesfully.");
-                return result;
-            }
-            else
-            {
-                var result = DiaryBox.Insert(0, ChoosenTime.ToString("dd.MM.yyyy HH:mm") + "\n");
-                _Logger.WriteLog("Choosen date and time was added succesfully.");
-                return result;
-            }
+            if (DateTime.TryParse(firstLine, out _) && firstLine.Length == 10) return DiaryBox.Replace(firstLine, firstLine + " " + ChoosenTime.ToString("HH:mm"));
+            else if (DateTime.TryParse(firstLine, out _) && firstLine.Length == 16) return DiaryBox.Replace(firstLine, ChoosenTime.ToString("dd.MM.yyyy"));
+            else return DiaryBox.Insert(0, ChoosenTime.ToString("dd.MM.yyyy HH:mm") + "\n");
         }
     }
 }

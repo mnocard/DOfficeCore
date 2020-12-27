@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -146,8 +144,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Изменение отображения данных по щелчку</summary>
         private void OnSelectedDataCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if ((parameter is ListBox listBox) && listBox.SelectedItem is Section CurrentItem)
             {
                 CurrentSection = CurrentItem;
@@ -170,7 +166,6 @@ namespace DOfficeCore.ViewModels
                         break;
                 }
             }
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanSelectedDataCommandExecute(object parameter) => parameter != null;
@@ -183,11 +178,8 @@ namespace DOfficeCore.ViewModels
         /// <summary>Добавление даты в дневник</summary>
         private void OnAddDateCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             DiaryBox = _DiaryBoxProvider.DateToDiaryBox(DiaryBox, ChoosenDate);
             Status = "Дата добавлена (или удалена)";
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanAddDateCommandExecute(object parameter) => true;
@@ -201,13 +193,9 @@ namespace DOfficeCore.ViewModels
         /// <summary>Добавление времени в дневник</summary>
         private void OnAddTimeCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             DiaryBox = _DiaryBoxProvider.TimeToDiaryBox(DiaryBox, ChoosenDate);
             
             Status = "Время добавлено (или удалено)";
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanAddTimeCommandExecute(object parameter) => true;
@@ -220,16 +208,12 @@ namespace DOfficeCore.ViewModels
         /// <summary>Добавление подписи в дневник</summary>
         private void OnAddDocToDiaryCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (parameter is object[] sign && sign[0] is string position && sign[1] is string doctor)
             {
                 DiaryBox = _DiaryBoxProvider.DocToDiary(DiaryBox, position, doctor);
             }
 
             Status = "Сведения о докторе добавлены (или удалены)";
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanAddDocToDiaryCommandExecute(object parameter) => true;
@@ -242,8 +226,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Добавление нового доктора в список докторов</summary>
         private void OnAddDoctorCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (Doctors == null) Doctors = new ObservableCollection<string>();
             if (CurrentDoctor != null && CurrentDoctor != String.Empty)
             {
@@ -253,8 +235,6 @@ namespace DOfficeCore.ViewModels
 
                 CurrentDoctor = null;
             }
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanAddDoctorCommandExecute(object parameter) => true;
@@ -267,8 +247,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Переименование доктора</summary>
         private void OnEditDoctorCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (parameter is string doctorsName
                 && Doctors.Contains(doctorsName)
                 && CurrentDoctor != null
@@ -279,8 +257,6 @@ namespace DOfficeCore.ViewModels
                 Status = "Переименовали " + doctorsName + " в " + CurrentDoctor;
                 CurrentDoctor = null;
             }
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanEditDoctorCommandExecute(object parameter) => true;
@@ -293,16 +269,12 @@ namespace DOfficeCore.ViewModels
         /// <summary>Удаление из списка выбранного в комбобоксе доктора</summary>
         private void OnDeleteDoctorCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (parameter is string doctorsName && Doctors.Contains(doctorsName))
             {
                 Doctors.Remove(doctorsName);
                 Status = "До свидания, " + doctorsName;
                 CurrentDoctor = null;
             }
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanDeleteDoctorCommandExecute(object parameter) => true;
@@ -315,8 +287,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Добавление должности в список должностей</summary>
         private void OnAddPositionCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (Position == null) Position = new ObservableCollection<string>();
             if (CurrentPosition != null && CurrentPosition != String.Empty)
             {
@@ -324,8 +294,6 @@ namespace DOfficeCore.ViewModels
                 Status = "Добавлена должность: " + CurrentPosition;
                 CurrentPosition = null;
             }
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanAddPositionCommandExecute(object parameter) => true;
@@ -338,8 +306,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Редактирование выбранной в комбобоксе должности</summary>
         private void OnEditPositionCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (parameter is string positionName
                 && Position.Contains(positionName)
                 && CurrentPosition != null
@@ -350,8 +316,6 @@ namespace DOfficeCore.ViewModels
                 Status = "Должность " + positionName + " изменена на " + CurrentPosition;
                 CurrentPosition = null;
             }
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanEditPositionCommandExecute(object parameter) => true;
@@ -364,16 +328,12 @@ namespace DOfficeCore.ViewModels
         /// <summary>Удаление из списка выбранной в комбобоксе должности</summary>
         private void OnDeletePositionCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (parameter is string positionName && Position.Contains(positionName))
             {
                 Position.Remove(positionName);
                 Status = "Удалена должность: " + positionName;
                 CurrentPosition = null;
             }
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanDeletePositionCommandExecute(object parameter) => true;
@@ -386,8 +346,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Сохранение списка должностей и врачей</summary>
         private void OnSaveDoctorsListCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             bool resultDoctors = false, resultPositions = false;
 
             if (Doctors != null)
@@ -400,8 +358,6 @@ namespace DOfficeCore.ViewModels
 
             if(resultPositions) Status += "Список должностей сохранён.";
             else Status += "Список должностей почему-то не сохранён.";
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanSaveDoctorsListCommandExecute(object parameter) => true;
@@ -414,8 +370,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда поиска элементов</summary>
         private void OnSearchElementCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (MultiBox != null && MultiBox != string.Empty && MultiBox.Length >= 3)
             {
                 DiagnosisList = _ViewCollectionProvider.SearchDiagnosis(DataCollection, MultiBox);
@@ -429,8 +383,6 @@ namespace DOfficeCore.ViewModels
                 Status = "Введите не менее трёх символов для поиска";
                 DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
             }
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanSearchElementCommandExecute(object parameter) => true;
@@ -443,14 +395,11 @@ namespace DOfficeCore.ViewModels
         /// <summary>Создание случайного дневника</summary>
         private void OnRandomCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
             if ((parameter is ListBox) && CurrentSection != null)
             {
                 DiaryBox = _ViewCollectionProvider.RandomDiary(DataCollection, CurrentSection);
                 Status = "Случайный дневник создан согласно записям диагноза: " + CurrentSection.Diagnosis;
             }
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanRandomCommandExecute(object parameter) => true;
@@ -463,8 +412,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда копирования текста</summary>
         private void OnCopyTextCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             if (parameter is string temp && temp != string.Empty && temp != "")
             {
                 Clipboard.SetText(temp);
@@ -472,7 +419,6 @@ namespace DOfficeCore.ViewModels
                 Status = "Дневник скопирован в буфер обмена";
             }
             else Status = "Что-то пошло не так";
-            _Logger.WriteLog("DONE");
         }
         private bool CanCopyTextCommandExecute(object parameter) => parameter is string temp && temp != string.Empty && temp != "";
         #endregion
@@ -483,15 +429,11 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда редактирования текста в окне дневника</summary>
         private void OnEditTextCommandExecuted(object p)
         {
-            _Logger.WriteLog("INFO");
-
             if (EnableDiaryBox)
             {
                 EnableDiaryBox = false;
                 Status = "Теперь вы можете сами отредактировать дневник";
             }
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanEditTextCommandExecute(object p) => EnableDiaryBox;
@@ -503,12 +445,9 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда очистки дневника</summary>
         private void OnClearDiaryBoxCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             DiaryBox = null;
             EnableDiaryBox = true;
             Status = "Начинаем с чистого листа";
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanClearDiaryBoxCommandExecute(object parameter) => true;

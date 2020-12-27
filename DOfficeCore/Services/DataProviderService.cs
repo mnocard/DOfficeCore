@@ -1,4 +1,4 @@
-﻿using DOfficeCore.Logger;
+using Newtonsoft.Json;
 using DOfficeCore.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +11,6 @@ namespace DOfficeCore.Services
     /// <summary>Класс, реализующий сохранение данных в файл и загрузки данных из файла</summary>
     internal class DataProviderService : IDataProviderService
     {
-        private readonly ILogger _Logger;
-
-        public DataProviderService(ILogger Logger) => _Logger = Logger;
-
         /// <summary>
         /// Сохранение данных в файл
         /// </summary>
@@ -24,27 +20,19 @@ namespace DOfficeCore.Services
         /// <returns></returns>
         public bool SaveDataToFile<T>(IEnumerable<T> data, string fileName)
         {
-            _Logger.WriteLog("INFO");
-            if (data == null)
-            {
-                _Logger.WriteLog("Collection is null");
-                return false;
-            } 
-            else if (string.IsNullOrEmpty(fileName))
-            {
-                _Logger.WriteLog("Filename can't be empty");
-                return false;
-            }
+            if (data == null) return false;
+            else if (string.IsNullOrEmpty(fileName)) return false;
 
             try
             {
                 var json = JsonSerializer.Serialize(data);
                 File.WriteAllText(fileName + ".json", json, Encoding.UTF8);
             }
-            catch (Exception e)
+
+            catch (Exception)
             {
                 _Logger.WriteLog($"Can't save file. Error.");
-                throw e;
+                throw;
             }
 
             _Logger.WriteLog("File saved succesfully");
@@ -58,13 +46,8 @@ namespace DOfficeCore.Services
         /// <returns>Возвращаемый список докторов или долдностей</returns>
         public IEnumerable<string> LoadDoctorsFromFile(string fileName)
         {
-            _Logger.WriteLog("INFO");
 
-            if (string.IsNullOrEmpty(fileName))
-            {
-                _Logger.WriteLog("Filename can't be empty");
-                return new List<string>();
-            }
+            if (string.IsNullOrEmpty(fileName)) return new List<string>();
 
             try
             {
@@ -87,10 +70,10 @@ namespace DOfficeCore.Services
                     return result;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _Logger.WriteLog($"Can't load doctors from file {fileName}.json. Error.");
-                throw e;
+                throw;
             }
         }
 
@@ -101,14 +84,7 @@ namespace DOfficeCore.Services
         /// <returns>Коллекция данных</returns>
         public List<Section> LoadDataFromFile(string fileName)
         {
-            _Logger.WriteLog("INFO");
-
-            List<Section> result = null;
-            if (string.IsNullOrEmpty(fileName))
-            {
-                _Logger.WriteLog("Filename can't be empty");
-                return new List<Section>();
-            }
+            if (string.IsNullOrEmpty(fileName)) return new List<Section>();
 
             try
             {
