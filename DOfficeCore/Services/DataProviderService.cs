@@ -1,7 +1,10 @@
-﻿using DOfficeCore.Models;
 using Newtonsoft.Json;
+using DOfficeCore.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using System.Text.Json;
 
 namespace DOfficeCore.Services
 {
@@ -20,11 +23,19 @@ namespace DOfficeCore.Services
             if (data == null) return false;
             else if (string.IsNullOrEmpty(fileName)) return false;
 
-            using (var file = File.CreateText(fileName + ".json"))
+            try
             {
-                var serializer = new JsonSerializer();
-                serializer.Serialize(file, data);
+                var json = JsonSerializer.Serialize(data);
+                File.WriteAllText(fileName + ".json", json, Encoding.UTF8);
             }
+
+            catch (Exception)
+            {
+                _Logger.WriteLog($"Can't save file. Error.");
+                throw;
+            }
+
+            _Logger.WriteLog("File saved succesfully");
             return true;
         }
 
@@ -38,16 +49,31 @@ namespace DOfficeCore.Services
 
             if (string.IsNullOrEmpty(fileName)) return new List<string>();
 
-            if (!File.Exists(fileName + ".json"))
+            try
             {
-                using var fs = File.Create(fileName + ".json");
-                return new List<string>();
+                if (!File.Exists(fileName + ".json"))
+                {
+                    using FileStream fs = File.Create(fileName + ".json");
+
+                    _Logger.WriteLog($"File {fileName} doesn't exist");
+
+                    return new List<string>();
+                }
+                else
+                {
+                    var jsonString = File.ReadAllText(fileName + ".json");
+
+                    IEnumerable<string> result = JsonSerializer.Deserialize<IEnumerable<string>>(jsonString);
+
+                    _Logger.WriteLog("File loaded succesfully");
+
+                    return result;
+                }
             }
-            else
+            catch (Exception)
             {
-                using var file = File.OpenText(fileName + ".json");
-                var serializer = new JsonSerializer();
-                return (IEnumerable<string>)serializer.Deserialize(file, typeof(IEnumerable<string>));
+                _Logger.WriteLog($"Can't load doctors from file {fileName}.json. Error.");
+                throw;
             }
         }
 
@@ -60,17 +86,29 @@ namespace DOfficeCore.Services
         {
             if (string.IsNullOrEmpty(fileName)) return new List<Section>();
 
-            if (!File.Exists(fileName + ".json"))
+            try
             {
-                using var fs = File.Create(fileName + ".json");
-                return new List<Section>();
+                if (!File.Exists(fileName + ".json"))
+                {
+                    using FileStream fs = File.Create(fileName + ".json");
+                    result = new List<Section>();
+                    _Logger.WriteLog($"File {fileName} doesn't exist");
+                }
+                else
+                {
+                    var jsonString = File.ReadAllText(fileName + ".json");
+
+                    result = JsonSerializer.Deserialize<List<Section>>(jsonString);
+
+                    _Logger.WriteLog("File loaded succesfully");
+                }
             }
-            else
+            catch (Exception e)
             {
-                using var file = File.OpenText(fileName + ".json");
-                var serializer = new JsonSerializer();
-                return (List<Section>)serializer.Deserialize(file, typeof(List<Section>));
+                _Logger.WriteLog($"Can't load data from file {fileName}.json. Error.");
+                throw e;
             }
+            return result;
         }
     }
 }

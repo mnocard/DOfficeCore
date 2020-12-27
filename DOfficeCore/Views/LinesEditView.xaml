@@ -120,7 +120,10 @@
                 DockPanel.Dock="Bottom"
                 Text="{Binding DiagnosisMultiBox}" />
             <StackPanel Grid.Row="1" Orientation="Horizontal">
-                <Button Margin="3,0" Command="{Binding AddDiagnosisCommand}">
+                <Button
+                    Margin="3,0"
+                    Command="{Binding AddDiagnosisCommand}"
+                    ToolTip="Добавить новый диагноз">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
@@ -129,13 +132,16 @@
                 <Button
                     Command="{Binding EditDiagnosisCommand}"
                     Cursor="Hand"
-                    ToolTip="Редактировать выбранный элемент">
+                    ToolTip="Редактировать выбранный диагноз">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
                         Kind="PencilOutline" />
                 </Button>
-                <Button Margin="3,0" Command="{Binding RemoveDiagnosisCommand}">
+                <Button
+                    Margin="3,0"
+                    Command="{Binding RemoveDiagnosisCommand}"
+                    ToolTip="Удалить выбранный диагноз">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
@@ -180,7 +186,10 @@
                 DockPanel.Dock="Bottom"
                 Text="{Binding BlockMultiBox}" />
             <StackPanel Grid.Row="4" Orientation="Horizontal">
-                <Button Margin="3,0" Command="{Binding AddBlockCommand}">
+                <Button
+                    Margin="3,0"
+                    Command="{Binding AddBlockCommand}"
+                    ToolTip="Добавить новый раздел">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
@@ -189,13 +198,16 @@
                 <Button
                     Command="{Binding EditBlockCommand}"
                     Cursor="Hand"
-                    ToolTip="Редактировать выбранный элемент">
+                    ToolTip="Редактировать выбранный раздел">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
                         Kind="PencilOutline" />
                 </Button>
-                <Button Margin="3,0" Command="{Binding RemoveBlockCommand}">
+                <Button
+                    Margin="3,0"
+                    Command="{Binding RemoveBlockCommand}"
+                    ToolTip="Удалить выбранный раздел">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
@@ -251,7 +263,10 @@
                 DockPanel.Dock="Bottom"
                 Text="{Binding LineMultiBox}" />
             <StackPanel Grid.Row="1" Orientation="Horizontal">
-                <Button Margin="3,0" Command="{Binding AddLineCommand}">
+                <Button
+                    Margin="3,0"
+                    Command="{Binding AddLineCommand}"
+                    ToolTip="Добавить новое предложение">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
@@ -260,19 +275,25 @@
                 <Button
                     Command="{Binding EditLineCommand}"
                     Cursor="Hand"
-                    ToolTip="Редактировать выбранный элемент">
+                    ToolTip="Редактировать выбранное предложение">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
                         Kind="PencilOutline" />
                 </Button>
-                <Button Margin="3,0" Command="{Binding RemoveLineCommand}">
+                <Button
+                    Margin="3,0"
+                    Command="{Binding RemoveLineCommand}"
+                    ToolTip="Удалить выбранное предложение">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
                         Kind="TrashCanOutline" />
                 </Button>
-                <Button Margin="3,0" Command="{Binding ReturnLineCommand}">
+                <Button
+                    Margin="3,0"
+                    Command="{Binding ReturnLineCommand}"
+                    ToolTip="Вернуть предложение в таблицу предложений">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
