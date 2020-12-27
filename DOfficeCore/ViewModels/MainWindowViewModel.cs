@@ -3,6 +3,7 @@ using DOfficeCore.Models;
 using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels.Core;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -166,7 +167,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда Загрузки данных</summary>
         private void OnLoadDataCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
+            Log.Information("INFO");
 
             try
             {
@@ -185,11 +186,11 @@ namespace DOfficeCore.ViewModels
             }
             catch (Exception e)
             {
-                _Logger.WriteLog($"Unexpected error\n{e.Message}");
+                Log.Error($"Unexpected error\n{e.Message}");
                 MessageBox.Show("Ошибка загрузки данных. Данные не загружены.", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            _Logger.WriteLog("DONE");
+            Log.Information("DONE");
         }
 
         private bool CanLoadDataCommandExecute(object parameter) => true;
@@ -201,7 +202,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда закрытия программы</summary>
         private void OnClosingAppCommandExecuted(object parameter)
         {
-
+            Log.CloseAndFlush();
         }
 
         private bool CanClosingAppCommandExecute(object parameter) => true;

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using DocumentFormat.OpenXml.Packaging;
+using Serilog;
 
 namespace DOfficeCore.Services
 {
@@ -49,10 +50,12 @@ namespace DOfficeCore.Services
             }
             catch (System.IO.InvalidDataException e)
             {
+                Log.Error("Ошибка!\n" + e.Message);
                 throw new Exception($"Cannot open file \"{filepath}\"", e);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.Error("Непредвиденная ошибка!\n" + e.Message);
                 throw;
             }
             finally
@@ -103,15 +106,18 @@ namespace DOfficeCore.Services
                 }
                 catch (System.IO.InvalidDataException e)
                 {
+                    Log.Error("Ошибка! InvalidDataException.\n" + e.Message);
                     throw new Exception($"Cannot open file \"{filepath}\"", e);
                 }
-                catch (OperationCanceledException)
+                catch (OperationCanceledException e)
                 {
+                    Log.Error("Ошибка! OperationCanceledException.\n" + e.Message);
                     throw;
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("Unexpected exception.", e);
+                    Log.Error("Непредвиденная ошибка!\n" + e.Message);
+                    throw;
                 }
                 finally
                 {
@@ -186,7 +192,6 @@ namespace DOfficeCore.Services
                         token.ThrowIfCancellationRequested();
                     }
                 }
-
                 return words;
             }).ConfigureAwait(false);
 

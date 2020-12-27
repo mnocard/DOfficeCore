@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using Serilog;
 
 namespace DOfficeCore
 {
@@ -23,6 +11,15 @@ namespace DOfficeCore
         public MainWindow()
         {
             InitializeComponent();
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.File(
+                    path: "Logs\\log.txt",
+                    fileSizeLimitBytes: 104857600,
+                    rollOnFileSizeLimit: true,
+                    outputTemplate: "===> {Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:l}{NewLine}{Exception}")
+                .CreateLogger();
         }
     }
 }

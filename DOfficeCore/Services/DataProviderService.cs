@@ -1,10 +1,10 @@
-using Newtonsoft.Json;
 using DOfficeCore.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using Serilog;
 
 namespace DOfficeCore.Services
 {
@@ -31,11 +31,11 @@ namespace DOfficeCore.Services
 
             catch (Exception)
             {
-                _Logger.WriteLog($"Can't save file. Error.");
+                Log.Error($"Can't save file. Error.");
                 throw;
             }
 
-            _Logger.WriteLog("File saved succesfully");
+            Log.Information("File saved succesfully");
             return true;
         }
 
@@ -55,7 +55,7 @@ namespace DOfficeCore.Services
                 {
                     using FileStream fs = File.Create(fileName + ".json");
 
-                    _Logger.WriteLog($"File {fileName} doesn't exist");
+                    Log.Verbose($"File {fileName} doesn't exist");
 
                     return new List<string>();
                 }
@@ -65,14 +65,14 @@ namespace DOfficeCore.Services
 
                     IEnumerable<string> result = JsonSerializer.Deserialize<IEnumerable<string>>(jsonString);
 
-                    _Logger.WriteLog("File loaded succesfully");
+                    Log.Information("File loaded succesfully");
 
                     return result;
                 }
             }
             catch (Exception)
             {
-                _Logger.WriteLog($"Can't load doctors from file {fileName}.json. Error.");
+                Log.Error($"Can't load doctors from file {fileName}.json. Error.");
                 throw;
             }
         }
@@ -85,14 +85,14 @@ namespace DOfficeCore.Services
         public List<Section> LoadDataFromFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName)) return new List<Section>();
-
+            List<Section> result;
             try
             {
                 if (!File.Exists(fileName + ".json"))
                 {
                     using FileStream fs = File.Create(fileName + ".json");
                     result = new List<Section>();
-                    _Logger.WriteLog($"File {fileName} doesn't exist");
+                    Log.Verbose($"File {fileName} doesn't exist");
                 }
                 else
                 {
@@ -100,12 +100,12 @@ namespace DOfficeCore.Services
 
                     result = JsonSerializer.Deserialize<List<Section>>(jsonString);
 
-                    _Logger.WriteLog("File loaded succesfully");
+                    Log.Information("File loaded succesfully");
                 }
             }
             catch (Exception e)
             {
-                _Logger.WriteLog($"Can't load data from file {fileName}.json. Error.");
+                Log.Error($"Can't load data from file {fileName}.json. Error.");
                 throw e;
             }
             return result;
