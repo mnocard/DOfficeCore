@@ -110,21 +110,19 @@ namespace DOfficeCore.ViewModels
 
             if (result == true)
             {
-                try
+                var task = Task.Run(() =>
                 {
-                    var task = Task.Run(() =>
+                    TextForEditing = _LineEditorService.OpenDocument(dlg.FileName);
+                    var resultLines = _LineEditorService.TextToLines(TextForEditing);
+                    RawLines = new ObservableCollection<string>(resultLines);
+                }).ContinueWith(task =>
+                {
+                    if (task.IsFaulted)
                     {
-                        TextForEditing =  _LineEditorService.OpenDocument(dlg.FileName);
-                        var resultLines =  _LineEditorService.TextToLines(TextForEditing);
-                        RawLines = new ObservableCollection<string>(resultLines);
-                    });
-                    if (!task.IsCompletedSuccessfully) throw task.Exception;
-                }
-                catch(Exception e)
-                {
-                    Status = "Что-то пошло не так!";
-                    MessageBox.Show("Невозможно открыть файл!\n" + e.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                        Status = "Что-то пошло не так!";
+                        MessageBox.Show("Невозможно открыть файл!\n" + task.Exception.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                });
             }
         }
 

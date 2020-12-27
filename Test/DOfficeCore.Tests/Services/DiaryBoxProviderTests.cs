@@ -18,8 +18,7 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = DiaryBox + "\n" + position + "\t\t\t" + doctor;
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.DocToDiary(DiaryBox, position, doctor);
 
@@ -35,8 +34,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = "" + "\n" + position + "\t\t\t" + doctor;
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.DocToDiary(DiaryBox, position, doctor);
 
@@ -52,8 +51,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = "" + "\n" + position + "\t\t\t" + doctor;
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.DocToDiary(DiaryBox, position, doctor);
 
@@ -69,8 +68,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = DiaryBox;
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.DocToDiary(DiaryBox, position, doctor);
 
@@ -86,8 +85,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = DiaryBox;
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.DocToDiary(DiaryBox, position, doctor);
 
@@ -103,8 +102,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = DiaryBox;
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.DocToDiary(DiaryBox, position, doctor);
 
@@ -120,8 +119,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = DiaryBox;
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.DocToDiary(DiaryBox, position, doctor);
 
@@ -137,8 +136,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = "Дневник";
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.DocToDiary(DiaryBox, position, doctor);
 
@@ -156,8 +155,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = DiaryBox + Line + " ";
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.LineToDiaryBox(DiaryBox, Line);
 
@@ -172,8 +171,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = "Дневник. ";
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.LineToDiaryBox(DiaryBox, Line);
 
@@ -188,8 +187,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = "" + Line + " ";
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.LineToDiaryBox(DiaryBox, Line);
 
@@ -204,8 +203,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = "" + Line + " ";
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.LineToDiaryBox(DiaryBox, Line);
 
@@ -220,8 +219,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = DiaryBox;
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.LineToDiaryBox(DiaryBox, Line);
 
@@ -236,8 +235,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = DiaryBox;
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.LineToDiaryBox(DiaryBox, Line);
 
@@ -255,8 +254,8 @@ namespace DOfficeCore.Tests.Services
 
             string expected_result = DiaryBox.Insert(0, ChoosenDate.ToString("dd.MM.yyyy") + "\n");
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.DateToDiaryBox(DiaryBox, ChoosenDate);
 
@@ -271,8 +270,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = "Дневник. ";
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.DateToDiaryBox(DiaryBox, ChoosenDate);
 
@@ -287,8 +286,8 @@ namespace DOfficeCore.Tests.Services
 
             string expected_result = ChoosenDate.ToString("dd.MM.yyyy") + "\n";
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.DateToDiaryBox(DiaryBox, ChoosenDate);
 
@@ -303,8 +302,8 @@ namespace DOfficeCore.Tests.Services
 
             string expected_result = ChoosenDate.ToString("dd.MM.yyyy") + "\n";
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.DateToDiaryBox(DiaryBox, ChoosenDate);
 
@@ -319,8 +318,8 @@ namespace DOfficeCore.Tests.Services
 
             const string expected_result = "Дневник. ";
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.DateToDiaryBox(DiaryBox, ChoosenDate);
 
@@ -339,8 +338,8 @@ namespace DOfficeCore.Tests.Services
 
             string expected_result = DiaryBox.Insert(0, ChoosenTime.ToString("dd.MM.yyyy HH:mm") + "\n");
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.TimeToDiaryBox(DiaryBox, ChoosenTime);
 
@@ -355,8 +354,8 @@ namespace DOfficeCore.Tests.Services
 
             string expected_result = DiaryBox.Replace(ChoosenTime.ToString("dd.MM.yyyy"), ChoosenTime.ToString("dd.MM.yyyy HH:mm"));
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.TimeToDiaryBox(DiaryBox, ChoosenTime);
 
@@ -371,8 +370,8 @@ namespace DOfficeCore.Tests.Services
 
             string expected_result = ChoosenTime.ToString("dd.MM.yyyy") + "\nДневник. ";
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.TimeToDiaryBox(DiaryBox, ChoosenTime);
 
@@ -387,8 +386,8 @@ namespace DOfficeCore.Tests.Services
 
             string expected_result = ChoosenTime.ToString("dd.MM.yyyy HH:mm") + "\n";
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.TimeToDiaryBox(DiaryBox, ChoosenTime);
 
@@ -403,8 +402,8 @@ namespace DOfficeCore.Tests.Services
 
             string expected_result = ChoosenTime.ToString("dd.MM.yyyy HH:mm") + "\n";
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.TimeToDiaryBox(DiaryBox, ChoosenTime);
 
@@ -419,8 +418,8 @@ namespace DOfficeCore.Tests.Services
 
             string expected_result = ChoosenTime.ToString("dd.MM.yyyy") + "\nДневник. ";
 
-            var logger = new Logger.Logger();
-            var d = new DiaryBoxProvider(logger);
+
+            var d = new DiaryBoxProvider();
 
             var actualResult = d.TimeToDiaryBox(DiaryBox, ChoosenTime);
 
