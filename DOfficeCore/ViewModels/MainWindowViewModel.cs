@@ -3,10 +3,12 @@ using DOfficeCore.Models;
 using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels.Core;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -167,10 +169,18 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда Загрузки данных</summary>
         private void OnLoadDataCommandExecuted(object parameter)
         {
-            Log.Information("INFO");
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            var logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder)
+                .CreateLogger();
 
             try
             {
+                logger.Information("INFO");
                 var temp = _DataProviderService.LoadDoctorsFromFile("Doctors");
                 if (temp != null) Doctors = new ObservableCollection<string>(temp);
                 temp = _DataProviderService.LoadDoctorsFromFile("Position");
