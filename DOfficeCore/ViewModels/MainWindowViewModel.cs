@@ -174,13 +174,13 @@ namespace DOfficeCore.ViewModels
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            var logger = new LoggerConfiguration()
+            Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(builder)
                 .CreateLogger();
 
             try
             {
-                logger.Information("INFO");
+                Log.Information("INFO");
                 var temp = _DataProviderService.LoadDoctorsFromFile("Doctors");
                 if (temp != null) Doctors = new ObservableCollection<string>(temp);
                 temp = _DataProviderService.LoadDoctorsFromFile("Position");
