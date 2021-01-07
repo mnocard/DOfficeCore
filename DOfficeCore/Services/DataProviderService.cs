@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using Serilog;
 
 namespace DOfficeCore.Services
 {
@@ -30,9 +31,11 @@ namespace DOfficeCore.Services
 
             catch (Exception)
             {
+                Log.Error($"Can't save file. Error.");
                 throw;
             }
 
+            Log.Information("File saved succesfully");
             return true;
         }
 
@@ -51,19 +54,24 @@ namespace DOfficeCore.Services
                 if (!File.Exists(fileName + ".json"))
                 {
                     using FileStream fs = File.Create(fileName + ".json");
+
+                    Log.Verbose($"File {fileName} doesn't exist");
+
                     return new List<string>();
                 }
                 else
                 {
                     var jsonString = File.ReadAllText(fileName + ".json");
-                    IEnumerable<string> result = JsonSerializer.Deserialize<IEnumerable<string>>(jsonString);
-                    return result;
+                    if (!String.IsNullOrEmpty(jsonString))
+                        return JsonSerializer.Deserialize<IEnumerable<string>>(jsonString);
                 }
             }
             catch (Exception)
             {
+                Log.Error($"Can't load doctors from file {fileName}.json. Error.");
                 throw;
             }
+            return new List<string>();
         }
 
         /// <summary>
@@ -74,25 +82,28 @@ namespace DOfficeCore.Services
         public List<Section> LoadDataFromFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName)) return new List<Section>();
-            List<Section> result;
             try
             {
                 if (!File.Exists(fileName + ".json"))
                 {
                     using FileStream fs = File.Create(fileName + ".json");
-                    result = new List<Section>();
+                    Log.Verbose($"File {fileName} doesn't exist");
+                    return new List<Section>();
                 }
                 else
                 {
                     var jsonString = File.ReadAllText(fileName + ".json");
-                    result = JsonSerializer.Deserialize<List<Section>>(jsonString);
+
+                    if (!String.IsNullOrEmpty(jsonString))
+                        return JsonSerializer.Deserialize<List<Section>>(jsonString);
                 }
             }
             catch (Exception e)
             {
+                Log.Error($"Can't load data from file {fileName}.json. Error.");
                 throw e;
             }
-            return result;
+            return new List<Section>();
         }
     }
 }
