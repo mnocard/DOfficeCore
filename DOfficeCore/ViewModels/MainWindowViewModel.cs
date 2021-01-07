@@ -3,9 +3,12 @@ using DOfficeCore.Models;
 using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels.Core;
+using Microsoft.Extensions.Configuration;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -166,10 +169,18 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда Загрузки данных</summary>
         private void OnLoadDataCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            var logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder)
+                .CreateLogger();
 
             try
             {
+                logger.Information("INFO");
                 var temp = _DataProviderService.LoadDoctorsFromFile("Doctors");
                 if (temp != null) Doctors = new ObservableCollection<string>(temp);
                 temp = _DataProviderService.LoadDoctorsFromFile("Position");
@@ -185,11 +196,11 @@ namespace DOfficeCore.ViewModels
             }
             catch (Exception e)
             {
-                _Logger.WriteLog($"Unexpected error\n{e.Message}");
+                Log.Error($"Unexpected error\n{e.Message}");
                 MessageBox.Show("Ошибка загрузки данных. Данные не загружены.", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            _Logger.WriteLog("DONE");
+            Log.Information("DONE");
         }
 
         private bool CanLoadDataCommandExecute(object parameter) => true;
@@ -201,7 +212,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда закрытия программы</summary>
         private void OnClosingAppCommandExecuted(object parameter)
         {
-
+            Log.CloseAndFlush();
         }
 
         private bool CanClosingAppCommandExecute(object parameter) => true;

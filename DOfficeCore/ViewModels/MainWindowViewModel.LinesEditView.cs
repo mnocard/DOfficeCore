@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using System;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace DOfficeCore.ViewModels
 {
@@ -119,6 +120,7 @@ namespace DOfficeCore.ViewModels
                 {
                     if (task.IsFaulted)
                     {
+                        Log.Error("Невозможно открыть файл!\n" + task.Exception.Message);
                         Status = "Что-то пошло не так!";
                         MessageBox.Show("Невозможно открыть файл!\n" + task.Exception.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
@@ -152,6 +154,7 @@ namespace DOfficeCore.ViewModels
                 }
                 catch (ArgumentNullException e)
                 {
+                    Log.Error("Ошибка копирования текста из буфера обмена. ArgumentNullException." + e.Message);
                     Status = "Что-то пошло не так!";
                     MessageBox.Show("Что-то пошло не так!\n" + e.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
