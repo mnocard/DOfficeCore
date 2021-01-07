@@ -1,12 +1,88 @@
-﻿<UserControl x:Class="DOfficeCore.Views.DataBaseView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DOfficeCore.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+﻿<UserControl
+    x:Class="DOfficeCore.Views.DataBaseView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
+    mc:Ignorable="d">
+    <Grid Margin="-3">
+        <Grid.Resources>
+            <Style TargetType="{x:Type Grid}">
+                <Setter Property="Background" Value="#FFD9D7D7" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel
+            Grid.Row="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="#FF686868"
+            Orientation="Horizontal">
+            <Button
+                Margin="20,0,10,0"
+                Command="{Binding}"
+                Content="Доктора"
+                ToolTip="Отобразить список докторов" />
+            <Button
+                Margin="10,0"
+                Command="{Binding}"
+                Content="Отделения"
+                ToolTip="Отобразить список отделений" />
+            <Button
+                Margin="10,0"
+                Command="{Binding}"
+                Content="Пациенты"
+                ToolTip="Отобразить список пациентов" />
+            <TextBox
+                x:Name="tbSearch"
+                MinWidth="200"
+                MaxWidth="500"
+                Margin="10,5"
+                Padding="5,0"
+                VerticalContentAlignment="Center"
+                materialDesign:HintAssist.Hint="Поиск"
+                Background="#FFD9D7D7" />
+            <Button
+                Margin="10,0"
+                Command="{Binding}"
+                ToolTip="Добавить элемент в базу данных">
+                <materialDesign:PackIcon
+                    Width="24"
+                    Height="24"
+                    Foreground="Black"
+                    Kind="AddCircleOutline" />
+            </Button>
+            <Button
+                Margin="10,0"
+                Background="#FF9E9E9E"
+                Command="{Binding}"
+                ToolTip="Редактировать выбранный элемент">
+                <materialDesign:PackIcon
+                    Width="24"
+                    Height="24"
+                    Foreground="Black"
+                    Kind="EditOutline" />
+            </Button>
+            <Button
+                Margin="10,0"
+                Command="{Binding}"
+                ToolTip="Удалить выбранный элемент">
+                <materialDesign:PackIcon
+                    Width="24"
+                    Height="24"
+                    Foreground="Black"
+                    Kind="DeleteOutline" />
+            </Button>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <DataGrid Background="#FF9E9E9E" />
+        </Grid>
     </Grid>
 </UserControl>

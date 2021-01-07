@@ -78,7 +78,7 @@
                     <materialDesign:PackIcon
                         Width="48"
                         Height="48"
-                        Kind="NotebookOutline">
+                        Kind="People">
                         <materialDesign:PackIcon.Background>
                             <ImageBrush />
                         </materialDesign:PackIcon.Background>
