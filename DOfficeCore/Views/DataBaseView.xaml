@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="clr-namespace:DOfficeCore.Views"
     d:DesignHeight="450"
     d:DesignWidth="800"
     DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
@@ -33,13 +34,13 @@
             <Button
                 Margin="10,0"
                 Command="{Binding}"
-                Content="Отделения"
-                ToolTip="Отобразить список отделений" />
+                Content="Пациенты"
+                ToolTip="Отобразить список пациентов" />
             <Button
                 Margin="10,0"
                 Command="{Binding}"
-                Content="Пациенты"
-                ToolTip="Отобразить список пациентов" />
+                Content="Отделения"
+                ToolTip="Отобразить список отделений" />
             <TextBox
                 x:Name="tbSearch"
                 MinWidth="200"
@@ -82,7 +83,44 @@
             </Button>
         </StackPanel>
         <Grid Grid.Row="1">
-            <DataGrid Background="#FF9E9E9E" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <TreeView Grid.Column="1" Background="#FF9E9E9E" />
+            <DataGrid Grid.Column="0" Background="#FF9E9E9E" >
+                <!--Rotate datagrid code: -->
+                <!--<DataGrid.LayoutTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="90"/>
+                        <MatrixTransform Matrix="-1,0,0,1,0,0"/>
+                    </TransformGroup>
+                </DataGrid.LayoutTransform>
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                        <Setter Property="LayoutTransform">
+                            <Setter.Value>
+                                <TransformGroup>
+                                    <RotateTransform Angle="-90"/>
+                                    <ScaleTransform ScaleX="1" ScaleY="-1" />
+                                </TransformGroup>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.CellStyle>
+                    <Style  TargetType="DataGridCell">
+                        <Setter Property="LayoutTransform">
+                            <Setter.Value>
+                                <TransformGroup>
+                                    <RotateTransform Angle="-90"/>
+                                    <ScaleTransform ScaleX="1" ScaleY="-1" />
+                                </TransformGroup>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.CellStyle>-->
+            </DataGrid>
         </Grid>
     </Grid>
 </UserControl>
