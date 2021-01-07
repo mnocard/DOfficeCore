@@ -166,8 +166,6 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда Загрузки данных</summary>
         private void OnLoadDataCommandExecuted(object parameter)
         {
-            _Logger.WriteLog("INFO");
-
             try
             {
                 var temp = _DataProviderService.LoadDoctorsFromFile("Doctors");
@@ -183,13 +181,10 @@ namespace DOfficeCore.ViewModels
                 DataCollection = _DataProviderService.LoadDataFromFile("lines");
                 DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                _Logger.WriteLog($"Unexpected error\n{e.Message}");
                 MessageBox.Show("Ошибка загрузки данных. Данные не загружены.", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            _Logger.WriteLog("DONE");
         }
 
         private bool CanLoadDataCommandExecute(object parameter) => true;

@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using DOfficeCore.Models;
 using System;
 using System.Collections.Generic;
@@ -31,11 +30,9 @@ namespace DOfficeCore.Services
 
             catch (Exception)
             {
-                _Logger.WriteLog($"Can't save file. Error.");
                 throw;
             }
 
-            _Logger.WriteLog("File saved succesfully");
             return true;
         }
 
@@ -54,25 +51,17 @@ namespace DOfficeCore.Services
                 if (!File.Exists(fileName + ".json"))
                 {
                     using FileStream fs = File.Create(fileName + ".json");
-
-                    _Logger.WriteLog($"File {fileName} doesn't exist");
-
                     return new List<string>();
                 }
                 else
                 {
                     var jsonString = File.ReadAllText(fileName + ".json");
-
                     IEnumerable<string> result = JsonSerializer.Deserialize<IEnumerable<string>>(jsonString);
-
-                    _Logger.WriteLog("File loaded succesfully");
-
                     return result;
                 }
             }
             catch (Exception)
             {
-                _Logger.WriteLog($"Can't load doctors from file {fileName}.json. Error.");
                 throw;
             }
         }
@@ -85,27 +74,22 @@ namespace DOfficeCore.Services
         public List<Section> LoadDataFromFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName)) return new List<Section>();
-
+            List<Section> result;
             try
             {
                 if (!File.Exists(fileName + ".json"))
                 {
                     using FileStream fs = File.Create(fileName + ".json");
                     result = new List<Section>();
-                    _Logger.WriteLog($"File {fileName} doesn't exist");
                 }
                 else
                 {
                     var jsonString = File.ReadAllText(fileName + ".json");
-
                     result = JsonSerializer.Deserialize<List<Section>>(jsonString);
-
-                    _Logger.WriteLog("File loaded succesfully");
                 }
             }
             catch (Exception e)
             {
-                _Logger.WriteLog($"Can't load data from file {fileName}.json. Error.");
                 throw e;
             }
             return result;
