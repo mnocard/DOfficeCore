@@ -16,9 +16,9 @@ namespace DOfficeCore.Views
     /// <summary>
     /// Логика взаимодействия для DataGridView.xaml
     /// </summary>
-    public partial class DataGridView : UserControl
+    public partial class DiaryView : UserControl
     {
-        public DataGridView()
+        public DiaryView()
         {
             InitializeComponent();
         }

@@ -97,7 +97,7 @@
                         </materialDesign:PackIcon.Background>
                     </materialDesign:PackIcon>
                 </TabItem.Header>
-                <views:DataGridView />
+                <views:DiaryView />
             </TabItem>
             <TabItem>
                 <TabItem.Header>
