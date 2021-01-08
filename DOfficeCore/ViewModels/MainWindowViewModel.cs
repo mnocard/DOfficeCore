@@ -210,10 +210,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда закрытия программы</summary>
         public ICommand ClosingAppCommand { get; }
         /// <summary>Команда закрытия программы</summary>
-        private void OnClosingAppCommandExecuted(object parameter)
-        {
-            Log.CloseAndFlush();
-        }
+        private void OnClosingAppCommandExecuted(object parameter) => Log.CloseAndFlush();
 
         private bool CanClosingAppCommandExecute(object parameter) => true;
 

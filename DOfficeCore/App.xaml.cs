@@ -1,4 +1,5 @@
-﻿using DOfficeCore.Data.Entities;
+﻿using DOfficeCore.Data;
+using DOfficeCore.Data.Entities;
 using DOfficeCore.Data.Storage;
 using DOfficeCore.Data.Storage.StorageInDB;
 using DOfficeCore.Services;
@@ -19,33 +20,34 @@ namespace DOfficeCore
     public partial class App : Application
     {
         private static IHost _Hosting;
-        public static IHost Hosting
-        {
-            get
-            {
-                if (_Hosting != null) return _Hosting;
-
-                return Host.CreateDefaultBuilder(Environment.GetCommandLineArgs())
-                    .ConfigureAppConfiguration(cfg => cfg.AddJsonFile("appsettings.json", optional:true, reloadOnChange: true))
+        public static IHost Hosting => _Hosting
+            ??= Host.CreateDefaultBuilder(Environment.GetCommandLineArgs())
+                    .ConfigureAppConfiguration(cfg => cfg.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true))
                     .ConfigureServices(ConfigureServices)
                     .Build();
-            }
-        }
 
         public static IServiceProvider Services => Hosting.Services;
 
-        private static void ConfigureServices (HostBuilderContext host, IServiceCollection services)
+        private static void ConfigureServices(HostBuilderContext host, IServiceCollection services)
         {
             services.AddSingleton<MainWindowViewModel>();
             services.AddTransient<IDataProviderService, DataProviderService>();
             services.AddSingleton<IViewCollectionProvider, ViewCollectionProvider>();
             services.AddSingleton<IDiaryBoxProvider, DiaryBoxProvider>();
             services.AddSingleton<ILineEditorService, LineEditorService>();
-            services.AddDbContext<DbContext>(opt => opt.UseSqlServer(host.Configuration.GetConnectionString("default")));
+
+            services.AddDbContext<HospitalDb>(opt => opt.UseSqlServer(host.Configuration.GetConnectionString("default")));
+            services.AddTransient<HospitalDbInitializer>();
             services.AddSingleton<IStorage<Department>, DepartmentsInDB>();
             services.AddSingleton<IStorage<Doctor>, DoctorsInDB>();
             services.AddSingleton<IStorage<Patient>, PatientsInDB>();
             services.AddSingleton<IStorage<Position>, PositionsInDB>();
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            Services.GetRequiredService<HospitalDbInitializer>().Initialize();
+            base.OnStartup(e);
         }
     }
 }

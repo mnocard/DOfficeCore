@@ -8,12 +8,10 @@ namespace DOfficeCore.Data
     class HospitalDbInitializer
     {
         private readonly HospitalDb _db;
-        public HospitalDbInitializer(HospitalDb db)
-        {
-            _db = db;
-        }
+        public HospitalDbInitializer(HospitalDb db) => _db = db;
         public void Initialize()
         {
+            _db.Database.EnsureCreated();
             _db.Database.Migrate();
             InitDepartments();
             InitDoctors();
