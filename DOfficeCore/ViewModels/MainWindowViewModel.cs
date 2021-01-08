@@ -1,4 +1,6 @@
-﻿using DOfficeCore.Infrastructure.Commands;
+﻿using DOfficeCore.Data.Storage;
+using DOfficeCore.Data.Entities;
+using DOfficeCore.Infrastructure.Commands;
 using DOfficeCore.Models;
 using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
@@ -19,12 +21,22 @@ namespace DOfficeCore.ViewModels
         public MainWindowViewModel(IDataProviderService DataProviderService, 
                                     IViewCollectionProvider ViewCollectionProvider, 
                                     IDiaryBoxProvider DiaryBoxProvider,
-                                    ILineEditorService LineEditorService)
+                                    ILineEditorService LineEditorService,
+                                    IStorage<Department> DepStorage,
+                                    IStorage<Doctor> DocStorage,
+                                    IStorage<Patient> PatStorage,
+                                    IStorage<Position> PosStorage
+                                    )
         {
             _DataProviderService = DataProviderService;
             _ViewCollectionProvider = ViewCollectionProvider;
             _DiaryBoxProvider = DiaryBoxProvider;
             _LineEditorService = LineEditorService;
+
+            DepartmentsDB = new ObservableCollection<Department>(DepStorage.GetAll());
+            DoctorsDB = new ObservableCollection<Doctor>(DocStorage.GetAll());
+            PatientsDB = new ObservableCollection<Patient>(PatStorage.GetAll());
+            PositionsDB = new ObservableCollection<Position>(PosStorage.GetAll());
 
             #region Команды окна дневника
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
@@ -73,6 +85,13 @@ namespace DOfficeCore.ViewModels
             RemoveLineCommand = new LambdaCommand(OnRemoveLineCommandExecuted, CanRemoveLineCommandExecute);
 
             ReturnLineCommand = new LambdaCommand(OnReturnLineCommandExecuted, CanReturnLineCommandExecute);
+            #endregion
+
+            #region Команды окна базы данных
+            ShowDoctorsCommand = new LambdaCommand(OnShowDoctorsCommandExecuted, CanShowDoctorsCommandExecute);
+            ShowPatientsCommand = new LambdaCommand(OnShowPatientsCommandExecuted, CanShowPatientsCommandExecute);
+            ShowDepartmentsCommand = new LambdaCommand(OnShowDepartmentsCommandExecuted, CanShowDepartmentsCommandExecute);
+
             #endregion
         }
 

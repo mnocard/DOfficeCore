@@ -28,17 +28,20 @@
             Orientation="Horizontal">
             <Button
                 Margin="20,0,10,0"
-                Command="{Binding}"
+                Command="{Binding ShowDoctorsCommand}"
+                CommandParameter="{Binding ElementName=tvDataBase}"
                 Content="Доктора"
                 ToolTip="Отобразить список докторов" />
             <Button
                 Margin="10,0"
-                Command="{Binding}"
+                Command="{Binding ShowPatientsCommand}"
+                CommandParameter="{Binding ElementName=tvDataBase}"
                 Content="Пациенты"
                 ToolTip="Отобразить список пациентов" />
             <Button
                 Margin="10,0"
-                Command="{Binding}"
+                Command="{Binding ShowDepartmentsCommand}"
+                CommandParameter="{Binding ElementName=tvDataBase}"
                 Content="Отделения"
                 ToolTip="Отобразить список отделений" />
             <TextBox
@@ -87,7 +90,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <TreeView Grid.Column="1" Background="#FF9E9E9E" />
+            <TreeView Grid.Column="1" Name="tvDataBase" Background="#FF9E9E9E" />
             <DataGrid Grid.Column="0" Background="#FF9E9E9E" >
                 <!--Rotate datagrid code: -->
                 <!--<DataGrid.LayoutTransform>
