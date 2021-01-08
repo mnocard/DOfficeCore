@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DOfficeCore.Data
 {
-    class HospitalDb : DbContext
+    public class HospitalDb : DbContext
     {
         public HospitalDb(DbContextOptions<HospitalDb> db) : base (db) { }
         public DbSet<Doctor> Doctors { get; set; }

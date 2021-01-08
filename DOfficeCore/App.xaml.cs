@@ -1,6 +1,11 @@
-﻿using DOfficeCore.Services;
+﻿using DOfficeCore.Data.Entities;
+using DOfficeCore.Data.Storage;
+using DOfficeCore.Data.Storage.StorageInDB;
+using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -19,11 +24,11 @@ namespace DOfficeCore
             get
             {
                 if (_Hosting != null) return _Hosting;
-                var host_builder = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs());
 
-                host_builder.ConfigureServices(ConfigureServices);
-
-                return _Hosting = host_builder.Build();
+                return Host.CreateDefaultBuilder(Environment.GetCommandLineArgs())
+                    .ConfigureAppConfiguration(cfg => cfg.AddJsonFile("appsettings.json", optional:true, reloadOnChange: true))
+                    .ConfigureServices(ConfigureServices)
+                    .Build();
             }
         }
 
@@ -36,7 +41,11 @@ namespace DOfficeCore
             services.AddSingleton<IViewCollectionProvider, ViewCollectionProvider>();
             services.AddSingleton<IDiaryBoxProvider, DiaryBoxProvider>();
             services.AddSingleton<ILineEditorService, LineEditorService>();
-
+            services.AddDbContext<DbContext>(opt => opt.UseSqlServer(host.Configuration.GetConnectionString("default")));
+            services.AddSingleton<IStorage<Department>, DepartmentsInDB>();
+            services.AddSingleton<IStorage<Doctor>, DoctorsInDB>();
+            services.AddSingleton<IStorage<Patient>, PatientsInDB>();
+            services.AddSingleton<IStorage<Position>, PositionsInDB>();
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using DOfficeCore.Data.Entities.Core;
 
 namespace DOfficeCore.Data.Entities
 {
-    public class Doctor
+    public class Doctor : Entity
     {
         [Required]
         public string Surname { get; set; }
