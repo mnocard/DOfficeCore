@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -67,6 +68,21 @@ namespace DOfficeCore.ViewModels
         }
 
         #endregion
+
+        #region SelectedItem : ObservableCollection<object> - Выбранный элемент
+
+        /// <summary>Выбранный элемент</summary>
+        private ObservableCollection<object> _SelectedItem;
+
+        /// <summary>Выбранный элемент</summary>
+        public ObservableCollection<object> SelectedItem
+        {
+            get => _SelectedItem;
+            set => Set(ref _SelectedItem, value);
+        }
+
+        #endregion
+
         #endregion
 
         #region Команды
@@ -77,9 +93,9 @@ namespace DOfficeCore.ViewModels
         /// <summary>Просмотр списка докторов</summary>
         private void OnShowDoctorsCommandExecuted(object parameter)
         {
-            if (parameter is TreeView treeView)
+            if (parameter is DataGrid dataGrid)
             {
-                treeView.ItemsSource = DoctorsDB;
+                dataGrid.ItemsSource = DoctorsDB;
             }
         }
 
@@ -93,9 +109,9 @@ namespace DOfficeCore.ViewModels
         /// <summary>Просмотр списка пациентов</summary>
         private void OnShowPatientsCommandExecuted(object parameter)
         {
-            if (parameter is TreeView treeView)
+            if (parameter is DataGrid dataGrid)
             {
-                treeView.ItemsSource = PatientsDB;
+                dataGrid.ItemsSource = PatientsDB;
             }
         }
 
@@ -109,9 +125,9 @@ namespace DOfficeCore.ViewModels
         /// <summary>Просмотр списка отделений</summary>
         private void OnShowDepartmentsCommandExecuted(object parameter)
         {
-            if (parameter is TreeView treeView)
+            if (parameter is DataGrid dataGrid)
             {
-                treeView.ItemsSource = DepartmentsDB;
+                dataGrid.ItemsSource = DepartmentsDB;
             }
         }
 
@@ -119,6 +135,22 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
+        #region Просмотр выбранного элемента
+        /// <summary>Просмотр выбранного элемента</summary>
+        public ICommand SelectedElementCommand { get; }
+        /// <summary>Просмотр выбранного элемента</summary>
+        private void OnSelectedElementCommandExecuted(object parameter)
+        {
+            if (parameter is DataGrid dataGrid)
+            {
+                var a = (object)dataGrid.SelectedItem;
+                SelectedItem = new ObservableCollection<object> { a };
+            }
+        }
+
+        private bool CanSelectedElementCommandExecute(object parameter) => true;
+
+        #endregion
         #endregion
     }
 }

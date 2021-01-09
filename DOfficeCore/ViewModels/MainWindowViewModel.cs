@@ -91,6 +91,7 @@ namespace DOfficeCore.ViewModels
             ShowDoctorsCommand = new LambdaCommand(OnShowDoctorsCommandExecuted, CanShowDoctorsCommandExecute);
             ShowPatientsCommand = new LambdaCommand(OnShowPatientsCommandExecuted, CanShowPatientsCommandExecute);
             ShowDepartmentsCommand = new LambdaCommand(OnShowDepartmentsCommandExecuted, CanShowDepartmentsCommandExecute);
+            SelectedElementCommand = new LambdaCommand(OnSelectedElementCommandExecuted, CanSelectedElementCommandExecute);
 
             #endregion
         }
