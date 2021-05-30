@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace DOfficeCore.Views
 {
     /// <summary>
-    /// Логика взаимодействия для DataGridView.xaml
+    /// Логика взаимодействия для DiaryBoxView.xaml
     /// </summary>
-    public partial class DiaryView : UserControl
+    public partial class DiaryBoxView : UserControl
     {
-        public DiaryView()
+        public DiaryBoxView()
         {
             InitializeComponent();
         }

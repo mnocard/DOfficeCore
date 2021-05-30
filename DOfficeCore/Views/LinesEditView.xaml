@@ -10,9 +10,9 @@
     d:DesignWidth="800"
     DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
-    <Grid Margin="-3" Background="#FFD9D7D7">
+    <Grid Background="#FFD9D7D7">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
+            <RowDefinition Height="50" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -20,13 +20,24 @@
             <ColumnDefinition Width="1.5*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        <StackPanel
+        <DockPanel
             Grid.Row="0"
             Grid.ColumnSpan="3"
-            Background="#FF686868"
-            Orientation="Horizontal">
+            Background="#FF9E9E9E" LastChildFill="False"
+            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border BorderBrush="#FF686868" BorderThickness="2" DockPanel.Dock="Bottom" />
             <Button
-                Margin="15,0,0,0"
+                    Command="{Binding ChangeTabCommand}"
+                    Margin="15, 0"
+                    Cursor="Hand"
+                    ToolTip="Найти элемент">
+                <materialDesign:PackIcon
+                        Width="24"
+                        Height="24"
+                        Kind="ClipboardFlow" />
+            </Button>
+            <Button
+                Margin="20,0,0,0"
                 Command="{Binding OpenFileCommand}"
                 ToolTip="Выбрать документ docx">
                 <materialDesign:PackIcon
@@ -49,14 +60,13 @@
                 x:Name="btnSaveXML"
                 Margin="3,0,15,0"
                 Command="{Binding SaveDataToFileCommand}"
-                DockPanel.Dock="Right"
                 ToolTip="Сохранить коллекцию">
                 <materialDesign:PackIcon
                     Width="24"
                     Height="24"
                     Kind="ContentSaveAllOutline" />
             </Button>
-        </StackPanel>
+        </DockPanel>
         <DockPanel
             Grid.Row="1"
             Grid.Column="0"

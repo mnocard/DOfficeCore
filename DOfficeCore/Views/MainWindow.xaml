@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="clr-namespace:DOfficeCore.Views"
     Title="{Binding Title}"
-    MinWidth="800"
+    MinWidth="600"
     MinHeight="450"
     Background="{DynamicResource MaterialDesignPaper}"
     DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
@@ -28,15 +28,15 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <DockPanel Background="#FF686868" LastChildFill="True">
-        <StatusBar DockPanel.Dock="Bottom" Background="#FF686868">
+        <StatusBar Background="#FF686868" DockPanel.Dock="Bottom">
             <StatusBarItem>
-                <TextBlock Text="{Binding Status}" Margin="0,0,0,0" Foreground="Black"/>
+                <TextBlock Foreground="Black" Text="{Binding Status}" />
             </StatusBarItem>
         </StatusBar>
         <Grid>
-            <views:DiaryView />
+            <views:DiaryBoxView Panel.ZIndex="{Binding DiaryZIndex}" Visibility="{Binding DiaryVisibility}" />
+            <views:LinesEditView Panel.ZIndex="{Binding LineEditorZIndex}" Visibility="{Binding LineEditorVisibility}" />
         </Grid>
-        
     </DockPanel>
 </Window>
 
