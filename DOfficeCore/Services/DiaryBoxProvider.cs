@@ -1,12 +1,9 @@
-﻿using System;
-using System.IO;
-using DOfficeCore.Services.Interfaces;
+﻿using DOfficeCore.Services.Interfaces;
 
 namespace DOfficeCore.Services
 {
     class DiaryBoxProvider : IDiaryBoxProvider
     {
-
         /// <summary>
         /// Добавлением строки в дневник с возможностью удаления вместо повторного добавления
         /// </summary>

@@ -1,5 +1,4 @@
 ﻿using System;
-using DOfficeCore.ViewModels.Core;
 
 namespace DOfficeCore.Models
 {
@@ -8,15 +7,11 @@ namespace DOfficeCore.Models
         // Diagnosis : string - Диагноз, в котором находится раздел
         public string Diagnosis { get; set; }
 
-
         // Block : string - Раздел, в котором находится строка
         public string Block { get; set; }
-       
 
         // Line : string - Собственно сама строка
-        
         public string Line { get; set; }
-        
 
         public bool Equals(Section other)
         {
@@ -31,10 +26,12 @@ namespace DOfficeCore.Models
             if (this == null && other == null) return true;
             if (this == null || other == null) return false;
 
-            if (other is Section otherSection)
-                return Equals(otherSection);
-            else
-                return false;
+            //if (other is Section otherSection)
+            //    return Equals(otherSection);
+            //else
+            //    return false;
+
+            return Equals(other as Section);
         }
         public override int GetHashCode() => HashCode.Combine(Diagnosis, Block, Line);
     }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DOfficeCore.Services.Interfaces
+﻿namespace DOfficeCore.Services.Interfaces
 {
     interface IDiaryBoxProvider
     {
