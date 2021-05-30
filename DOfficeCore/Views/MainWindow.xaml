@@ -30,85 +30,13 @@
     <DockPanel Background="#FF686868" LastChildFill="True">
         <StatusBar DockPanel.Dock="Bottom" Background="#FF686868">
             <StatusBarItem>
-                <TextBlock Text="{Binding Status}" Margin="70,3,0,5" Foreground="Black"/>
+                <TextBlock Text="{Binding Status}" Margin="0,0,0,0" Foreground="Black"/>
             </StatusBarItem>
         </StatusBar>
-        <TabControl SelectedIndex="1" TabStripPlacement="Left">
-            <TabControl.Resources>
-                <Style TargetType="{x:Type Grid}">
-                    <Setter Property="Background" Value="#FF686868" />
-                </Style>
-                <Style TargetType="{x:Type TabItem}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type TabItem}">
-                                <Border
-                                    x:Name="Border"
-                                    Margin="5,5,0,0"
-                                    BorderBrush="#FF686868"
-                                    BorderThickness="1,1,0,1"
-                                    CornerRadius="10,0,0,10">
-                                    <ContentPresenter
-                                        x:Name="ContentSite"
-                                        Margin="5,2"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        ContentSource="Header" />
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="#FFC2C0C0" />
-                                        <Setter TargetName="Border" Property="Margin" Value="5,5,-1,0" />
-                                        <Setter TargetName="Border" Property="Background" Value="#FFC2C0C0" />
-                                        <Setter TargetName="Border" Property="BorderBrush" Value="#FFC2C0C0" />
-                                    </Trigger>
-                                    <Trigger Property="IsSelected" Value="False">
-                                        <Setter TargetName="Border" Property="Background" Value="Gray" />
-                                        <Setter TargetName="Border" Property="BorderThickness" Value="1,1,2,1" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TabControl.Resources>
-            <TabItem Height="33" Visibility="Hidden" />
-            <TabItem>
-                <TabItem.Header>
-                    <materialDesign:PackIcon
-                        Width="48"
-                        Height="48"
-                        Kind="People">
-                        <materialDesign:PackIcon.Background>
-                            <ImageBrush />
-                        </materialDesign:PackIcon.Background>
-                    </materialDesign:PackIcon>
-                </TabItem.Header>
-                <views:DataBaseView/>
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <materialDesign:PackIcon
-                        Width="48"
-                        Height="48"
-                        Kind="NotebookOutline">
-                        <materialDesign:PackIcon.Background>
-                            <ImageBrush />
-                        </materialDesign:PackIcon.Background>
-                    </materialDesign:PackIcon>
-                </TabItem.Header>
-                <views:DiaryView />
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <materialDesign:PackIcon
-                        Width="48"
-                        Height="48"
-                        Kind="FolderOutline" />
-                </TabItem.Header>
-                <views:LinesEditView />
-            </TabItem>
-        </TabControl>
+        <Grid>
+            <views:DiaryView />
+        </Grid>
+        
     </DockPanel>
 </Window>
 

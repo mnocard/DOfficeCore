@@ -1,11 +1,6 @@
-﻿using DOfficeCore.Data;
-using DOfficeCore.Data.Entities;
-using DOfficeCore.Data.Storage;
-using DOfficeCore.Data.Storage.StorageInDB;
-using DOfficeCore.Services;
+﻿using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
 using DOfficeCore.ViewModels;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -36,17 +31,10 @@ namespace DOfficeCore
             services.AddSingleton<IDiaryBoxProvider, DiaryBoxProvider>();
             services.AddSingleton<ILineEditorService, LineEditorService>();
 
-            services.AddDbContext<HospitalDb>(opt => opt.UseSqlServer(host.Configuration.GetConnectionString("default")));
-            services.AddTransient<HospitalDbInitializer>();
-            services.AddSingleton<IStorage<Department>, DepartmentsInDB>();
-            services.AddSingleton<IStorage<Doctor>, DoctorsInDB>();
-            services.AddSingleton<IStorage<Patient>, PatientsInDB>();
-            services.AddSingleton<IStorage<Position>, PositionsInDB>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            Services.GetRequiredService<HospitalDbInitializer>().Initialize();
             base.OnStartup(e);
         }
     }

@@ -1,6 +1,4 @@
-﻿using DOfficeCore.Data.Storage;
-using DOfficeCore.Data.Entities;
-using DOfficeCore.Infrastructure.Commands;
+﻿using DOfficeCore.Infrastructure.Commands;
 using DOfficeCore.Models;
 using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
@@ -21,11 +19,7 @@ namespace DOfficeCore.ViewModels
         public MainWindowViewModel(IDataProviderService DataProviderService, 
                                     IViewCollectionProvider ViewCollectionProvider, 
                                     IDiaryBoxProvider DiaryBoxProvider,
-                                    ILineEditorService LineEditorService,
-                                    IStorage<Department> DepStorage,
-                                    IStorage<Doctor> DocStorage,
-                                    IStorage<Patient> PatStorage,
-                                    IStorage<Position> PosStorage
+                                    ILineEditorService LineEditorService
                                     )
         {
             _DataProviderService = DataProviderService;
@@ -33,29 +27,11 @@ namespace DOfficeCore.ViewModels
             _DiaryBoxProvider = DiaryBoxProvider;
             _LineEditorService = LineEditorService;
 
-            DepartmentsDB = new ObservableCollection<Department>(DepStorage.GetAll());
-            DoctorsDB = new ObservableCollection<Doctor>(DocStorage.GetAll());
-            PatientsDB = new ObservableCollection<Patient>(PatStorage.GetAll());
-            PositionsDB = new ObservableCollection<Position>(PosStorage.GetAll());
-
             #region Команды окна дневника
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
             ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
 
             SelectedDataCommand = new LambdaCommand(OnSelectedDataCommandExecuted, CanSelectedDataCommandExecute);
-            
-            AddDateCommand = new LambdaCommand(OnAddDateCommandExecuted, CanAddDateCommandExecute);
-            AddTimeCommand = new LambdaCommand(OnAddTimeCommandExecuted, CanAddTimeCommandExecute);
-            
-            AddDocToDiaryCommand = new LambdaCommand(OnAddDocToDiaryCommandExecuted, CanAddDocToDiaryCommandExecute);
-            AddPositionCommand = new LambdaCommand(OnAddPositionCommandExecuted, CanAddPositionCommandExecute);
-            EditPositionCommand = new LambdaCommand(OnEditPositionCommandExecuted, CanEditPositionCommandExecute);
-            DeletePositionCommand = new LambdaCommand(OnDeletePositionCommandExecuted, CanDeletePositionCommandExecute); 
-            AddDoctorCommand = new LambdaCommand(OnAddDoctorCommandExecuted, CanAddDoctorCommandExecute);
-            EditDoctorCommand = new LambdaCommand(OnEditDoctorCommandExecuted, CanEditDoctorCommandExecute);
-            DeleteDoctorCommand = new LambdaCommand(OnDeleteDoctorCommandExecuted, CanDeleteDoctorCommandExecute);
-            
-            SaveDoctorsListCommand = new LambdaCommand(OnSaveDoctorsListCommandExecuted, CanSaveDoctorsListCommandExecute);
             
             SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted, CanSearchElementCommandExecute);
             
@@ -87,13 +63,6 @@ namespace DOfficeCore.ViewModels
             ReturnLineCommand = new LambdaCommand(OnReturnLineCommandExecuted, CanReturnLineCommandExecute);
             #endregion
 
-            #region Команды окна базы данных
-            ShowDoctorsCommand = new LambdaCommand(OnShowDoctorsCommandExecuted, CanShowDoctorsCommandExecute);
-            ShowPatientsCommand = new LambdaCommand(OnShowPatientsCommandExecuted, CanShowPatientsCommandExecute);
-            ShowDepartmentsCommand = new LambdaCommand(OnShowDepartmentsCommandExecuted, CanShowDepartmentsCommandExecute);
-            SelectedElementCommand = new LambdaCommand(OnSelectedElementCommandExecuted, CanSelectedElementCommandExecute);
-
-            #endregion
         }
 
         #region Свойства
@@ -201,11 +170,7 @@ namespace DOfficeCore.ViewModels
             try
             {
                 Log.Information("INFO");
-                var temp = _DataProviderService.LoadDoctorsFromFile("Doctors");
-                if (temp != null) Doctors = new ObservableCollection<string>(temp);
-                temp = _DataProviderService.LoadDoctorsFromFile("Position");
-                if (temp != null) Position = new ObservableCollection<string>(temp);
-
+                
                 // Тестовые данные
                 //DataCollection = TestData.GetCollection();
                 //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);

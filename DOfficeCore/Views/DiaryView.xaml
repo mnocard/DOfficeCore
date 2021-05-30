@@ -11,143 +11,13 @@
     d:DesignWidth="800"
     DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <infra:DoctorsConverter x:Key="doctorsConverter" />
-    </UserControl.Resources>
-    <Grid Margin="-3">
+    <Grid>
         <Grid.Resources>
             <Style TargetType="{x:Type Grid}">
                 <Setter Property="Background" Value="#FFD9D7D7" />
             </Style>
         </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <StackPanel
-            Grid.Row="0"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Background="#FF686868"
-            Orientation="Horizontal">
-            <Button
-                x:Name="cbDiaryDate"
-                Margin="10,0"
-                VerticalAlignment="Center"
-                Command="{Binding AddDateCommand}"
-                Content="Добавить дату" />
-            <DatePicker
-                x:Name="DiaryDate"
-                MinWidth="100"
-                Margin="5,3,0,0"
-                VerticalAlignment="Center"
-                materialDesign:HintAssist.Hint="Выберите дату"
-                IsDropDownOpen="False"
-                SelectedDate="{Binding ChoosenDate}"
-                SelectedDateFormat="Short" />
-            <Button
-                x:Name="cbDiaryTime"
-                Margin="10,0"
-                Command="{Binding AddTimeCommand}"
-                Content="Добавить время" />
-            <materialDesign:TimePicker
-                x:Name="DiaryTime"
-                Width="70"
-                Margin="5,3,0,0"
-                VerticalAlignment="Center"
-                materialDesign:HintAssist.Hint="Выберите время"
-                Background="Transparent"
-                Is24Hours="True"
-                SelectedTime="{Binding ChoosenDate}" />
-        </StackPanel>
-        <StackPanel
-            Grid.Row="1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Background="#FF9E9E9E"
-            Orientation="Horizontal">
-            <Button
-                Margin="10,0"
-                Command="{Binding AddDocToDiaryCommand}"
-                Content="Добавить подпись">
-                <Button.CommandParameter>
-                    <MultiBinding Converter="{StaticResource doctorsConverter}">
-                        <Binding ElementName="cbPositionList" Path="SelectedItem" />
-                        <Binding ElementName="cbDoctorsList" Path="SelectedItem" />
-                    </MultiBinding>
-                </Button.CommandParameter>
-            </Button>
-            <ComboBox
-                x:Name="cbPositionList"
-                MinWidth="200"
-                Margin="10,0"
-                materialDesign:HintAssist.Hint="Выберите должность"
-                BorderBrush="Black"
-                FontSize="16"
-                ItemsSource="{Binding Position}" />
-            <materialDesign:PopupBox
-                PlacementMode="BottomAndAlignLeftEdges"
-                StaysOpen="True"
-                ToolTip="Изменить список должностей">
-                <StackPanel>
-                    <TextBox
-                        x:Name="tbPosition"
-                        Margin="10,5"
-                        materialDesign:HintAssist.Hint="Введите должность"
-                        Text="{Binding CurrentPosition}" />
-                    <Button Command="{Binding AddPositionCommand}" Content="Добавить должность" />
-                    <Button
-                        Command="{Binding DeletePositionCommand}"
-                        CommandParameter="{Binding ElementName=cbPositionList, Path=SelectedItem}"
-                        Content="Удалить должность" />
-                    <Button
-                        Command="{Binding EditPositionCommand}"
-                        CommandParameter="{Binding ElementName=cbPositionList, Path=SelectedItem}"
-                        Content="Изменить выбранную должность" />
-                </StackPanel>
-            </materialDesign:PopupBox>
-            <ComboBox
-                x:Name="cbDoctorsList"
-                MinWidth="200"
-                Margin="10,0"
-                materialDesign:HintAssist.Hint="Выберите доктора"
-                BorderBrush="Black"
-                FontSize="16"
-                ItemsSource="{Binding Doctors}" />
-            <materialDesign:PopupBox
-                PlacementMode="BottomAndAlignLeftEdges"
-                StaysOpen="True"
-                ToolTip="Изменить список докторов">
-                <StackPanel>
-                    <TextBox
-                        x:Name="tbDoctors"
-                        Margin="10,5"
-                        materialDesign:HintAssist.Hint="Введите Ф.И.О."
-                        Text="{Binding CurrentDoctor}" />
-                    <Button Command="{Binding AddDoctorCommand}" Content="Добавить доктора" />
-                    <Button
-                        Command="{Binding DeleteDoctorCommand}"
-                        CommandParameter="{Binding ElementName=cbDoctorsList, Path=SelectedItem}"
-                        Content="Удалить доктора" />
-                    <Button
-                        Command="{Binding EditDoctorCommand}"
-                        CommandParameter="{Binding ElementName=cbDoctorsList, Path=SelectedItem}"
-                        Content="Переименовать выбранного доктора" />
-                </StackPanel>
-            </materialDesign:PopupBox>
-            <Button
-                x:Name="btnSaveDoctorsXML"
-                Margin="10,0"
-                Command="{Binding SaveDoctorsListCommand}"
-                ToolTip="Сохранить список докторов">
-                <materialDesign:PackIcon
-                    Width="24"
-                    Height="24"
-                    Kind="ContentSaveAllOutline" />
-            </Button>
-        </StackPanel>
-        <Grid Grid.Row="2">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" MinWidth="500" />
                 <ColumnDefinition Width="*" MinWidth="300" />
@@ -156,6 +26,17 @@
                 <GroupBox>
                     <GroupBox.Header>
                         <DockPanel LastChildFill="True">
+                            <Button
+                                x:Name="btnLinesEdit"
+                                Command="{Binding }"
+                                Cursor="Hand"
+                                DockPanel.Dock="Left"
+                                ToolTip="Найти элемент">
+                                <materialDesign:PackIcon
+                                    Width="24"
+                                    Height="24"
+                                    Kind="FolderOutline" />
+                            </Button>
                             <Button
                                 x:Name="btnSearchNode"
                                 Command="{Binding SearchElementCommand}"

@@ -40,41 +40,6 @@ namespace DOfficeCore.Services
         }
 
         /// <summary>
-        /// Загрузка списка докторов из файла (применимо к должностям
-        /// </summary>
-        /// <param name="fileName">Имя файла</param>
-        /// <returns>Возвращаемый список докторов или долдностей</returns>
-        public IEnumerable<string> LoadDoctorsFromFile(string fileName)
-        {
-
-            if (string.IsNullOrEmpty(fileName)) return new List<string>();
-
-            try
-            {
-                if (!File.Exists(fileName + ".json"))
-                {
-                    using FileStream fs = File.Create(fileName + ".json");
-
-                    Log.Verbose($"File {fileName} doesn't exist");
-
-                    return new List<string>();
-                }
-                else
-                {
-                    var jsonString = File.ReadAllText(fileName + ".json");
-                    if (!String.IsNullOrEmpty(jsonString))
-                        return JsonSerializer.Deserialize<IEnumerable<string>>(jsonString);
-                }
-            }
-            catch (Exception)
-            {
-                Log.Error($"Can't load doctors from file {fileName}.json. Error.");
-                throw;
-            }
-            return new List<string>();
-        }
-
-        /// <summary>
         /// Загрузка данных из файла
         /// </summary>
         /// <param name="fileName">Имя файла</param>
