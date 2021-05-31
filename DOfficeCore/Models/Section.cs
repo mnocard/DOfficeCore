@@ -2,7 +2,7 @@
 
 namespace DOfficeCore.Models
 {
-    class Section : IEquatable<Section>
+    public class Section : IEquatable<Section>
     {
         // Diagnosis : string - Диагноз, в котором находится раздел
         public string Diagnosis { get; set; }
@@ -15,10 +15,27 @@ namespace DOfficeCore.Models
 
         public bool Equals(Section other)
         {
-            if (this == null && other == null) return true;
-            if (this == null || other == null) return false;
+            if (this is null || other is null)
+                return this is null && other is null;
 
-            return GetHashCode() == other.GetHashCode();
+            if (Diagnosis is null || other.Diagnosis is null)
+                return Diagnosis is null && other.Diagnosis is null;
+
+            if (Diagnosis == other.Diagnosis)
+            {
+                if (Block is null || other.Block is null)
+                    return Block is null && other.Block is null;
+
+                if (Block == other.Block)
+                {
+                    if (Line is null || other.Line is null)
+                        return Line is null && other.Line is null;
+
+                    return Line == other.Line;
+                }
+            }
+
+            return false;
         }
 
         public override bool Equals(Object other)
@@ -26,13 +43,10 @@ namespace DOfficeCore.Models
             if (this == null && other == null) return true;
             if (this == null || other == null) return false;
 
-            //if (other is Section otherSection)
-            //    return Equals(otherSection);
-            //else
-            //    return false;
-
             return Equals(other as Section);
         }
-        public override int GetHashCode() => HashCode.Combine(Diagnosis, Block, Line);
+
+        // GetHashCode не переопределяем, так как данный класс может изменять свои свойства.
+        //public override int GetHashCode() => HashCode.Combine(Diagnosis, Block, Line);
     }
 }
