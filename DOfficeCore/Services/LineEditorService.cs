@@ -19,51 +19,7 @@ namespace DOfficeCore.Services
         ///<inheritdoc/>
         public string OpenDocument(string filepath)
         {
-            if (string.IsNullOrEmpty(filepath))
-            {
-                return string.Empty;
-            }
-
-            const string wordmlNamespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
-
-            var textBuilder = new StringBuilder();
-            string result;
-
-            WordprocessingDocument wdDoc = null;
-
-            try
-            {
-                wdDoc = WordprocessingDocument.Open(filepath, false);
-                var nt = new NameTable();
-                var nsManager = new XmlNamespaceManager(nt);
-                nsManager.AddNamespace("w", wordmlNamespace);
-
-                var xdoc = new XmlDocument(nt);
-                xdoc.Load(wdDoc.MainDocumentPart.GetStream());
-
-                XmlNodeList paragraphNodes = xdoc.SelectNodes("//w:p", nsManager);
-                foreach (XmlNode paragraphNode in paragraphNodes)
-                {
-                    textBuilder.Append(paragraphNode.InnerText);
-                }
-                result = textBuilder.ToString();
-            }
-            catch (System.IO.InvalidDataException e)
-            {
-                Log.Error("Ошибка!\n" + e.Message);
-                throw new Exception($"Cannot open file \"{filepath}\"", e);
-            }
-            catch (Exception e)
-            {
-                Log.Error("Непредвиденная ошибка!\n" + e.Message);
-                throw;
-            }
-            finally
-            {
-                wdDoc?.Dispose();
-            }
-
-            return result;
+            return OpenDocumentAsync(filepath).Result;
         }
 
         ///<inheritdoc/>
@@ -76,15 +32,12 @@ namespace DOfficeCore.Services
 
             var task = await Task.Run(() =>
             {
-
                 var textBuilder = new StringBuilder();
                 string result;
-
                 WordprocessingDocument wdDoc = null;
 
                 try
                 {
-
                     wdDoc = WordprocessingDocument.Open(filepath, false);
                     var nt = new NameTable();
                     var nsManager = new XmlNamespaceManager(nt);
@@ -106,18 +59,18 @@ namespace DOfficeCore.Services
                 }
                 catch (System.IO.InvalidDataException e)
                 {
-                    Log.Error("Ошибка! InvalidDataException.\n" + e.Message);
+                    Log.Error($"Ошибка! InvalidDataException.\n{0}", e.Message);
                     throw new Exception($"Cannot open file \"{filepath}\"", e);
                 }
                 catch (OperationCanceledException e)
                 {
-                    Log.Error("Ошибка! OperationCanceledException.\n" + e.Message);
-                    throw;
+                    Log.Error($"Ошибка! OperationCanceledException.\n{0}", e.Message);
+                    throw new Exception("Unexpected error", e);
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Непредвиденная ошибка!\n" + e.Message);
-                    throw;
+                    Log.Error($"Непредвиденная ошибка!\n{0}", e.Message);
+                    throw new Exception("Unexpected error", e);
                 }
                 finally
                 {
@@ -133,30 +86,7 @@ namespace DOfficeCore.Services
         ///<inheritdoc/>
         public List<string> TextToLines(string lines)
         {
-            if (string.IsNullOrEmpty(lines)) throw new ArgumentNullException();
-
-            lines = Regex.Replace(lines, @"(\d+)([.|,])(\d+)([.|,])(\d+)([г][.|,])|(\d+)([.|,])(\d+)([г][.|,])|(\d+)([г][.|,])|(\d+)([г])|(\d+)([.|,])(\d+)([.|,])(\d+)|(\d+)([.|,])(\d+)", "");
-            lines = Regex.Replace(lines, @"(\s+)", " ");
-
-            var words = lines.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            for (var i = 0; i < words.Count;)
-            {
-                string line = words[i].Trim();
-                if(line.Length > 7)
-                {
-                    line = line.Replace("  ", " ");
-                    line = line.ToLower();
-                    line = char.ToUpper(line[0]) + line.Substring(1);
-                    words[i] = line + ".";
-                    i++;
-                }
-                else
-                {
-                    words.RemoveAt(i);
-                }
-            }
-
-            return words;
+            return TextToLinesAsync(lines).Result;
         }
 
         ///<inheritdoc/>
@@ -166,7 +96,6 @@ namespace DOfficeCore.Services
 
             var task = await Task.Run(() =>
             {
-
                 lines = Regex.Replace(lines, @"(\d+)([.|,])(\d+)([.|,])(\d+)([г][.|,])|(\d+)([.|,])(\d+)([г][.|,])|(\d+)([г][.|,])|(\d+)([г])|(\d+)([.|,])(\d+)([.|,])(\d+)|(\d+)([.|,])(\d+)", "");
                 lines = Regex.Replace(lines, @"(\s+)", " ");
 

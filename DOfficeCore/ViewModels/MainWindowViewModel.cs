@@ -19,7 +19,8 @@ namespace DOfficeCore.ViewModels
         public MainWindowViewModel(IDataProviderService DataProviderService, 
                                     IViewCollectionProvider ViewCollectionProvider, 
                                     IDiaryBoxProvider DiaryBoxProvider,
-                                    ILineEditorService LineEditorService)
+                                    ILineEditorService LineEditorService
+                                    )
         {
             _DataProviderService = DataProviderService;
             _ViewCollectionProvider = ViewCollectionProvider;
@@ -31,19 +32,6 @@ namespace DOfficeCore.ViewModels
             ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
 
             SelectedDataCommand = new LambdaCommand(OnSelectedDataCommandExecuted, CanSelectedDataCommandExecute);
-            
-            AddDateCommand = new LambdaCommand(OnAddDateCommandExecuted, CanAddDateCommandExecute);
-            AddTimeCommand = new LambdaCommand(OnAddTimeCommandExecuted, CanAddTimeCommandExecute);
-            
-            AddDocToDiaryCommand = new LambdaCommand(OnAddDocToDiaryCommandExecuted, CanAddDocToDiaryCommandExecute);
-            AddPositionCommand = new LambdaCommand(OnAddPositionCommandExecuted, CanAddPositionCommandExecute);
-            EditPositionCommand = new LambdaCommand(OnEditPositionCommandExecuted, CanEditPositionCommandExecute);
-            DeletePositionCommand = new LambdaCommand(OnDeletePositionCommandExecuted, CanDeletePositionCommandExecute); 
-            AddDoctorCommand = new LambdaCommand(OnAddDoctorCommandExecuted, CanAddDoctorCommandExecute);
-            EditDoctorCommand = new LambdaCommand(OnEditDoctorCommandExecuted, CanEditDoctorCommandExecute);
-            DeleteDoctorCommand = new LambdaCommand(OnDeleteDoctorCommandExecuted, CanDeleteDoctorCommandExecute);
-            
-            SaveDoctorsListCommand = new LambdaCommand(OnSaveDoctorsListCommandExecuted, CanSaveDoctorsListCommandExecute);
             
             SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted, CanSearchElementCommandExecute);
             
@@ -74,6 +62,7 @@ namespace DOfficeCore.ViewModels
 
             ReturnLineCommand = new LambdaCommand(OnReturnLineCommandExecuted, CanReturnLineCommandExecute);
             #endregion
+
         }
 
         #region Свойства
@@ -174,18 +163,14 @@ namespace DOfficeCore.ViewModels
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            var logger = new LoggerConfiguration()
+            Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(builder)
                 .CreateLogger();
 
             try
             {
-                logger.Information("INFO");
-                var temp = _DataProviderService.LoadDoctorsFromFile("Doctors");
-                if (temp != null) Doctors = new ObservableCollection<string>(temp);
-                temp = _DataProviderService.LoadDoctorsFromFile("Position");
-                if (temp != null) Position = new ObservableCollection<string>(temp);
-
+                Log.Information("INFO");
+                
                 // Тестовые данные
                 //DataCollection = TestData.GetCollection();
                 //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
@@ -210,10 +195,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда закрытия программы</summary>
         public ICommand ClosingAppCommand { get; }
         /// <summary>Команда закрытия программы</summary>
-        private void OnClosingAppCommandExecuted(object parameter)
-        {
-            Log.CloseAndFlush();
-        }
+        private void OnClosingAppCommandExecuted(object parameter) => Log.CloseAndFlush();
 
         private bool CanClosingAppCommandExecute(object parameter) => true;
 

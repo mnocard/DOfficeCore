@@ -20,7 +20,7 @@ namespace DOfficeCore.Services
         /// <returns></returns>
         public bool SaveDataToFile<T>(IEnumerable<T> data, string fileName)
         {
-            if (data == null) return false;
+            if (data is null) return false;
             else if (string.IsNullOrEmpty(fileName)) return false;
 
             try
@@ -29,49 +29,14 @@ namespace DOfficeCore.Services
                 File.WriteAllText(fileName + ".json", json, Encoding.UTF8);
             }
 
-            catch (Exception)
+            catch (Exception e)
             {
-                Log.Error($"Can't save file. Error.");
-                throw;
+                Log.Error($"Can't save file. Error:\n{0}", e.Message);
+                throw new Exception("Unexpected error", e);
             }
 
             Log.Information("File saved succesfully");
             return true;
-        }
-
-        /// <summary>
-        /// Загрузка списка докторов из файла (применимо к должностям
-        /// </summary>
-        /// <param name="fileName">Имя файла</param>
-        /// <returns>Возвращаемый список докторов или долдностей</returns>
-        public IEnumerable<string> LoadDoctorsFromFile(string fileName)
-        {
-
-            if (string.IsNullOrEmpty(fileName)) return new List<string>();
-
-            try
-            {
-                if (!File.Exists(fileName + ".json"))
-                {
-                    using FileStream fs = File.Create(fileName + ".json");
-
-                    Log.Verbose($"File {fileName} doesn't exist");
-
-                    return new List<string>();
-                }
-                else
-                {
-                    var jsonString = File.ReadAllText(fileName + ".json");
-                    if (!String.IsNullOrEmpty(jsonString))
-                        return JsonSerializer.Deserialize<IEnumerable<string>>(jsonString);
-                }
-            }
-            catch (Exception)
-            {
-                Log.Error($"Can't load doctors from file {fileName}.json. Error.");
-                throw;
-            }
-            return new List<string>();
         }
 
         /// <summary>
@@ -82,6 +47,8 @@ namespace DOfficeCore.Services
         public List<Section> LoadDataFromFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName)) return new List<Section>();
+
+            var result = new List<Section>();
             try
             {
                 if (!File.Exists(fileName + ".json"))
@@ -94,16 +61,16 @@ namespace DOfficeCore.Services
                 {
                     var jsonString = File.ReadAllText(fileName + ".json");
 
-                    if (!String.IsNullOrEmpty(jsonString))
-                        return JsonSerializer.Deserialize<List<Section>>(jsonString);
+                    if (!string.IsNullOrEmpty(jsonString))
+                        result.AddRange(JsonSerializer.Deserialize<List<Section>>(jsonString));
                 }
             }
             catch (Exception e)
             {
-                Log.Error($"Can't load data from file {fileName}.json. Error.");
-                throw e;
+                Log.Error($"Can't load data from file {0}.json. Error:\n{1}.", fileName, e.Message);
+                throw new Exception("Unexpected error", e);
             }
-            return new List<Section>();
+            return result;
         }
     }
 }
