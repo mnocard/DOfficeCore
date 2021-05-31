@@ -316,6 +316,7 @@ namespace DOfficeCore.ViewModels
             if (DataCollection != null && CurrentSection != null && DiagnosisMultiBox != null)
             {
                 _ViewCollectionProvider.EditDiagnosis(DataCollection, CurrentSection, DiagnosisMultiBox);
+                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
                 Status = "Диагноз " + CurrentSection.Diagnosis + " переименован в " + DiagnosisMultiBox;
             }
             else Status = "Нечего редактировать";
@@ -334,6 +335,7 @@ namespace DOfficeCore.ViewModels
             if (DataCollection != null && CurrentSection != null && BlockMultiBox != null)
             {
                 _ViewCollectionProvider.EditBlock(DataCollection, CurrentSection, BlockMultiBox);
+                BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
                 Status = "Раздел " + CurrentSection.Block + " переименован в " + BlockMultiBox;
             }
             else Status = "Нечего редактировать";
@@ -352,6 +354,7 @@ namespace DOfficeCore.ViewModels
             if (DataCollection != null && CurrentSection != null && LineMultiBox != null)
             {
                 _ViewCollectionProvider.EditLine(DataCollection, CurrentSection, LineMultiBox);
+                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
                 Status = "Предложение изменено";
             }
             else Status = "Нечего редактировать";
