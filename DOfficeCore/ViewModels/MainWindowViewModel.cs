@@ -1,4 +1,5 @@
-﻿using DOfficeCore.Infrastructure.Commands;
+﻿using DOfficeCore.Data;
+using DOfficeCore.Infrastructure.Commands;
 using DOfficeCore.Models;
 using DOfficeCore.Services;
 using DOfficeCore.Services.Interfaces;
@@ -39,6 +40,8 @@ namespace DOfficeCore.ViewModels
             CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
             EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
             ClearDiaryBoxCommand = new LambdaCommand(OnClearDiaryBoxCommandExecuted, CanClearDiaryBoxCommandExecute);
+            ChangeTabCommand = new LambdaCommand(OnChangeTabCommandExecuted, CanChangeTabCommandExecute);
+
             #endregion
 
             #region Команды окна редактирования строк
@@ -76,6 +79,62 @@ namespace DOfficeCore.ViewModels
             get => _Title;
             set => Set(ref _Title, value);
         }
+        #endregion
+
+        #region DiaryVisibility : bool - Видимость вкладки дневника
+
+        /// <summary>Видимость вкладки дневника</summary>
+        private Visibility _DiaryVisibility = Visibility.Visible;
+
+        /// <summary>Видимость вкладки дневника</summary>
+        public Visibility DiaryVisibility
+        {
+            get => _DiaryVisibility;
+            set => Set(ref _DiaryVisibility, value);
+        }
+
+        #endregion
+
+        #region LineEditorVisibility : bool - Видимость вкладки обработки предложений
+
+        /// <summary>Видимость вкладки обработки предложений</summary>
+        private Visibility _LineEditorVisibility = Visibility.Collapsed;
+
+        /// <summary>Видимость вкладки обработки предложений</summary>
+        public Visibility LineEditorVisibility
+        {
+            get => _LineEditorVisibility;
+            set => Set(ref _LineEditorVisibility, value);
+        }
+
+        #endregion
+
+        #region DiaryZIndex : int - Положение вкладки дневника
+
+        /// <summary>Положение вкладки дневника</summary>
+        private int _DiaryZIndex = 1;
+
+        /// <summary>Положение вкладки дневника</summary>
+        public int DiaryZIndex
+        {
+            get => _DiaryZIndex;
+            set => Set(ref _DiaryZIndex, value);
+        }
+
+        #endregion
+
+        #region LineEditorZIndex : int - Положение вкладки обработки предложений
+
+        /// <summary>Положение вкладки обработки предложений</summary>
+        private int _LineEditorZIndex = 0;
+
+        /// <summary>Положение вкладки обработки предложений</summary>
+        public int LineEditorZIndex
+        {
+            get => _LineEditorZIndex;
+            set => Set(ref _LineEditorZIndex, value);
+        }
+
         #endregion
 
         #region Status : string - Состояние программы
@@ -170,14 +229,14 @@ namespace DOfficeCore.ViewModels
             try
             {
                 Log.Information("INFO");
-                
+
                 // Тестовые данные
-                //DataCollection = TestData.GetCollection();
-                //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                DataCollection = TestData.GetCollection();
+                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
                 // Реальные данные
-                DataCollection = _DataProviderService.LoadDataFromFile("lines");
-                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                //DataCollection = _DataProviderService.LoadDataFromFile("lines");
+                //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
             }
             catch (Exception e)
             {
@@ -198,6 +257,37 @@ namespace DOfficeCore.ViewModels
         private void OnClosingAppCommandExecuted(object parameter) => Log.CloseAndFlush();
 
         private bool CanClosingAppCommandExecute(object parameter) => true;
+
+        #endregion
+
+
+        #region Команда переключения вкладок между дневником и обработкой предложений
+        /// <summary>Команда переключения вкладок между дневником и обработкой предложений</summary>
+        public ICommand ChangeTabCommand { get; }
+        /// <summary>Команда переключения вкладок между дневником и обработкой предложений</summary>
+        private void OnChangeTabCommandExecuted(object parameter)
+        {
+            if (DiaryVisibility is Visibility.Visible && LineEditorVisibility is Visibility.Collapsed && DiaryZIndex > LineEditorZIndex)
+            {
+                DiaryVisibility = Visibility.Collapsed;
+                LineEditorVisibility = Visibility.Visible;
+                DiaryZIndex = 0;
+                LineEditorZIndex = 1;
+            }
+            else if (DiaryVisibility is Visibility.Collapsed && LineEditorVisibility is Visibility.Visible && DiaryZIndex < LineEditorZIndex)
+            {
+                DiaryVisibility = Visibility.Visible;
+                LineEditorVisibility = Visibility.Collapsed;
+                DiaryZIndex = 1;
+                LineEditorZIndex = 0;
+            }
+            else
+            {
+                MessageBox.Show("Непредвиденная ошибка! Не удаётся переключиться между окнами.", "Ошибка!", MessageBoxButton.OK);
+            }
+        }
+
+        private bool CanChangeTabCommandExecute(object parameter) => true;
 
         #endregion
 
