@@ -117,16 +117,12 @@ namespace DOfficeCore.Services
         public bool EditDiagnosis(List<Section> DataCollection, Section CurrentSection, string MultiBox)
         {
             bool result = false;
-
             foreach (Section item in DataCollection)
-            {
                 if (item.Diagnosis.Equals(CurrentSection.Diagnosis))
                 {
                     item.Diagnosis = MultiBox;
                     result = true;
                 }
-            }
-
             return result;
         }
 

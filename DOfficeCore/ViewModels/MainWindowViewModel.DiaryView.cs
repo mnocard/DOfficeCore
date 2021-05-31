@@ -76,22 +76,19 @@ namespace DOfficeCore.ViewModels
         {
             if ((parameter is ListBox listBox) && listBox.SelectedItem is Section CurrentItem)
             {
-                CurrentSection = CurrentItem;
+                CurrentSection = Section.CloneSection(CurrentItem);
                 switch (listBox.Name)
                 {
-                    
                     case "dgCodes": 
                         BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
                         LinesList = new ObservableCollection<Section>();
                         break;
-                    
                     case "dgBlocksNames":
                         LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
                         break;
                     case "dgLinesContent":
                         DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, CurrentSection.Line);
                         break;
-                    
                     default:
                         break;
                 }

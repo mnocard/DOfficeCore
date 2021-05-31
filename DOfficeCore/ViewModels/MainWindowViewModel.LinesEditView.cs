@@ -214,7 +214,7 @@ namespace DOfficeCore.ViewModels
                 }
                 else if (listBox.SelectedItem is Section CurrentItem)
                 {
-                    CurrentSection = CurrentItem;
+                    CurrentSection = Section.CloneSection(CurrentItem);
                     switch (listBox.Name)
                     {
                         case "dgDiagnosisLineEditView":

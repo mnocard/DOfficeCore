@@ -46,6 +46,18 @@ namespace DOfficeCore.Models
             return Equals(other as Section);
         }
 
+        public static Section CloneSection(Section other)
+        {
+            if (other is null) return null;
+
+            return new Section
+            {
+                Diagnosis = other.Diagnosis,
+                Block = other.Block,
+                Line = other.Line,
+            };
+        }
+
         // GetHashCode не переопределяем, так как данный класс может изменять свои свойства.
         //public override int GetHashCode() => HashCode.Combine(Diagnosis, Block, Line);
     }
