@@ -76,7 +76,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка диагнозов</summary>
         private void OnSelectedDiagnosisCommandExecuted(object parameter)
         {
-            if ((parameter is ListBox listBox) && listBox.SelectedItem is Section CurrentItem)
+            if (parameter is Section CurrentItem)
             {
                 CurrentSection = Section.CloneSection(CurrentItem);
                 BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
@@ -93,7 +93,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка разделов</summary>
         private void OnSelectedBlockCommandExecuted(object parameter)
         {
-            if ((parameter is ListBox listBox) && listBox.SelectedItem is Section CurrentItem)
+            if (parameter is Section CurrentItem)
             {
                 CurrentSection = Section.CloneSection(CurrentItem);
                 LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
@@ -109,7 +109,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка строк</summary>
         private void OnSelectedLineCommandExecuted(object parameter)
         {
-            if ((parameter is ListBox listBox) && listBox.SelectedItem is Section CurrentItem)
+            if (parameter is Section CurrentItem)
             {
                 CurrentSection = Section.CloneSection(CurrentItem);
                 DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, CurrentSection.Line);
