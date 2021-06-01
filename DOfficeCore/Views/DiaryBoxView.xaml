@@ -150,7 +150,7 @@
                 SelectionMode="Single">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                        <i:InvokeCommandAction Command="{Binding SelectedDiagnosisCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
@@ -190,7 +190,7 @@
                 SelectionMode="Single">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                        <i:InvokeCommandAction Command="{Binding SelectedBlockCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
@@ -229,7 +229,7 @@
                 SelectionMode="Single">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding SelectedDataCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                        <i:InvokeCommandAction Command="{Binding SelectedLineCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
@@ -257,9 +257,10 @@
             Grid.Row="1"
             Grid.Column="1"
             MinWidth="300"
-            Margin="5,10,5,5" Foreground="Black"
+            Margin="5,10,5,5"
             materialDesign:HintAssist.Hint="Введите текст"
             AcceptsReturn="True"
+            Foreground="Black"
             IsReadOnly="{Binding EnableDiaryBox}"
             Text="{Binding DiaryBox}"
             TextWrapping="Wrap"
