@@ -126,7 +126,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда поиска элементов</summary>
         private void OnSearchElementCommandExecuted(object parameter)
         {
-            if (MultiBox != null && MultiBox != string.Empty && MultiBox.Length >= 3)
+            if (!string.IsNullOrWhiteSpace(MultiBox) && MultiBox.Length >= 3)
             {
                 DiagnosisList = _ViewCollectionProvider.SearchDiagnosis(DataCollection, MultiBox);
                 if (DiagnosisList.Count == 0) DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
@@ -151,10 +151,10 @@ namespace DOfficeCore.ViewModels
         /// <summary>Создание случайного дневника</summary>
         private void OnRandomCommandExecuted(object parameter)
         {
-            if ((parameter is ListBox) && CurrentSection != null)
+            if (CurrentSection != null)
             {
                 DiaryBox = _ViewCollectionProvider.RandomDiary(DataCollection, CurrentSection);
-                Status = "Случайный дневник создан согласно записям диагноза: " + CurrentSection.Diagnosis;
+                Status = "Случайный дневник создан согласно записям: " + CurrentSection.Diagnosis;
             }
         }
 
@@ -168,7 +168,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда копирования текста</summary>
         private void OnCopyTextCommandExecuted(object parameter)
         {
-            if (parameter is string temp && temp != string.Empty && temp != "")
+            if (parameter is string temp && !string.IsNullOrWhiteSpace(temp))
             {
                 Clipboard.SetText(temp);
                 EnableDiaryBox = true;
@@ -201,7 +201,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда очистки дневника</summary>
         private void OnClearDiaryBoxCommandExecuted(object parameter)
         {
-            DiaryBox = null;
+            DiaryBox = string.Empty;
             EnableDiaryBox = true;
             Status = "Начинаем с чистого листа";
         }

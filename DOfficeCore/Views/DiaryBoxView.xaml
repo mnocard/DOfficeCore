@@ -62,10 +62,7 @@
                 HorizontalAlignment="Right"
                 DockPanel.Dock="Right"
                 Orientation="Horizontal">
-                <Button
-                    Margin="10,0"
-                    Command="{Binding RandomCommand}"
-                    CommandParameter="{Binding ElementName=dgCodes}">
+                <Button Margin="10,0" Command="{Binding RandomCommand}">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
@@ -140,7 +137,7 @@
                 FontSize="15"
                 FontWeight="Bold"
                 Foreground="Black"
-                Text="Диагноз:" />
+                Text="Основа:" />
             <ListBox
                 x:Name="dgCodes"
                 Grid.Row="1"
