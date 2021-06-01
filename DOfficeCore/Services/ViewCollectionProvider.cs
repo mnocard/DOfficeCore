@@ -1,4 +1,5 @@
 ﻿using DOfficeCore.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,10 +28,8 @@ namespace DOfficeCore.Services
             var DiagnosisList = new ObservableCollection<Section>();
 
             foreach (Section item in DataCollection)
-            {
-                if (DiagnosisList.Count == 0) DiagnosisList.Add(item);
-                else if (!DiagnosisList.Any(t => t.Diagnosis.Equals(item.Diagnosis))) DiagnosisList.Add(item);
-            }
+                if (!DiagnosisList.Any(t => t.Diagnosis.Equals(item.Diagnosis)))
+                    DiagnosisList.Add(item);
 
             return DiagnosisList;
         }
@@ -44,14 +43,13 @@ namespace DOfficeCore.Services
         public ObservableCollection<Section> BlocksFromDataToView(IEnumerable<Section> DataCollection, Section CurrentSection)
         {
             if (CurrentSection == null || CurrentSection.Block == null) return new ObservableCollection<Section>();
-            
+
             var BlockList = new ObservableCollection<Section>();
 
             foreach (Section item in DataCollection)
-            {
-                if (BlockList.Count == 0 && item.Diagnosis.Equals(CurrentSection.Diagnosis)) BlockList.Add(item);
-                else if (item.Diagnosis.Equals(CurrentSection.Diagnosis) && !BlockList.Any(t => t.Block.Equals(item.Block))) BlockList.Add(item);
-            }
+                if (item.Diagnosis.Equals(CurrentSection.Diagnosis))
+                    if (!BlockList.Any(t => t.Block.Equals(item.Block)))
+                        BlockList.Add(item);
 
             return BlockList;
         }
@@ -70,7 +68,8 @@ namespace DOfficeCore.Services
 
             foreach (Section item in DataCollection)
             {
-                if (item.Block != null && item.Block.Equals(CurrentSection.Block) && item.Diagnosis.Equals(CurrentSection.Diagnosis)) LineList.Add(item);
+                if (item.Block != null && item.Block.Equals(CurrentSection.Block) && item.Diagnosis.Equals(CurrentSection.Diagnosis))
+                    LineList.Add(item);
             }
 
             return LineList;
@@ -85,13 +84,8 @@ namespace DOfficeCore.Services
         /// <param name="DataCollection">Коллекция элемента</param>
         /// <param name="CurrentSection">Секция, из которого берется диагноз</param>
         /// <returns>True если удаление прошло успешно</returns>
-        public bool RemoveDiagnosis(List<Section> DataCollection, Section CurrentSection)
-        {
-            var result = DataCollection.RemoveAll(t => t.Diagnosis.Equals(CurrentSection.Diagnosis));
-
-            if (result > 0) return true;
-            else return false;
-        }
+        public bool RemoveDiagnosis(List<Section> DataCollection, Section CurrentSection) =>
+              DataCollection.RemoveAll(t => t.Diagnosis.Equals(CurrentSection.Diagnosis)) > 0;
 
         /// <summary>
         /// Удаление всех элементов раздела
@@ -99,13 +93,8 @@ namespace DOfficeCore.Services
         /// <param name="DataCollection">Коллекция из которой происходит удаление</param>
         /// <param name="CurrentSection">Секция, из которой берутся данные о диагнозе и разделе</param>
         /// <returns>True если удаление прошло успешно</returns>
-        public bool RemoveBlock(List<Section> DataCollection, Section CurrentSection)
-        {
-            var result = DataCollection.RemoveAll(t => t.Diagnosis.Equals(CurrentSection.Diagnosis) && t.Block.Equals(CurrentSection.Block));
-
-            if (result > 0) return true;
-            else return false;
-        }
+        public bool RemoveBlock(List<Section> DataCollection, Section CurrentSection) =>
+            DataCollection.RemoveAll(t => t.Diagnosis.Equals(CurrentSection.Diagnosis) && t.Block.Equals(CurrentSection.Block)) > 0;
 
         /// <summary>
         /// Удаление строки
@@ -128,16 +117,12 @@ namespace DOfficeCore.Services
         public bool EditDiagnosis(List<Section> DataCollection, Section CurrentSection, string MultiBox)
         {
             bool result = false;
-
             foreach (Section item in DataCollection)
-            {
                 if (item.Diagnosis.Equals(CurrentSection.Diagnosis))
                 {
                     item.Diagnosis = MultiBox;
                     result = true;
                 }
-            }
-
             return result;
         }
 
@@ -315,7 +300,7 @@ namespace DOfficeCore.Services
             {
                 foreach (Section item in DataCollection)
                 {
-                    if(item.Diagnosis.Equals(CurrentSection.Diagnosis) && item.Block.Equals(CurrentSection.Block) && item.Line == null)
+                    if (item.Diagnosis.Equals(CurrentSection.Diagnosis) && item.Block.Equals(CurrentSection.Block) && item.Line == null)
                     {
                         item.Line = MultiBox;
                         return true;

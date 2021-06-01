@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+
 using DOfficeCore.Models;
 
 namespace DOfficeCore.ViewModels
@@ -68,37 +69,54 @@ namespace DOfficeCore.ViewModels
 
         #region Команды вкладки дневника
 
-        #region Изменение отображения данных по щелчку
-        /// <summary>Изменение отображения данных по щелчку</summary>
-        public ICommand SelectedDataCommand { get; }
-        /// <summary>Изменение отображения данных по щелчку</summary>
-        private void OnSelectedDataCommandExecuted(object parameter)
+
+        #region Щелчок по элементу списка диагнозов
+        /// <summary>Щелчок по элементу списка диагнозов</summary>
+        public ICommand SelectedDiagnosisCommand { get; }
+        /// <summary>Щелчок по элементу списка диагнозов</summary>
+        private void OnSelectedDiagnosisCommandExecuted(object parameter)
         {
             if ((parameter is ListBox listBox) && listBox.SelectedItem is Section CurrentItem)
             {
-                CurrentSection = CurrentItem;
-                switch (listBox.Name)
-                {
-                    
-                    case "dgCodes": 
-                        BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
-                        LinesList = new ObservableCollection<Section>();
-                        break;
-                    
-                    case "dgBlocksNames":
-                        LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
-                        break;
-                    case "dgLinesContent":
-                        DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, CurrentSection.Line);
-                        break;
-                    
-                    default:
-                        break;
-                }
+                CurrentSection = Section.CloneSection(CurrentItem);
+                BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
+                LinesList = new ObservableCollection<Section>();
+            }
+        }
+        private bool CanSelectedDiagnosisCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Щелчок по элементу списка разделов
+        /// <summary>Щелчок по элементу списка разделов</summary>
+        public ICommand SelectedBlockCommand { get; }
+        /// <summary>Щелчок по элементу списка разделов</summary>
+        private void OnSelectedBlockCommandExecuted(object parameter)
+        {
+            if ((parameter is ListBox listBox) && listBox.SelectedItem is Section CurrentItem)
+            {
+                CurrentSection = Section.CloneSection(CurrentItem);
+                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+            }
+        }
+        private bool CanSelectedBlockCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Щелчок по элементу списка строк
+        /// <summary>Щелчок по элементу списка строк</summary>
+        public ICommand SelectedLineCommand { get; }
+        /// <summary>Щелчок по элементу списка строк</summary>
+        private void OnSelectedLineCommandExecuted(object parameter)
+        {
+            if ((parameter is ListBox listBox) && listBox.SelectedItem is Section CurrentItem)
+            {
+                CurrentSection = Section.CloneSection(CurrentItem);
+                DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, CurrentSection.Line);
             }
         }
 
-        private bool CanSelectedDataCommandExecute(object parameter) => parameter != null;
+        private bool CanSelectedLineCommandExecute(object parameter) => true;
 
         #endregion
 
@@ -191,7 +209,7 @@ namespace DOfficeCore.ViewModels
         private bool CanClearDiaryBoxCommandExecute(object parameter) => true;
 
         #endregion
-        
+
         #endregion
     }
 }
