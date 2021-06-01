@@ -32,10 +32,6 @@ namespace DOfficeCore.ViewModels
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
             ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
 
-            SelectedDiagnosisCommand = new LambdaCommand(OnSelectedDiagnosisCommandExecuted, CanSelectedDiagnosisCommandExecute);
-            SelectedBlockCommand = new LambdaCommand(OnSelectedBlockCommandExecuted, CanSelectedBlockCommandExecute);
-            SelectedLineCommand = new LambdaCommand(OnSelectedLineCommandExecuted, CanSelectedLineCommandExecute);
-
             SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted, CanSearchElementCommandExecute);
             
             RandomCommand = new LambdaCommand(OnRandomCommandExecuted, CanRandomCommandExecute);
@@ -51,7 +47,11 @@ namespace DOfficeCore.ViewModels
             GetTextFromClipboardCommand = new LambdaCommand(OnGetTextFromClipboardCommandExecuted, CanGetTextFromClipboardCommandExecute); 
             SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
             ClearListBoxCommand = new LambdaCommand(OnClearListBoxCommandExecuted, CanClearListBoxCommandExecute);
-            TransferCommand = new LambdaCommand(OnTransferCommandExecuted, CanTransferCommandExecute);
+            
+            SelectedRawLineCommand = new LambdaCommand(OnSelectedRawLineCommandExecuted, CanSelectedRawLineCommandExecute);
+            SelectedDiagnosisELCommand = new LambdaCommand(OnSelectedDiagnosisELCommandExecuted, CanSelectedDiagnosisELCommandExecute);
+            SelectedBlockELCommand = new LambdaCommand(OnSelectedBlockELCommandExecuted, CanSelectedBlockELCommandExecute);
+            SelectedLinesELCommand = new LambdaCommand(OnSelectedLinesELCommandExecuted, CanSelectedLinesELCommandExecute);
 
             AddDiagnosisCommand = new LambdaCommand(OnAddDiagnosisCommandExecuted, CanAddDiagnosisCommandExecute);
             AddBlockCommand = new LambdaCommand(OnAddBlockCommandExecuted, CanAddBlockCommandExecute);

@@ -23,18 +23,23 @@
         <DockPanel
             Grid.Row="0"
             Grid.ColumnSpan="3"
-            Background="#FF9E9E9E" LastChildFill="False"
-            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Border BorderBrush="#FF686868" BorderThickness="2" DockPanel.Dock="Bottom" />
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="#FF9E9E9E"
+            LastChildFill="False">
+            <Border
+                BorderBrush="#FF686868"
+                BorderThickness="2"
+                DockPanel.Dock="Bottom" />
             <Button
-                    Command="{Binding ChangeTabCommand}"
-                    Margin="15, 0"
-                    Cursor="Hand"
-                    ToolTip="Найти элемент">
+                Margin="15,0"
+                Command="{Binding ChangeTabCommand}"
+                Cursor="Hand"
+                ToolTip="Найти элемент">
                 <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="ClipboardFlow" />
+                    Width="24"
+                    Height="24"
+                    Kind="ClipboardFlow" />
             </Button>
             <Button
                 Margin="20,0,0,0"
@@ -93,7 +98,7 @@
                 </ListBox.ItemTemplate>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding TransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                        <i:InvokeCommandAction Command="{Binding SelectedRawLineCommand}" CommandParameter="{Binding ElementName=lbRawLines, Path=SelectedItem}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListBox>
@@ -174,7 +179,7 @@
                 </ListBox.ItemTemplate>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding TransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                        <i:InvokeCommandAction Command="{Binding SelectedDiagnosisELCommand}" CommandParameter="{Binding ElementName=dgDiagnosisLineEditView, Path=SelectedItem}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListBox>
@@ -240,7 +245,7 @@
                 </ListBox.ItemTemplate>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding TransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                        <i:InvokeCommandAction Command="{Binding SelectedBlockELCommand}" CommandParameter="{Binding ElementName=dgBlocksLineEditView, Path=SelectedItem}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListBox>
@@ -325,7 +330,7 @@
                 </ListBox.ItemTemplate>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding TransferCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                        <i:InvokeCommandAction Command="{Binding SelectedLinesELCommand}" CommandParameter="{Binding ElementName=dgLinesLineEditView, Path=SelectedItem}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListBox>

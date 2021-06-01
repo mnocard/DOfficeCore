@@ -197,49 +197,77 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
-        #region Перенос строки из необработанной коллекции
-        /// <summary>Перенос строки из необработанной коллекции</summary>
-        public ICommand TransferCommand { get; }
-        /// <summary>Перенос строки из необработанной коллекции</summary>
-        private void OnTransferCommandExecuted(object parameter)
+        #region Щелчок по элементу списка необработанных строк
+        /// <summary>Щелчок по элементу списка необработанных строк</summary>
+        public ICommand SelectedRawLineCommand { get; }
+        /// <summary>Щелчок по элементу списка необработанных строк</summary>
+        private void OnSelectedRawLineCommandExecuted(object parameter)
         {
-            if (parameter is ListBox listBox)
+            if (parameter is string rawLine 
+                && !string.IsNullOrWhiteSpace(rawLine)
+                && CurrentSection != null)
             {
-                if (listBox.Name.Equals("lbRawLines") && CurrentSection != null)
-                {
-                    _ViewCollectionProvider.AddLine(DataCollection, CurrentSection, (string)listBox.SelectedItem);
-                    LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
-                    RawLines.Remove((string)listBox.SelectedItem);
-                    Status = "Выбранная строка перемещена в таблицу предложений";
-                }
-                else if (listBox.SelectedItem is Section CurrentItem)
-                {
-                    CurrentSection = Section.CloneSection(CurrentItem);
-                    switch (listBox.Name)
-                    {
-                        case "dgDiagnosisLineEditView":
-                            BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
-                            LinesList = new ObservableCollection<Section>();
-                            DiagnosisMultiBox = CurrentSection.Diagnosis;
-                            BlockMultiBox = null;
-                            LineMultiBox = null;
-                            break;
-                        case "dgBlocksLineEditView":
-                            LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
-                            BlockMultiBox = CurrentSection.Block;
-                            LineMultiBox = null;
-                            break;
-                        case "dgLinesLineEditView":
-                            LineMultiBox = CurrentSection.Line;
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                _ViewCollectionProvider.AddLine(DataCollection, CurrentSection, rawLine);
+                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+                RawLines.Remove(rawLine);
+                Status = "Выбранная строка перемещена в таблицу предложений";
             }
         }
+        private bool CanSelectedRawLineCommandExecute(object parameter) => true;
 
-        private bool CanTransferCommandExecute(object parameter) => true;
+        #endregion
+
+        #region Щелчок по элементу списка диагнозов в окне редактирования строк
+        /// <summary>Щелчок по элементу списка диагнозов в окне редактирования строк</summary>
+        public ICommand SelectedDiagnosisELCommand { get; }
+        /// <summary>Щелчок по элементу списка диагнозов в окне редактирования строк</summary>
+        private void OnSelectedDiagnosisELCommandExecuted(object parameter)
+        {
+            if (parameter is Section CurrentItem)
+            {
+                CurrentSection = Section.CloneSection(CurrentItem);
+                BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
+                LinesList = new ObservableCollection<Section>();
+                DiagnosisMultiBox = CurrentSection.Diagnosis;
+                BlockMultiBox = null;
+                LineMultiBox = null;
+            }
+        }
+        private bool CanSelectedDiagnosisELCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Щелчок по элементу списка блоков в окне редактирования строк
+        /// <summary>Щелчок по элементу списка блоков в окне редактирования строк</summary>
+        public ICommand SelectedBlockELCommand { get; }
+        /// <summary>Щелчок по элементу списка блоков в окне редактирования строк</summary>
+        private void OnSelectedBlockELCommandExecuted(object parameter)
+        {
+            if (parameter is Section CurrentItem)
+            {
+                CurrentSection = Section.CloneSection(CurrentItem);
+                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+                BlockMultiBox = CurrentSection.Block;
+                LineMultiBox = null;
+            }
+        }
+        private bool CanSelectedBlockELCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Щелчок по элементу списка строк в окне редактирования строк
+        /// <summary>Щелчок по элементу списка строк в окне редактирования строк</summary>
+        public ICommand SelectedLinesELCommand { get; }
+        /// <summary>Щелчок по элементу списка строк в окне редактирования строк</summary>
+        private void OnSelectedLinesELCommandExecuted(object parameter)
+        {
+            if (parameter is Section CurrentItem)
+            {
+                CurrentSection = Section.CloneSection(CurrentItem);
+                LineMultiBox = CurrentSection.Line;
+            }
+        }
+        private bool CanSelectedLinesELCommandExecute(object parameter) => true;
 
         #endregion
 
