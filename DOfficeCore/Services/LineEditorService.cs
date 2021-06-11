@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -57,7 +58,12 @@ namespace DOfficeCore.Services
                     }
                     result = textBuilder.ToString();
                 }
-                catch (System.IO.InvalidDataException e)
+                catch(IOException e)
+                {
+                    Log.Error($"Ошибка! IOException: файл уже используется другой программой.\n{0}", e.Message);
+                    throw new Exception("Unexpected error", e);
+                }
+                catch (InvalidDataException e)
                 {
                     Log.Error($"Ошибка! InvalidDataException.\n{0}", e.Message);
                     throw new Exception($"Cannot open file \"{filepath}\"", e);
@@ -121,7 +127,8 @@ namespace DOfficeCore.Services
                         token.ThrowIfCancellationRequested();
                     }
                 }
-                return words;
+
+                return words.Select(w => w).Distinct().ToList();
             }).ConfigureAwait(false);
 
             return task;
