@@ -327,20 +327,25 @@ namespace DOfficeCore.Services
         /// <param name="DataCollection">Коллекция элементов базы данных</param>
         /// <param name="CurrentSection">Выбранная секция базы данных</param>
         /// <returns>Случайный дневник</returns>
-        public string RandomDiary(List<Section> DataCollection, Section CurrentSection)
+        public (string, ObservableCollection<Section>) RandomDiary(List<Section> DataCollection, Section CurrentSection)
         {
             string result = "";
             var rnd = new Random();
 
             var BlockList = BlocksFromDataToView(DataCollection, CurrentSection);
-
-            foreach (Section item in BlockList)
+            var linesOfDiary = new ObservableCollection<Section>();
+            foreach (Section block in BlockList)
             {
-                var LineList = LinesFromDataToView(DataCollection, item);
-                if (LineList.Count > 0) result += LineList[rnd.Next(LineList.Count)].Line + " ";
+                var LineList = LinesFromDataToView(DataCollection, block);
+                if (LineList.Count > 0)
+                {
+                    var section = LineList[rnd.Next(LineList.Count)];
+                    linesOfDiary.Add(section);
+                    result += section.Line + " ";
+                }
             }
 
-            return result;
+            return (result, linesOfDiary);
         }
         #endregion
 

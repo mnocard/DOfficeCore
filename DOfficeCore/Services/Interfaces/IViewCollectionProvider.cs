@@ -25,7 +25,7 @@ namespace DOfficeCore.Services
         Section AddDiagnosis(List<Section> DataCollection, string MultiBox);
         Section AddBlock(List<Section> DataCollection, Section CurrentSection, string MultiBox);
         Section AddLine(List<Section> DataCollection, Section CurrentSection, string MultiBox);
-        
-        string RandomDiary(List<Section> DataCollection, Section CurrentSection);
+
+        (string, ObservableCollection<Section>) RandomDiary(List<Section> DataCollection, Section CurrentSection);
     }
 }

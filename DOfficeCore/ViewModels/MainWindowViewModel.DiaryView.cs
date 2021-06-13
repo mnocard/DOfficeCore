@@ -151,7 +151,7 @@ namespace DOfficeCore.ViewModels
         {
             if (CurrentSection != null)
             {
-                DiaryBox = _ViewCollectionProvider.RandomDiary(DataCollection, CurrentSection);
+                (DiaryBox, LinesList) = _ViewCollectionProvider.RandomDiary(DataCollection, CurrentSection);
                 Status = "Случайный дневник создан согласно записям: " + CurrentSection.Diagnosis;
             }
         }
