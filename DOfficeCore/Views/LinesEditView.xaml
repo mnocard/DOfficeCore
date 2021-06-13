@@ -117,138 +117,148 @@
             MinWidth="100"
             Background="#FF9E9E9E">
             <Grid.RowDefinitions>
-                <RowDefinition Height="40" />
-                <RowDefinition Height="40" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="40" />
-                <RowDefinition Height="40" />
+                <RowDefinition Height="5" />
                 <RowDefinition Height="2*" />
             </Grid.RowDefinitions>
-            <TextBox
-                x:Name="tbDiagnosisBox"
-                Grid.Row="0"
-                Margin="10,0,10,3"
-                VerticalContentAlignment="Center"
-                materialDesign:HintAssist.Hint="Введите текст"
-                materialDesign:TextFieldAssist.HasClearButton="True"
-                CaretBrush="White"
-                DockPanel.Dock="Bottom"
-                Text="{Binding DiagnosisMultiBox}" />
-            <StackPanel Grid.Row="1" Orientation="Horizontal">
-                <Button
-                    Margin="3,0"
-                    Command="{Binding AddDiagnosisCommand}"
-                    ToolTip="Добавить новый диагноз">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="AddCircleOutline" />
-                </Button>
-                <Button
-                    Command="{Binding EditDiagnosisCommand}"
-                    Cursor="Hand"
-                    ToolTip="Редактировать выбранный диагноз">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="PencilOutline" />
-                </Button>
-                <Button
-                    Margin="3,0"
-                    Command="{Binding RemoveDiagnosisCommand}"
-                    ToolTip="Удалить выбранный диагноз">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="TrashCanOutline" />
-                </Button>
-            </StackPanel>
-            <ListBox
-                x:Name="dgDiagnosisLineEditView"
-                Grid.Row="2"
-                Background="#FF9E9E9E"
-                DockPanel.Dock="Top"
-                ItemsSource="{Binding DiagnosisList}"
-                SelectionMode="Single">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <TextBlock Text="{Binding Path=Diagnosis}" TextWrapping="Wrap" />
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding SelectedDiagnosisELCommand}" CommandParameter="{Binding ElementName=dgDiagnosisLineEditView, Path=SelectedItem}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ListBox>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBox
+                    x:Name="tbDiagnosisBox"
+                    Grid.Row="0"
+                    Margin="10,0,10,3"
+                    VerticalContentAlignment="Center"
+                    materialDesign:HintAssist.Hint="Введите текст"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    CaretBrush="White"
+                    DockPanel.Dock="Bottom"
+                    Text="{Binding DiagnosisMultiBox}" />
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Button
+                        Margin="3,0"
+                        Command="{Binding AddDiagnosisCommand}"
+                        ToolTip="Добавить новый диагноз">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="AddCircleOutline" />
+                    </Button>
+                    <Button
+                        Command="{Binding EditDiagnosisCommand}"
+                        Cursor="Hand"
+                        ToolTip="Редактировать выбранный диагноз">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="PencilOutline" />
+                    </Button>
+                    <Button
+                        Margin="3,0"
+                        Command="{Binding RemoveDiagnosisCommand}"
+                        ToolTip="Удалить выбранный диагноз">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="TrashCanOutline" />
+                    </Button>
+                </StackPanel>
+                <ListBox
+                    x:Name="dgDiagnosisLineEditView"
+                    Grid.Row="2"
+                    Background="#FF9E9E9E"
+                    DockPanel.Dock="Top"
+                    ItemsSource="{Binding DiagnosisList}"
+                    SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock Text="{Binding Path=Diagnosis}" TextWrapping="Wrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseUp">
+                            <i:InvokeCommandAction Command="{Binding SelectedDiagnosisELCommand}" CommandParameter="{Binding ElementName=dgDiagnosisLineEditView, Path=SelectedItem}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ListBox>
+            </Grid>
             <GridSplitter
-                Grid.Row="3"
+                Grid.Row="1"
                 MinHeight="5"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
                 Background="#FF686868"
                 ShowsPreview="False" />
-            <TextBox
-                x:Name="tbBlockBox"
-                Grid.Row="3"
-                Margin="10,0,10,3"
-                VerticalContentAlignment="Center"
-                materialDesign:HintAssist.Hint="Введите текст"
-                materialDesign:TextFieldAssist.HasClearButton="True"
-                CaretBrush="White"
-                DockPanel.Dock="Bottom"
-                Text="{Binding BlockMultiBox}" />
-            <StackPanel Grid.Row="4" Orientation="Horizontal">
-                <Button
-                    Margin="3,0"
-                    Command="{Binding AddBlockCommand}"
-                    ToolTip="Добавить новый раздел">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="AddCircleOutline" />
-                </Button>
-                <Button
-                    Command="{Binding EditBlockCommand}"
-                    Cursor="Hand"
-                    ToolTip="Редактировать выбранный раздел">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="PencilOutline" />
-                </Button>
-                <Button
-                    Margin="3,0"
-                    Command="{Binding RemoveBlockCommand}"
-                    ToolTip="Удалить выбранный раздел">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        Kind="TrashCanOutline" />
-                </Button>
-            </StackPanel>
-            <ListBox
-                x:Name="dgBlocksLineEditView"
-                Grid.Row="5"
-                Margin="0,5,0,0"
-                Background="#FF9E9E9E"
-                ItemsSource="{Binding BlocksList}"
-                SelectionMode="Single">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <TextBlock Text="{Binding Path=Block}" TextWrapping="Wrap" />
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding SelectedBlockELCommand}" CommandParameter="{Binding ElementName=dgBlocksLineEditView, Path=SelectedItem}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ListBox>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBox
+                    x:Name="tbBlockBox"
+                    Grid.Row="0"
+                    Margin="10,0,10,3"
+                    VerticalContentAlignment="Center"
+                    materialDesign:HintAssist.Hint="Введите текст"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    CaretBrush="White"
+                    DockPanel.Dock="Bottom"
+                    Text="{Binding BlockMultiBox}" />
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Button
+                        Margin="3,0"
+                        Command="{Binding AddBlockCommand}"
+                        ToolTip="Добавить новый раздел">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="AddCircleOutline" />
+                    </Button>
+                    <Button
+                        Command="{Binding EditBlockCommand}"
+                        Cursor="Hand"
+                        ToolTip="Редактировать выбранный раздел">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="PencilOutline" />
+                    </Button>
+                    <Button
+                        Margin="3,0"
+                        Command="{Binding RemoveBlockCommand}"
+                        ToolTip="Удалить выбранный раздел">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="TrashCanOutline" />
+                    </Button>
+                </StackPanel>
+                <ListBox
+                    x:Name="dgBlocksLineEditView"
+                    Grid.Row="2"
+                    Margin="0,5,0,0"
+                    Background="#FF9E9E9E"
+                    ItemsSource="{Binding BlocksList}"
+                    SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock Text="{Binding Path=Block}" TextWrapping="Wrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseUp">
+                            <i:InvokeCommandAction Command="{Binding SelectedBlockELCommand}" CommandParameter="{Binding ElementName=dgBlocksLineEditView, Path=SelectedItem}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ListBox>
+            </Grid>
         </Grid>
         <GridSplitter
             Grid.Row="1"
