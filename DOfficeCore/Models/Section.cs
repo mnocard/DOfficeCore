@@ -58,6 +58,11 @@ namespace DOfficeCore.Models
             };
         }
 
+        public override string ToString()
+        {
+            return $"Секция: {Diagnosis}, Раздел: {Block}, Строка: {Line}";
+        }
+
         // GetHashCode не переопределяем, так как данный класс может изменять свои свойства.
         //public override int GetHashCode() => HashCode.Combine(Diagnosis, Block, Line);
     }

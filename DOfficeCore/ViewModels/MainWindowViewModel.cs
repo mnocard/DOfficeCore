@@ -237,12 +237,12 @@ namespace DOfficeCore.ViewModels
                 Log.Information("INFO");
 
                 // Тестовые данные
-                DataCollection = TestData.GetCollection();
-                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                //DataCollection = TestData.GetCollection();
+                //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
                 // Реальные данные
-                //DataCollection = _DataProviderService.LoadDataFromFile("lines");
-                //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                DataCollection = _DataProviderService.LoadDataFromFile("lines");
+                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
             }
             catch (Exception e)
             {
