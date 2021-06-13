@@ -240,21 +240,15 @@ namespace DOfficeCore.Services
         /// <param name="DataCollection">Коллекция, в которую происходит добавление</param>
         /// <param name="MultiBox">Диагноз, который необходимо добавить</param>
         /// <returns>True если успешно добавлено</returns>
-        public bool AddDiagnosis(List<Section> DataCollection, string MultiBox)
+        public Section AddDiagnosis(List<Section> DataCollection, string MultiBox)
         {
-            if (MultiBox != null && MultiBox != "")
-            {
-                if (DataCollection.Count == 0)
-                {
-                    DataCollection.Add(new Section() { Diagnosis = MultiBox });
-                    return true;
-                }
-                foreach (var _ in DataCollection.Where(item => item.Diagnosis.Equals(MultiBox)).Select(item => new { })) return false;
+            if (string.IsNullOrWhiteSpace(MultiBox) ||
+                DataCollection.Any(section => section.Diagnosis.Equals(MultiBox)))
+                return null;
 
-                DataCollection.Add(new Section() { Diagnosis = MultiBox });
-                return true;
-            }
-            else return false;
+            var newSection = new Section() { Diagnosis = MultiBox };
+            DataCollection.Add(newSection);
+            return newSection;
         }
 
         /// <summary>
@@ -264,27 +258,28 @@ namespace DOfficeCore.Services
         /// <param name="CurrentSection">Секция, предназначенная для получения диагноза, в которой будет находится раздел</param>
         /// <param name="MultiBox">Раздел, который необходимо добавить</param>
         /// <returns>True если успешно добавлено</returns>
-        public bool AddBlock(List<Section> DataCollection, Section CurrentSection, string MultiBox)
+        public Section AddBlock(List<Section> DataCollection, Section CurrentSection, string MultiBox)
         {
-            if (CurrentSection.Diagnosis != null && MultiBox != null && MultiBox != "")
-            {
-                foreach (Section item in DataCollection)
-                {
-                    if (item.Diagnosis.Equals(CurrentSection.Diagnosis))
-                    {
-                        if (item.Block == null)
-                        {
-                            item.Block = MultiBox;
-                            return true;
-                        }
-                        else if (item.Block.Equals(MultiBox)) return false;
-                    }
-                }
+            if (CurrentSection.Diagnosis is null || 
+                string.IsNullOrWhiteSpace(MultiBox) ||
+                DataCollection.Any(section =>
+                    section.Diagnosis.Equals(CurrentSection.Diagnosis) &&
+                    section.Block is not null &&
+                    section.Block.Equals(MultiBox)))
+                return null;
 
-                DataCollection.Add(new Section() { Diagnosis = CurrentSection.Diagnosis, Block = MultiBox });
-                return true;
+            if (DataCollection.FirstOrDefault(section => 
+                    section.Diagnosis.Equals(CurrentSection.Diagnosis) && 
+                    section.Block is null) 
+                is Section section)
+            {
+                section.Block = MultiBox;
+                return section;
             }
-            return false;
+
+            var newSection = new Section() { Diagnosis = CurrentSection.Diagnosis, Block = MultiBox };
+            DataCollection.Add(newSection);
+            return newSection;
         }
 
         /// <summary>
@@ -294,22 +289,33 @@ namespace DOfficeCore.Services
         /// <param name="CurrentSection">Секция, предназначенная для получения диагноза и раздела, в которой будет находится строка</param>
         /// <param name="MultiBox">Строка, которую необходимо добавить</param>
         /// <returns>True если успешно добавлено</returns>
-        public bool AddLine(List<Section> DataCollection, Section CurrentSection, string MultiBox)
+        public Section AddLine(List<Section> DataCollection, Section CurrentSection, string MultiBox)
         {
-            if (CurrentSection.Diagnosis != null && CurrentSection.Block != null)
+            if (CurrentSection.Block is null ||
+                string.IsNullOrWhiteSpace(MultiBox) ||
+                DataCollection.Any(section =>
+                    section.Diagnosis.Equals(CurrentSection.Diagnosis) &&
+                    section.Block.Equals(CurrentSection.Block) &&
+                    section.Line is not null &&
+                    section.Line.Equals(MultiBox)))
+                return null;
+
+            if (DataCollection.FirstOrDefault(section => 
+                    section.Diagnosis.Equals(CurrentSection.Diagnosis) && 
+                    section.Block.Equals(CurrentSection.Block) &&
+                    section.Line is null)
+                is Section section)
             {
-                foreach (Section item in DataCollection)
-                {
-                    if (item.Diagnosis.Equals(CurrentSection.Diagnosis) && item.Block.Equals(CurrentSection.Block) && item.Line == null)
-                    {
-                        item.Line = MultiBox;
-                        return true;
-                    }
-                }
+                section.Line = MultiBox;
+                return section;
             }
 
-            DataCollection.Add(new Section() { Diagnosis = CurrentSection.Diagnosis, Block = CurrentSection.Block, Line = MultiBox });
-            return true;
+            var newSection = new Section { 
+                Diagnosis = CurrentSection.Diagnosis, 
+                Block = CurrentSection.Block, 
+                Line = MultiBox };
+            DataCollection.Add(newSection);
+            return newSection;
         }
         #endregion
 

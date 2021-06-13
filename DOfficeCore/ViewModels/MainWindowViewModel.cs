@@ -32,6 +32,10 @@ namespace DOfficeCore.ViewModels
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
             ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
 
+            SelectedDiagnosisCommand = new LambdaCommand(OnSelectedDiagnosisCommandExecuted, CanSelectedDiagnosisCommandExecute);
+            SelectedBlockCommand = new LambdaCommand(OnSelectedBlockCommandExecuted, CanSelectedBlockCommandExecute);
+            SelectedLineCommand = new LambdaCommand(OnSelectedLineCommandExecuted, CanSelectedLineCommandExecute);
+
             SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted, CanSearchElementCommandExecute);
             
             RandomCommand = new LambdaCommand(OnRandomCommandExecuted, CanRandomCommandExecute);

@@ -22,9 +22,9 @@ namespace DOfficeCore.Services
         ObservableCollection<Section> SearchBlocks(List<Section> DataCollection, string MultiBox);
         ObservableCollection<Section> SearchLines(List<Section> DataCollection, string MultiBox);
 
-        bool AddDiagnosis(List<Section> DataCollection, string MultiBox);
-        bool AddBlock(List<Section> DataCollection, Section CurrentSection, string MultiBox);
-        bool AddLine(List<Section> DataCollection, Section CurrentSection, string MultiBox);
+        Section AddDiagnosis(List<Section> DataCollection, string MultiBox);
+        Section AddBlock(List<Section> DataCollection, Section CurrentSection, string MultiBox);
+        Section AddLine(List<Section> DataCollection, Section CurrentSection, string MultiBox);
         
         string RandomDiary(List<Section> DataCollection, Section CurrentSection);
     }

@@ -150,7 +150,7 @@ namespace DOfficeCore.ViewModels
                     {
                         RawLines.Add(item);
                     }
-                Status = "Готово";
+                    Status = "Готово";
                 }
                 catch (ArgumentNullException e)
                 {
@@ -203,7 +203,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка необработанных строк</summary>
         private void OnSelectedRawLineCommandExecuted(object parameter)
         {
-            if (parameter is string rawLine 
+            if (parameter is string rawLine
                 && !string.IsNullOrWhiteSpace(rawLine)
                 && CurrentSection != null)
             {
@@ -280,11 +280,18 @@ namespace DOfficeCore.ViewModels
         private void OnAddDiagnosisCommandExecuted(object parameter)
         {
             if (DataCollection == null) DataCollection = new List<Section>();
-            if (DiagnosisMultiBox != null)
+            if (!string.IsNullOrWhiteSpace(DiagnosisMultiBox))
             {
-                _ViewCollectionProvider.AddDiagnosis(DataCollection, DiagnosisMultiBox);
-                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
-                Status = "Добавлен диагноз " + DiagnosisMultiBox;
+                var section = _ViewCollectionProvider.AddDiagnosis(DataCollection, DiagnosisMultiBox);
+                if (section is not null)
+                {
+                    CurrentSection = section;
+                    DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                    BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
+                    LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+                    Status = "Добавлен элемент " + DiagnosisMultiBox;
+                }
+                else Status = "Такой элемент уже существует.";
             }
             else Status = "Нечего добавлять";
         }
@@ -299,11 +306,19 @@ namespace DOfficeCore.ViewModels
         /// <summary>Добавление раздела в коллекцию</summary>
         private void OnAddBlockCommandExecuted(object parameter)
         {
-            if (DataCollection != null && CurrentSection != null && BlockMultiBox != null)
+            if (DataCollection != null &&
+                CurrentSection != null &&
+                !string.IsNullOrWhiteSpace(BlockMultiBox))
             {
-                _ViewCollectionProvider.AddBlock(DataCollection, CurrentSection, BlockMultiBox);
-                BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
-                Status = "Добавлен раздел " + BlockMultiBox + " в диагноз " + CurrentSection.Diagnosis;
+                var section = _ViewCollectionProvider.AddBlock(DataCollection, CurrentSection, BlockMultiBox);
+                if (section is not null)
+                {
+                    CurrentSection = section;
+                    BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
+                    LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+                    Status = "Добавлен элемент " + DiagnosisMultiBox;
+                }
+                else Status = "Такой элемент уже существует.";
             }
             else Status = "Нечего добавлять";
         }
@@ -318,11 +333,19 @@ namespace DOfficeCore.ViewModels
         /// <summary>Добавление нового предложения в коллекцию</summary>
         private void OnAddLineCommandExecuted(object parameter)
         {
-            if (DataCollection != null && CurrentSection != null && LineMultiBox != null)
+            if (DataCollection != null &&
+                CurrentSection != null &&
+                !string.IsNullOrWhiteSpace(LineMultiBox))
             {
-                _ViewCollectionProvider.AddLine(DataCollection, CurrentSection, LineMultiBox);
-                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
-                Status = "Добавлено предложение в раздел " + CurrentSection.Block + " в диагнозе " + CurrentSection.Diagnosis;
+                var section = _ViewCollectionProvider.AddLine(DataCollection, CurrentSection, LineMultiBox);
+
+                if (section is not null)
+                {
+                    CurrentSection = section;
+                    Status = "Добавлен элемент " + DiagnosisMultiBox;
+                    LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+                }
+                else Status = "Такой элемент уже существует.";
             }
             else Status = "Нечего добавлять";
         }

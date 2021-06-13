@@ -184,10 +184,10 @@
                 </i:Interaction.Triggers>
             </ListBox>
             <GridSplitter
-                Grid.Row="1"
+                Grid.Row="3"
                 MinHeight="5"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Top"
+                VerticalAlignment="Stretch"
                 Background="#FF686868"
                 ShowsPreview="False" />
             <TextBox
