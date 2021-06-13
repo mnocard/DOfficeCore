@@ -23,6 +23,8 @@ namespace DOfficeCore.ViewModels
                                     ILineEditorService LineEditorService
                                     )
         {
+            _Folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DOffice");
+
             _DataProviderService = DataProviderService;
             _ViewCollectionProvider = ViewCollectionProvider;
             _DiaryBoxProvider = DiaryBoxProvider;
@@ -75,6 +77,9 @@ namespace DOfficeCore.ViewModels
         }
 
         #region Свойства
+
+        /// <summary>Путь к папке с базой данных</summary>
+        private string _Folder;
 
         #region Заголовок окна
         /// <summary>Заголовок окна</summary>
@@ -241,7 +246,7 @@ namespace DOfficeCore.ViewModels
                 //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
                 // Реальные данные
-                DataCollection = _DataProviderService.LoadDataFromFile("lines");
+                DataCollection = _DataProviderService.LoadDataFromFile(Path.Combine(_Folder, "data.json"));
                 DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
             }
             catch (Exception e)
@@ -265,7 +270,6 @@ namespace DOfficeCore.ViewModels
         private bool CanClosingAppCommandExecute(object parameter) => true;
 
         #endregion
-
 
         #region Команда переключения вкладок между дневником и обработкой предложений
         /// <summary>Команда переключения вкладок между дневником и обработкой предложений</summary>

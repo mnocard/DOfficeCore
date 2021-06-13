@@ -98,7 +98,7 @@ namespace DOfficeCore.Services
         ///<inheritdoc/>
         public async Task<List<string>> TextToLinesAsync(string lines, CancellationToken token = default)
         {
-            if (string.IsNullOrEmpty(lines)) throw new ArgumentNullException();
+            if (string.IsNullOrEmpty(lines)) throw new ArgumentNullException(nameof(lines));
 
             var task = await Task.Run(() =>
             {
