@@ -5,8 +5,10 @@ using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
 using System;
+
 using System.Threading.Tasks;
 using Serilog;
+using System.IO;
 
 namespace DOfficeCore.ViewModels
 {
@@ -15,6 +17,9 @@ namespace DOfficeCore.ViewModels
         #region Форматы открываемых файлов
         private const string dlgFilter = "Word documents (.docx)|*.docx";
         private const string dlgDefaultExt = ".docx";
+        private const string dataFileName = "Data";
+        private const string dataFileFormat = ".json";
+        private const string dataFileFilter = "json documents (.json)|*.json";
         #endregion
 
         #region Свойства окна обработчика строк
@@ -173,13 +178,67 @@ namespace DOfficeCore.ViewModels
         {
             if (DataCollection != null)
             {
-                _DataProviderService.SaveDataToFile(DataCollection, "lines");
-                Status = "Ваша коллекция сохраненая";
+                var dlg = new SaveFileDialog();
+                if (!Directory.Exists(_Folder))
+                    Directory.CreateDirectory(_Folder);
+                dlg.InitialDirectory = _Folder;
+                dlg.FileName = dataFileName;
+                dlg.DefaultExt = dataFileFormat;
+                dlg.Filter = dataFileFilter;
+                if (dlg.ShowDialog() is true)
+                {
+                    string path = dlg.FileName;
+                    if (_DataProviderService.SaveDataToFile(DataCollection, path))
+                        Status = "Ваша коллекция сохраненая";
+                    else Status = "Непредвиденная ошибка! Сохранение не удалось";
+                }
+                else Status = "Ну и не надо. Больно-то и хотелось.";
             }
             else Status = "Нечего сохранять";
         }
 
         private bool CanSaveDataToFileCommandExecute(object p) => true;
+        #endregion
+
+
+        #region Загрузка бд из файла
+        /// <summary>Загрузка бд из файла</summary>
+        public ICommand LoadDataFromFileCommand { get; }
+        /// <summary>Загрузка бд из файла</summary>
+        private void OnLoadDataFromFileCommandExecuted(object parameter)
+        {
+            var confirmDlg = MessageBox.Show(
+                "Вы хотите добавить новые данные к существующей коллекции или удалить старые данные и оставить только новые? " +
+                "Учтите, что, если старая коллекция не сохранена, то она будет утрачена безвозвратно!" +
+                "\nДа - объединить старую коллекцию и новую" +
+                "\nНет - оставить только новую коллекцию" +
+                "\nОтмена - оставить всё как есть", "Внимание!", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+
+            if (confirmDlg.Equals(MessageBoxResult.Cancel))
+                return;
+
+            var dlg = new OpenFileDialog();
+            dlg.InitialDirectory = _Folder;
+            dlg.FileName = dataFileName;
+            dlg.DefaultExt = dataFileFormat;
+            dlg.Filter = dataFileFilter;
+
+            if (dlg.ShowDialog() is true)
+            {
+                string path = dlg.FileName;
+                var newCollection = _DataProviderService.LoadDataFromFile(Path.Combine(_Folder, path));
+
+                if (confirmDlg.Equals(MessageBoxResult.Yes))
+                    DataCollection.AddRange(newCollection);
+                else DataCollection = new List<Section>(newCollection);
+
+                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+            }
+            else Status = "Ну и не надо. Больно-то и хотелось.";
+        }
+
+        private bool CanLoadDataFromFileCommandExecute(object parameter) => true;
+
         #endregion
 
         #region Очистка необработанной таблицы

@@ -63,13 +63,22 @@
             </Button>
             <Button
                 x:Name="btnSaveXML"
-                Margin="3,0,15,0"
+                Margin="3,0,0,0"
                 Command="{Binding SaveDataToFileCommand}"
                 ToolTip="Сохранить коллекцию">
                 <materialDesign:PackIcon
                     Width="24"
                     Height="24"
                     Kind="ContentSaveAllOutline" />
+            </Button>
+            <Button
+                Margin="3,0,15,0"
+                Command="{Binding LoadDataFromFileCommand}"
+                ToolTip="Загрузить коллекцию">
+                <materialDesign:PackIcon
+                    Width="24"
+                    Height="24"
+                    Kind="UploadOutline" />
             </Button>
         </DockPanel>
         <DockPanel

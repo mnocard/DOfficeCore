@@ -51,7 +51,10 @@ namespace DOfficeCore.ViewModels
             #region Команды окна редактирования строк
             OpenFileCommand = new LambdaCommand(OnOpenFileCommandExecuted, CanOpenFileCommandExecute);
             GetTextFromClipboardCommand = new LambdaCommand(OnGetTextFromClipboardCommandExecuted, CanGetTextFromClipboardCommandExecute); 
+
             SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
+            LoadDataFromFileCommand = new LambdaCommand(OnLoadDataFromFileCommandExecuted, CanLoadDataFromFileCommandExecute);
+
             ClearListBoxCommand = new LambdaCommand(OnClearListBoxCommandExecuted, CanClearListBoxCommandExecute);
             
             SelectedRawLineCommand = new LambdaCommand(OnSelectedRawLineCommandExecuted, CanSelectedRawLineCommandExecute);
@@ -79,7 +82,7 @@ namespace DOfficeCore.ViewModels
         #region Свойства
 
         /// <summary>Путь к папке с базой данных</summary>
-        private string _Folder;
+        private readonly string _Folder;
 
         #region Заголовок окна
         /// <summary>Заголовок окна</summary>
@@ -242,12 +245,12 @@ namespace DOfficeCore.ViewModels
                 Log.Information("INFO");
 
                 // Тестовые данные
-                //DataCollection = TestData.GetCollection();
-                //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                DataCollection = TestData.GetCollection();
+                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
                 // Реальные данные
-                DataCollection = _DataProviderService.LoadDataFromFile(Path.Combine(_Folder, "data.json"));
-                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                //DataCollection = _DataProviderService.LoadDataFromFile(Path.Combine(_Folder, "data.json"));
+                //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
             }
             catch (Exception e)
             {
