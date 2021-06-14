@@ -151,15 +151,14 @@
                 ItemsSource="{Binding DiagnosisList}"
                 SelectionMode="Single">
                 <i:Interaction.Triggers>
+                    <!--  <i:EventTrigger EventName="KeyUp"  -->
                     <i:EventTrigger EventName="MouseUp">
                         <i:InvokeCommandAction Command="{Binding SelectedDiagnosisCommand}" CommandParameter="{Binding ElementName=dgCodes, Path=SelectedItem}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <TextBlock Text="{Binding Path=Diagnosis}" TextWrapping="Wrap" />
-                        </Grid>
+                        <TextBlock Text="{Binding Path=Diagnosis}" TextWrapping="Wrap" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -197,9 +196,7 @@
                 </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <TextBlock Text="{Binding Path=Block}" TextWrapping="Wrap" />
-                        </Grid>
+                        <TextBlock Text="{Binding Path=Block}" TextWrapping="Wrap" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -236,12 +233,10 @@
                 </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <TextBlock
-                                Grid.Row="1"
-                                Text="{Binding Path=Line}"
-                                TextWrapping="Wrap" />
-                        </Grid>
+                        <TextBlock
+                            Grid.Row="1"
+                            Text="{Binding Path=Line}"
+                            TextWrapping="Wrap" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
