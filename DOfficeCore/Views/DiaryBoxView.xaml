@@ -69,10 +69,17 @@
                         Kind="Dice5Outline" />
                 </Button>
                 <Button
-                    x:Name="Copy"
+                    Margin="5,0"
+                    Command="{Binding ReturnTextToLinesCommand}"
+                    ToolTip="Разобрать текст на строки">
+                    <materialDesign:PackIcon
+                        Width="24"
+                        Height="24"
+                        Kind="ArrowLeftBoldBoxOutline" />
+                </Button>
+                <Button
                     Margin="5,0"
                     Command="{Binding CopyTextCommand}"
-                    CommandParameter="{Binding Text, ElementName=tbDiary}"
                     ToolTip="Копировать текст">
                     <materialDesign:PackIcon
                         Width="24"
@@ -83,7 +90,6 @@
                     x:Name="Edit"
                     Margin="5,0"
                     Command="{Binding EditTextCommand}"
-                    CommandTarget="{Binding ElementName=tbDiary}"
                     ToolTip="Редактировать текст">
                     <materialDesign:PackIcon
                         Width="24"
@@ -94,7 +100,6 @@
                     x:Name="Clear"
                     Margin="5,0"
                     Command="{Binding ClearDiaryBoxCommand}"
-                    CommandParameter="{Binding ElementName=tbDiary}"
                     ToolTip="Очистить поле">
                     <materialDesign:PackIcon
                         Width="24"
@@ -259,7 +264,7 @@
             AcceptsReturn="True"
             Foreground="Black"
             IsReadOnly="{Binding EnableDiaryBox}"
-            Text="{Binding DiaryBox}"
+            Text="{Binding DiaryBox, UpdateSourceTrigger=PropertyChanged}"
             TextWrapping="Wrap"
             VerticalScrollBarVisibility="Auto" />
     </Grid>

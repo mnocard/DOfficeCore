@@ -45,6 +45,7 @@ namespace DOfficeCore.ViewModels
             EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
             ClearDiaryBoxCommand = new LambdaCommand(OnClearDiaryBoxCommandExecuted, CanClearDiaryBoxCommandExecute);
             ChangeTabCommand = new LambdaCommand(OnChangeTabCommandExecuted, CanChangeTabCommandExecute);
+            ReturnTextToLinesCommand = new LambdaCommand(OnReturnTextToLinesCommandExecuted, CanReturnTextToLinesCommandExecute);
 
             #endregion
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -166,7 +167,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда копирования текста</summary>
         private void OnCopyTextCommandExecuted(object parameter)
         {
-            if (parameter is string temp && !string.IsNullOrWhiteSpace(temp))
+            if (parameter is string temp && !string.IsNullOrWhiteSpace(DiaryBox))
             {
                 Clipboard.SetText(temp);
                 EnableDiaryBox = true;
@@ -205,6 +206,25 @@ namespace DOfficeCore.ViewModels
         }
 
         private bool CanClearDiaryBoxCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Команда переноса текста из дневника в коллекцию
+        /// <summary>Команда переноса текста из дневника в коллекцию</summary>
+        public ICommand ReturnTextToLinesCommand { get; }
+        /// <summary>Команда переноса текста из дневника в коллекцию</summary>
+        private void OnReturnTextToLinesCommandExecuted(object parameter)
+        {
+            if (!string.IsNullOrWhiteSpace(DiaryBox))
+            {
+                var lines = _LineEditorService.TextToLines(DiaryBox);
+                var sections = DataCollection.Where(s => lines.Contains(s.Line)).Select(s => s);
+                LinesList = new ObservableCollection<Section>(sections);
+                RawLines = new ObservableCollection<string>(lines);
+            }
+        }
+
+        private bool CanReturnTextToLinesCommandExecute(object parameter) => true;
 
         #endregion
 

@@ -90,10 +90,12 @@ namespace DOfficeCore.Services
         }
 
         ///<inheritdoc/>
-        public List<string> TextToLines(string lines)
-        {
-            return TextToLinesAsync(lines).Result;
-        }
+        public List<string> TextToLines(string lines) => string.IsNullOrWhiteSpace(lines) ? null : TextToLinesAsync(lines).Result;
+        //{
+        //    if (!string.IsNullOrWhiteSpace(lines))
+        //        return TextToLinesAsync(lines).Result;
+        //    else return null;
+        //}
 
         ///<inheritdoc/>
         public async Task<List<string>> TextToLinesAsync(string lines, CancellationToken token = default)
