@@ -151,7 +151,6 @@
                 ItemsSource="{Binding DiagnosisList}"
                 SelectionMode="Single">
                 <i:Interaction.Triggers>
-                    <!--  <i:EventTrigger EventName="KeyUp"  -->
                     <i:EventTrigger EventName="MouseUp">
                         <i:InvokeCommandAction Command="{Binding SelectedDiagnosisCommand}" CommandParameter="{Binding ElementName=dgCodes, Path=SelectedItem}" />
                     </i:EventTrigger>

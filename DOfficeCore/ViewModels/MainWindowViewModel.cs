@@ -33,6 +33,8 @@ namespace DOfficeCore.ViewModels
             #region Команды окна дневника
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
             ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
+            
+            IndexUpCommand = new LambdaCommand(OnIndexUpCommandExecuted, CanIndexUpCommandExecute);
 
             SelectedDiagnosisCommand = new LambdaCommand(OnSelectedDiagnosisCommandExecuted, CanSelectedDiagnosisCommandExecute);
             SelectedBlockCommand = new LambdaCommand(OnSelectedBlockCommandExecuted, CanSelectedBlockCommandExecute);
@@ -304,6 +306,27 @@ namespace DOfficeCore.ViewModels
         private bool CanChangeTabCommandExecute(object parameter) => true;
 
         #endregion
+
+        #region Команда поднятия элемента в списке вверх
+        /// <summary>Команда поднятия элемента в списке вверх</summary>
+        public ICommand IndexUpCommand { get; }
+        /// <summary>Команда поднятия элемента в списке вверх</summary>
+        private void OnIndexUpCommandExecuted(object parameter)
+        {
+            if(CurrentSection is not null)
+            {
+                var newSection = Section.CloneSection(CurrentSection);
+                var index = DataCollection.IndexOf(CurrentSection);
+                DataCollection.Remove(CurrentSection);
+                DataCollection.Insert(index - 1, newSection);
+                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+            }
+        }
+
+        private bool CanIndexUpCommandExecute(object parameter) => true;
+
+        #endregion
+
 
         #endregion
 
