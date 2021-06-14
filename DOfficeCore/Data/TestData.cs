@@ -19,7 +19,7 @@ namespace DOfficeCore.Data
                         {
                             Diagnosis = $"Diagnosis {a}",
                             Block = $"Block {b} in diagnosis {a}",
-                            Line = $"Line {c} in block {b} in diagnosis {a}"
+                            Line = $"Line {c} in block {b} in diagnosis {a}."
                         });
                     }
                 }
