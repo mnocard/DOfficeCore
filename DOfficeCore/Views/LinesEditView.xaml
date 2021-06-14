@@ -145,7 +145,11 @@
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     CaretBrush="White"
                     DockPanel.Dock="Bottom"
-                    Text="{Binding DiagnosisMultiBox}" />
+                    Text="{Binding DiagnosisMultiBox, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding AddDiagnosisCommand}" />
+                    </TextBox.InputBindings>
+                </TextBox>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <Button
                         Margin="3,0"
@@ -217,7 +221,11 @@
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     CaretBrush="White"
                     DockPanel.Dock="Bottom"
-                    Text="{Binding BlockMultiBox}" />
+                    Text="{Binding BlockMultiBox, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding AddBlockCommand}" />
+                    </TextBox.InputBindings>
+                </TextBox>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <Button
                         Margin="3,0"
@@ -295,7 +303,11 @@
                 materialDesign:TextFieldAssist.HasClearButton="True"
                 CaretBrush="White"
                 DockPanel.Dock="Bottom"
-                Text="{Binding LineMultiBox}" />
+                Text="{Binding LineMultiBox, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding AddLineCommand}" />
+                </TextBox.InputBindings>
+            </TextBox>
             <StackPanel Grid.Row="1" Orientation="Horizontal">
                 <Button
                     Margin="3,0"
