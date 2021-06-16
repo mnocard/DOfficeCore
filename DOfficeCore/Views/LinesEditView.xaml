@@ -84,6 +84,7 @@
         <DockPanel
             Grid.Row="1"
             Grid.Column="0"
+            Margin="0,0,5,0"
             Background="#FF9E9E9E">
             <Button
                 Grid.Row="1"
@@ -116,12 +117,13 @@
             MinWidth="5"
             HorizontalAlignment="Right"
             VerticalAlignment="Stretch"
-            Background="#FF686868"
+            Background="#FF282828"
             ShowsPreview="False" />
         <Grid
             Grid.Row="1"
             Grid.Column="1"
             MinWidth="100"
+            Margin="0,0,5,0"
             Background="#FF9E9E9E">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -148,20 +150,21 @@
                         <KeyBinding Key="Enter" Command="{Binding AddDiagnosisCommand}" />
                     </TextBox.InputBindings>
                 </TextBox>
-                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <DockPanel Grid.Row="1" LastChildFill="False">
                     <Button
                         Margin="3,0"
                         Command="{Binding AddDiagnosisCommand}"
-                        ToolTip="Добавить новый диагноз">
+                        ToolTip="Добавить новый элемент">
                         <materialDesign:PackIcon
                             Width="24"
                             Height="24"
                             Kind="AddCircleOutline" />
                     </Button>
                     <Button
+                        Margin="3,0"
                         Command="{Binding EditDiagnosisCommand}"
                         Cursor="Hand"
-                        ToolTip="Редактировать выбранный диагноз">
+                        ToolTip="Редактировать выбранный элемент">
                         <materialDesign:PackIcon
                             Width="24"
                             Height="24"
@@ -170,13 +173,31 @@
                     <Button
                         Margin="3,0"
                         Command="{Binding RemoveDiagnosisCommand}"
-                        ToolTip="Удалить выбранный диагноз">
+                        ToolTip="Удалить выбранный элемент">
                         <materialDesign:PackIcon
                             Width="24"
                             Height="24"
                             Kind="TrashCanOutline" />
                     </Button>
-                </StackPanel>
+                    <Button
+                        Margin="3,0"
+                        Command="{Binding}"
+                        ToolTip="Поднять выбранный элемент">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="TransferUp" />
+                    </Button>
+                    <Button
+                        Margin="3,0"
+                        Command="{Binding}"
+                        ToolTip="Опустить выбранный элемент">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="TransferDown" />
+                    </Button>
+                </DockPanel>
                 <ListBox
                     x:Name="dgDiagnosisLineEditView"
                     Grid.Row="2"
@@ -200,9 +221,9 @@
                 Grid.Row="1"
                 MinHeight="5"
                 HorizontalAlignment="Stretch"
-                Background="#FF686868"
+                Background="#FF585858"
                 ShowsPreview="False" />
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" Margin="0,5,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40" />
                     <RowDefinition Height="40" />
@@ -250,6 +271,24 @@
                             Height="24"
                             Kind="TrashCanOutline" />
                     </Button>
+                    <Button
+                        Margin="3,0"
+                        Command="{Binding}"
+                        ToolTip="Поднять выбранный раздел">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="TransferUp" />
+                    </Button>
+                    <Button
+                        Margin="3,0"
+                        Command="{Binding}"
+                        ToolTip="Опустить выбранный раздел">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="TransferDown" />
+                    </Button>
                 </StackPanel>
                 <ListBox
                     x:Name="dgBlocksLineEditView"
@@ -277,7 +316,7 @@
             MinWidth="5"
             HorizontalAlignment="Right"
             VerticalAlignment="Stretch"
-            Background="#FF686868"
+            Background="#FF282828"
             ShowsPreview="False" />
         <Grid
             Grid.Row="1"
@@ -338,6 +377,24 @@
                         Width="24"
                         Height="24"
                         Kind="ArrowLeftBoldBoxOutline" />
+                </Button>
+                <Button
+                    Margin="3,0"
+                    Command="{Binding}"
+                    ToolTip="Поднять выбранное предложение">
+                    <materialDesign:PackIcon
+                        Width="24"
+                        Height="24"
+                        Kind="TransferUp" />
+                </Button>
+                <Button
+                    Margin="3,0"
+                    Command="{Binding}"
+                    ToolTip="Опустить выбранное предложение">
+                    <materialDesign:PackIcon
+                        Width="24"
+                        Height="24"
+                        Kind="TransferDown" />
                 </Button>
             </StackPanel>
             <ListBox
