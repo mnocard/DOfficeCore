@@ -483,17 +483,22 @@ namespace DOfficeCore.ViewModels
         /// <summary>Удаление диагноза</summary>
         private void OnRemoveDiagnosisCommandExecuted(object parameter)
         {
-            var result = MessageBox.Show($"Вы уверены, что хотите удалить диагноз \"{DiagnosisMultiBox}\"? Все элементы, относящиеся к этому диагнозу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes && DataCollection != null && CurrentSection != null)
+            if (DataCollection != null && CurrentSection != null)
             {
-                _ViewCollectionProvider.RemoveDiagnosis(DataCollection, CurrentSection);
-                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
-                BlocksList = null;
-                LinesList = null;
-                Status = "Удален диагноз " + CurrentSection.Diagnosis;
-                CurrentSection = null;
+                var result = MessageBox.Show($"Вы уверены, что хотите удалить диагноз \"{DiagnosisMultiBox}\"? " +
+                    $"Все элементы, относящиеся к этому диагнозу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    _ViewCollectionProvider.RemoveDiagnosis(DataCollection, CurrentSection);
+                    DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                    BlocksList = null;
+                    LinesList = null;
+                    Status = "Удален диагноз " + CurrentSection.Diagnosis;
+                    CurrentSection = null;
+                }
+                else Status = "Удаление отменено";
             }
-            else Status = "Удаление отменено";
+            else Status = "Выберите элемент, который хотите удалить";
         }
 
         private bool CanRemoveDiagnosisCommandExecute(object parameter) => true;
@@ -506,16 +511,20 @@ namespace DOfficeCore.ViewModels
         /// <summary>Удаление раздела</summary>
         private void OnRemoveBlockCommandExecuted(object parameter)
         {
-            var result = MessageBox.Show($"Вы уверены, что хотите удалить раздел \"{BlockMultiBox}\"? Все элементы также относящиеся к этому разделу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes && DataCollection != null && CurrentSection != null)
+            if (DataCollection != null && CurrentSection != null)
             {
-                _ViewCollectionProvider.RemoveBlock(DataCollection, CurrentSection);
-                BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
-                LinesList = null;
-                Status = "Удален раздел " + CurrentSection.Block;
-                CurrentSection = null;
+                var result = MessageBox.Show($"Вы уверены, что хотите удалить раздел \"{BlockMultiBox}\"? Все элементы также относящиеся к этому разделу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    _ViewCollectionProvider.RemoveBlock(DataCollection, CurrentSection);
+                    BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
+                    LinesList = null;
+                    Status = "Удален раздел " + CurrentSection.Block;
+                    CurrentSection = null;
+                }
+                else Status = "Удаление отменено";
             }
-            else Status = "Удаление отменено";
+            else Status = "Выберите элемент, который хотите удалить";
         }
 
         private bool CanRemoveBlockCommandExecute(object parameter) => true;
@@ -528,15 +537,19 @@ namespace DOfficeCore.ViewModels
         /// <summary>Удаление строки</summary>
         private void OnRemoveLineCommandExecuted(object parameter)
         {
-            var result = MessageBox.Show($"Вы уверены, что хотите удалить строку \"{LineMultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes && DataCollection != null && CurrentSection != null)
+            if (DataCollection != null && CurrentSection != null)
             {
-                _ViewCollectionProvider.RemoveLine(DataCollection, CurrentSection);
-                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
-                Status = "Удалено предложение";
-                CurrentSection = null;
+                var result = MessageBox.Show($"Вы уверены, что хотите удалить строку \"{LineMultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    _ViewCollectionProvider.RemoveLine(DataCollection, CurrentSection);
+                    LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+                    Status = "Удалено предложение";
+                    CurrentSection = null;
+                }
+                else Status = "Удаление отменено";
             }
-            else Status = "Удаление отменено";
+            else Status = "Выберите элемент, который хотите удалить";
         }
 
         private bool CanRemoveLineCommandExecute(object parameter) => true;
