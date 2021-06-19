@@ -150,7 +150,7 @@
                         <KeyBinding Key="Enter" Command="{Binding AddDiagnosisCommand}" />
                     </TextBox.InputBindings>
                 </TextBox>
-                <DockPanel Grid.Row="1" LastChildFill="False">
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <Button
                         Margin="3,0"
                         Command="{Binding AddDiagnosisCommand}"
@@ -163,7 +163,6 @@
                     <Button
                         Margin="3,0"
                         Command="{Binding EditDiagnosisCommand}"
-                        Cursor="Hand"
                         ToolTip="Редактировать выбранный элемент">
                         <materialDesign:PackIcon
                             Width="24"
@@ -181,7 +180,7 @@
                     </Button>
                     <Button
                         Margin="3,0"
-                        Command="{Binding}"
+                        Command="{Binding RaiseDiagnosisCommand}"
                         ToolTip="Поднять выбранный элемент">
                         <materialDesign:PackIcon
                             Width="24"
@@ -197,7 +196,7 @@
                             Height="24"
                             Kind="TransferDown" />
                     </Button>
-                </DockPanel>
+                </StackPanel>
                 <ListBox
                     x:Name="dgDiagnosisLineEditView"
                     Grid.Row="2"
@@ -254,8 +253,8 @@
                             Kind="AddCircleOutline" />
                     </Button>
                     <Button
+                        Margin="3,0"
                         Command="{Binding EditBlockCommand}"
-                        Cursor="Hand"
                         ToolTip="Редактировать выбранный раздел">
                         <materialDesign:PackIcon
                             Width="24"
@@ -352,8 +351,8 @@
                         Kind="AddCircleOutline" />
                 </Button>
                 <Button
+                    Margin="3,0"
                     Command="{Binding EditLineCommand}"
-                    Cursor="Hand"
                     ToolTip="Редактировать выбранное предложение">
                     <materialDesign:PackIcon
                         Width="24"
