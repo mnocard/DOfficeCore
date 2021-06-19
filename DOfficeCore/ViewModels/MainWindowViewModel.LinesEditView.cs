@@ -265,7 +265,7 @@ namespace DOfficeCore.ViewModels
                 && !string.IsNullOrWhiteSpace(rawLine)
                 && CurrentSection != null)
             {
-                _ViewCollectionProvider.AddLine(DataCollection, CurrentSection, rawLine);
+                _CollectionHandler.AddLine(DataCollection, CurrentSection, rawLine);
                 LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
                 RawLines.Remove(rawLine);
                 Status = "Выбранная строка перемещена в таблицу предложений";
@@ -340,7 +340,7 @@ namespace DOfficeCore.ViewModels
             if (DataCollection == null) DataCollection = new List<Section>();
             if (!string.IsNullOrWhiteSpace(DiagnosisMultiBox))
             {
-                var section = _ViewCollectionProvider.AddDiagnosis(DataCollection, DiagnosisMultiBox);
+                var section = _CollectionHandler.AddDiagnosis(DataCollection, DiagnosisMultiBox);
                 if (section is not null)
                 {
                     CurrentSection = section;
@@ -368,7 +368,7 @@ namespace DOfficeCore.ViewModels
                 CurrentSection != null &&
                 !string.IsNullOrWhiteSpace(BlockMultiBox))
             {
-                var section = _ViewCollectionProvider.AddBlock(DataCollection, CurrentSection, BlockMultiBox);
+                var section = _CollectionHandler.AddBlock(DataCollection, CurrentSection, BlockMultiBox);
                 if (section is not null)
                 {
                     CurrentSection = section;
@@ -395,7 +395,7 @@ namespace DOfficeCore.ViewModels
                 CurrentSection != null &&
                 !string.IsNullOrWhiteSpace(LineMultiBox))
             {
-                var section = _ViewCollectionProvider.AddLine(DataCollection, CurrentSection, LineMultiBox);
+                var section = _CollectionHandler.AddLine(DataCollection, CurrentSection, LineMultiBox);
 
                 if (section is not null)
                 {
@@ -424,7 +424,7 @@ namespace DOfficeCore.ViewModels
         {
             if (DataCollection != null && CurrentSection != null && DiagnosisMultiBox != null)
             {
-                _ViewCollectionProvider.EditDiagnosis(DataCollection, CurrentSection, DiagnosisMultiBox);
+                _CollectionHandler.EditDiagnosis(DataCollection, CurrentSection, DiagnosisMultiBox);
                 DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
                 Status = "Диагноз " + CurrentSection.Diagnosis + " переименован в " + DiagnosisMultiBox;
             }
@@ -443,7 +443,7 @@ namespace DOfficeCore.ViewModels
         {
             if (DataCollection != null && CurrentSection != null && BlockMultiBox != null)
             {
-                _ViewCollectionProvider.EditBlock(DataCollection, CurrentSection, BlockMultiBox);
+                _CollectionHandler.EditBlock(DataCollection, CurrentSection, BlockMultiBox);
                 BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
                 Status = "Раздел " + CurrentSection.Block + " переименован в " + BlockMultiBox;
             }
@@ -462,7 +462,7 @@ namespace DOfficeCore.ViewModels
         {
             if (DataCollection != null && CurrentSection != null && LineMultiBox != null)
             {
-                _ViewCollectionProvider.EditLine(DataCollection, CurrentSection, LineMultiBox);
+                _CollectionHandler.EditLine(DataCollection, CurrentSection, LineMultiBox);
                 LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
                 Status = "Предложение изменено";
             }
@@ -489,7 +489,7 @@ namespace DOfficeCore.ViewModels
                     $"Все элементы, относящиеся к этому диагнозу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
-                    _ViewCollectionProvider.RemoveDiagnosis(DataCollection, CurrentSection);
+                    _CollectionHandler.RemoveDiagnosis(DataCollection, CurrentSection);
                     DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
                     BlocksList = null;
                     LinesList = null;
@@ -516,7 +516,7 @@ namespace DOfficeCore.ViewModels
                 var result = MessageBox.Show($"Вы уверены, что хотите удалить раздел \"{BlockMultiBox}\"? Все элементы также относящиеся к этому разделу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
-                    _ViewCollectionProvider.RemoveBlock(DataCollection, CurrentSection);
+                    _CollectionHandler.RemoveBlock(DataCollection, CurrentSection);
                     BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
                     LinesList = null;
                     Status = "Удален раздел " + CurrentSection.Block;
@@ -542,7 +542,7 @@ namespace DOfficeCore.ViewModels
                 var result = MessageBox.Show($"Вы уверены, что хотите удалить строку \"{LineMultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
-                    _ViewCollectionProvider.RemoveLine(DataCollection, CurrentSection);
+                    _CollectionHandler.RemoveLine(DataCollection, CurrentSection);
                     LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
                     Status = "Удалено предложение";
                     CurrentSection = null;
@@ -567,7 +567,7 @@ namespace DOfficeCore.ViewModels
             if (RawLines == null) RawLines = new ObservableCollection<string>();
             if (LineMultiBox != null)
             {
-                _ViewCollectionProvider.RemoveLine(DataCollection, CurrentSection);
+                _CollectionHandler.RemoveLine(DataCollection, CurrentSection);
                 LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
                 RawLines.Add(CurrentSection.Line);
                 CurrentSection = null;

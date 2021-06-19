@@ -20,7 +20,8 @@ namespace DOfficeCore.ViewModels
         public MainWindowViewModel(IDataProviderService DataProviderService, 
                                     IViewCollectionProvider ViewCollectionProvider, 
                                     IDiaryBoxProvider DiaryBoxProvider,
-                                    ILineEditorService LineEditorService
+                                    ILineEditorService LineEditorService,
+                                    ICollectionHandler CollectionHandler
                                     )
         {
             _Folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DOffice");
@@ -29,6 +30,7 @@ namespace DOfficeCore.ViewModels
             _ViewCollectionProvider = ViewCollectionProvider;
             _DiaryBoxProvider = DiaryBoxProvider;
             _LineEditorService = LineEditorService;
+            _CollectionHandler = CollectionHandler;
 
             #region Команды окна дневника
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
@@ -340,7 +342,7 @@ namespace DOfficeCore.ViewModels
         private readonly IDataProviderService _DataProviderService;
         #endregion
 
-        #region Сервис работы с данными
+        #region Сервис отображения данных
         private readonly IViewCollectionProvider _ViewCollectionProvider;
         #endregion
 
@@ -348,6 +350,9 @@ namespace DOfficeCore.ViewModels
         private readonly IDiaryBoxProvider _DiaryBoxProvider;
         #endregion
 
+        #region Сервис работы с коллекцией
+        private readonly ICollectionHandler _CollectionHandler;
+        #endregion
         #endregion
     }
 }
