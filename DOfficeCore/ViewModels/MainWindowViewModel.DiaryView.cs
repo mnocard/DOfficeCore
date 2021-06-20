@@ -50,20 +50,6 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
-        #region CurrentSection : Section - Выбранная в датагриде секция
-
-        /// <summary>Выбранная в датагриде секция</summary>
-        private Section _CurrentSection;
-
-        /// <summary>Выбранная в датагриде секция</summary>
-        public Section CurrentSection
-        {
-            get => _CurrentSection;
-            set => Set(ref _CurrentSection, value);
-        }
-
-        #endregion
-
         #endregion
 
         #region Команды вкладки дневника
@@ -149,10 +135,10 @@ namespace DOfficeCore.ViewModels
         /// <summary>Создание случайного дневника</summary>
         private void OnRandomCommandExecuted(object parameter)
         {
-            if (CurrentSection != null)
+            if (BlocksList.Any())
             {
-                (DiaryBox, LinesList) = _DiaryBoxProvider.RandomDiary(DataCollection, CurrentSection);
-                Status = "Случайный дневник создан согласно записям: " + CurrentSection.Diagnosis;
+                (DiaryBox, LinesList) = _DiaryBoxProvider.RandomDiaryWithNewModel(BlocksList);
+                Status = "Случайный дневник создан согласно записям: " + BlocksList[0].Sector;
             }
         }
 

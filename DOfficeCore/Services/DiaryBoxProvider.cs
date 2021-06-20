@@ -16,6 +16,7 @@ namespace DOfficeCore.Services
         {
             _ViewCollectionProvider = ViewCollectionProvider;
         }
+
         /// <summary>
         /// Добавлением строки в дневник с возможностью удаления вместо повторного добавления
         /// </summary>
@@ -53,6 +54,26 @@ namespace DOfficeCore.Services
                     var section = LineList[rnd.Next(LineList.Count)];
                     linesOfDiary.Add(section);
                     result += section.Line + " ";
+                }
+            }
+
+            return (result, linesOfDiary);
+        }
+
+        public (string, ObservableCollection<string>) RandomDiaryWithNewModel(IEnumerable<Block> Blocks)
+        {
+            string result = "";
+            var rnd = new Random();
+
+            var linesOfDiary = new ObservableCollection<string>();
+            foreach (Block block in Blocks)
+            {
+                var LineList = block.Lines;
+                if (LineList.Count > 0 && rnd.Next(100) <= LineList.Count * _ChanceMidofier)
+                {
+                    var line = LineList[rnd.Next(LineList.Count)];
+                    linesOfDiary.Add(line);
+                    result += line + " ";
                 }
             }
 

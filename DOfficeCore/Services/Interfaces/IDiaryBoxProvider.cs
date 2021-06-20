@@ -9,5 +9,6 @@ namespace DOfficeCore.Services.Interfaces
     {
         string LineToDiaryBox(string DiaryBox, string Line);
         (string, ObservableCollection<Section>) RandomDiary(List<Section> DataCollection, Section CurrentSection);
+        (string, ObservableCollection<string>) RandomDiaryWithNewModel(IEnumerable<Block> Blocks);
     }
 }

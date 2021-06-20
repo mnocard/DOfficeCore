@@ -195,16 +195,16 @@ namespace DOfficeCore.ViewModels
 
         #region ModelChanging
 
-        #region SectorCollection : ObservableCollection<Sector> - Коллекция данных новой модели
+        #region SectorsList : ObservableCollection<Sector> - Коллекция данных новой модели
 
         /// <summary>Коллекция данных новой модели</summary>
-        private ObservableCollection<Sector> _SectorCollection;
+        private ObservableCollection<Sector> _SectorsList;
 
         /// <summary>Коллекция данных новой модели</summary>
-        public ObservableCollection<Sector> SectorCollection
+        public ObservableCollection<Sector> SectorsList
         {
-            get => _SectorCollection;
-            set => _SectorCollection = value;
+            get => _SectorsList;
+            set => Set(ref _SectorsList, value);
         }
 
         #endregion
@@ -263,7 +263,7 @@ namespace DOfficeCore.ViewModels
                 Log.Information("INFO");
 
                 // Тестовые для новой модели данных Sector
-                SectorCollection = new ObservableCollection<Sector>(TestData.GetSectorCollection());
+                SectorsList = new ObservableCollection<Sector>(TestData.GetSectorCollection());
 
                 // Реальные данные
                 //SectorCollection = _DataProviderService.LoadDataFromFile(Path.Combine(_Folder, "data.json"));

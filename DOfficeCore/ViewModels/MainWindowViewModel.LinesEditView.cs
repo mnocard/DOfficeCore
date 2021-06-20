@@ -230,8 +230,8 @@ namespace DOfficeCore.ViewModels
 
                 if (confirmDlg.Equals(MessageBoxResult.Yes))
                     foreach (var item in newCollection)
-                        SectorCollection.Add(item);   
-                else SectorCollection = new ObservableCollection<Sector>(newCollection);
+                        SectorsList.Add(item);   
+                else SectorsList = new ObservableCollection<Sector>(newCollection);
             }
             else Status = "Ну и не надо. Больно-то и хотелось.";
         }
