@@ -18,7 +18,7 @@ namespace DOfficeCore.ViewModels
     internal partial class MainWindowViewModel : ViewModelCore
     {
         public MainWindowViewModel(IDataProviderService DataProviderService, 
-                                    IViewCollectionProvider ViewCollectionProvider, 
+                                    INewViewCollectionProvider NewViewCollectionProvider, 
                                     IDiaryBoxProvider DiaryBoxProvider,
                                     ILineEditorService LineEditorService,
                                     INewCollectionHandler NewCollectionHandler
@@ -28,7 +28,7 @@ namespace DOfficeCore.ViewModels
             _NewCollectionHandler = NewCollectionHandler;
 
             _DataProviderService = DataProviderService;
-            _ViewCollectionProvider = ViewCollectionProvider;
+            _NewViewCollectionProvider = NewViewCollectionProvider;
             _DiaryBoxProvider = DiaryBoxProvider;
             _LineEditorService = LineEditorService;
 
@@ -94,7 +94,7 @@ namespace DOfficeCore.ViewModels
         #endregion
 
         #region Сервис отображения данных
-        private readonly IViewCollectionProvider _ViewCollectionProvider;
+        private readonly INewViewCollectionProvider _NewViewCollectionProvider;
         #endregion
 
         #region Сервис работы с дневником
@@ -266,7 +266,7 @@ namespace DOfficeCore.ViewModels
                 SectorsList = new ObservableCollection<Sector>(TestData.GetSectorCollection());
 
                 // Реальные данные
-                //SectorCollection = _DataProviderService.LoadDataFromFile(Path.Combine(_Folder, "data.json"));
+                //SectorsList = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, "data.json"));
 
                 // Заменить следующую строчку (устаревшая версия)
                 //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
