@@ -9,13 +9,13 @@ namespace DOfficeCore.Services
 {
     class DiaryBoxProvider : IDiaryBoxProvider
     {
-        private readonly IViewCollectionProvider _ViewCollectionProvider;
         private const int _ChanceMidofier = 20;
 
-        public DiaryBoxProvider(IViewCollectionProvider ViewCollectionProvider)
-        {
-            _ViewCollectionProvider = ViewCollectionProvider;
-        }
+        //private readonly IViewCollectionProvider _ViewCollectionProvider;
+        //public DiaryBoxProvider(IViewCollectionProvider ViewCollectionProvider)
+        //{
+        //    _ViewCollectionProvider = ViewCollectionProvider;
+        //}
 
         /// <summary>
         /// Добавлением строки в дневник с возможностью удаления вместо повторного добавления
@@ -39,25 +39,28 @@ namespace DOfficeCore.Services
         /// <param name="DataCollection">Коллекция элементов базы данных</param>
         /// <param name="CurrentSection">Выбранная секция базы данных</param>
         /// <returns>Случайный дневник</returns>
+        [Obsolete("Метод устарел. Используй RandomDiaryWithNewModel", true)]
         public (string, ObservableCollection<Section>) RandomDiary(List<Section> DataCollection, Section CurrentSection)
         {
-            string result = "";
-            var rnd = new Random();
+            throw new MethodAccessException("Метод устарел. Используйте RandomDiaryWithNewModel");
 
-            var BlockList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
-            var linesOfDiary = new ObservableCollection<Section>();
-            foreach (Section block in BlockList)
-            {
-                var LineList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, block);
-                if (LineList.Count > 0 && rnd.Next(100) <= LineList.Count * _ChanceMidofier)
-                {
-                    var section = LineList[rnd.Next(LineList.Count)];
-                    linesOfDiary.Add(section);
-                    result += section.Line + " ";
-                }
-            }
+            //string result = "";
+            //var rnd = new Random();
 
-            return (result, linesOfDiary);
+            //var BlockList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
+            //var linesOfDiary = new ObservableCollection<Section>();
+            //foreach (Section block in BlockList)
+            //{
+            //    var LineList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, block);
+            //    if (LineList.Count > 0 && rnd.Next(100) <= LineList.Count * _ChanceMidofier)
+            //    {
+            //        var section = LineList[rnd.Next(LineList.Count)];
+            //        linesOfDiary.Add(section);
+            //        result += section.Line + " ";
+            //    }
+            //}
+
+            //return (result, linesOfDiary);
         }
 
         public (string, ObservableCollection<string>) RandomDiaryWithNewModel(IEnumerable<Block> Blocks)

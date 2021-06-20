@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DOfficeCore.Models;
 
 namespace DOfficeCore.Services
 {
+    [Obsolete("Класс устарел. Используй INewViewCollectionProvider", true)]
     interface IViewCollectionProvider
     {
         ObservableCollection<Section> DiagnosisFromDataToView(IEnumerable<Section> DataCollection);

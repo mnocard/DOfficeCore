@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using DOfficeCore.Models;
@@ -6,6 +7,7 @@ using DOfficeCore.Services.Interfaces;
 
 namespace DOfficeCore.Services
 {
+    [Obsolete("Класс устарел. Используй INewCollectionHandler", true)]
     public class CollectionHandler : ICollectionHandler
     {
         #region Удаление элементов

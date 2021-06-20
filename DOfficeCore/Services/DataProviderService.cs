@@ -44,6 +44,7 @@ namespace DOfficeCore.Services
         /// </summary>
         /// <param name="fileName">Имя файла</param>
         /// <returns>Коллекция данных</returns>
+        [Obsolete("Метод устарел. Используй LoadSectorsFromFile", true)]
         public List<Section> LoadDataFromFile(string path)
         {
             if (string.IsNullOrWhiteSpace(path)) return new List<Section>();
