@@ -198,7 +198,7 @@ namespace DOfficeCore.ViewModels
 
         #region SectorsCollection : List<Sector> - Основная коллекция данных
         /// <summary>Основная коллекция данных</summary>
-        private List<Sector> _SectorsCollection;
+        private List<Sector> _SectorsCollection = new List<Sector>();
 
         /// <summary>Основная коллекция данных</summary>
         public List<Sector> SectorsCollection
@@ -211,7 +211,7 @@ namespace DOfficeCore.ViewModels
         #region SectorsList : ObservableCollection<Sector> - Коллекция данных новой модели
 
         /// <summary>Коллекция данных новой модели</summary>
-        private ObservableCollection<Sector> _SectorsList;
+        private ObservableCollection<Sector> _SectorsList = new ObservableCollection<Sector>();
 
         /// <summary>Коллекция данных новой модели</summary>
         public ObservableCollection<Sector> SectorsList
@@ -225,7 +225,7 @@ namespace DOfficeCore.ViewModels
         #region BlocksList : ObservableCollection<Block> - Коллекция блоков
 
         /// <summary>Коллекция названий блоков</summary>
-        private ObservableCollection<Block> _BlocksList;
+        private ObservableCollection<Block> _BlocksList = new ObservableCollection<Block>();
 
         /// <summary>Коллекция названий блоков</summary>
         public ObservableCollection<Block> BlocksList
@@ -239,7 +239,7 @@ namespace DOfficeCore.ViewModels
         #region LinesList : ObservableCollection<string> - Коллекция строк
 
         /// <summary>Коллекция содержимого строк</summary>
-        private ObservableCollection<string> _LinesList;
+        private ObservableCollection<string> _LinesList = new ObservableCollection<string>();
 
         /// <summary>Коллекция содержимого строк</summary>
         public ObservableCollection<string> LinesList
@@ -277,14 +277,11 @@ namespace DOfficeCore.ViewModels
 
                 // Тестовые для новой модели данных Sector
                 SectorsCollection = TestData.GetSectorCollection();
-                SectorsList = new ObservableCollection<Sector>(SectorsCollection);
 
                 // Реальные данные
-                //SectorsList = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, "data.json"));
+                //SectorsCollection = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, "data.json"));
 
-                // Заменить следующую строчку (устаревшая версия)
-                //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
-
+                SectorsList = new ObservableCollection<Sector>(SectorsCollection);
             }
             catch (Exception e)
             {

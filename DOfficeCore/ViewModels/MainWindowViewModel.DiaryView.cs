@@ -105,19 +105,15 @@ namespace DOfficeCore.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(MultiBox) && MultiBox.Length >= 3)
             {
-                var sectors = _NewViewCollectionProvider.SearchDiagnosis(SectorsList, MultiBox);
+                SectorsList = new ObservableCollection<Sector>(_NewViewCollectionProvider.SearchSectors(SectorsCollection, MultiBox));
+                BlocksList = new ObservableCollection<Block>(_NewViewCollectionProvider.SearchBlocks(SectorsCollection, MultiBox));
+                LinesList = new ObservableCollection<string>(_NewViewCollectionProvider.SearchLines(SectorsCollection, MultiBox));
 
-                DiagnosisList = _ViewCollectionProvider.SearchDiagnosis(DataCollection, MultiBox);
-                if (DiagnosisList.Count == 0) DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
-                BlocksList = _ViewCollectionProvider.SearchBlocks(DataCollection, MultiBox);
-                LinesList = _ViewCollectionProvider.SearchLines(DataCollection, MultiBox);
+                if (!SectorsList.Any()) SectorsList = new ObservableCollection<Sector>(SectorsCollection);
                 Status = "Вот, что мы нашли по вашему запросу";
             }
             else
-            {
                 Status = "Введите не менее трёх символов для поиска";
-                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
-            }
         }
 
         private bool CanSearchElementCommandExecute(object parameter) => true;
