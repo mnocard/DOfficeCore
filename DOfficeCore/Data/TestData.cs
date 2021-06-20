@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
 using DOfficeCore.Models;
 
 namespace DOfficeCore.Data
 {
     class TestData
     {
-        public static List<Section> GetCollection()
+        public static List<Section> GetSectionCollection()
         {
             var TestLines = new List<Section>();
 
@@ -25,6 +28,22 @@ namespace DOfficeCore.Data
                 }
             }
             return TestLines;
+        }
+
+        public static List<Sector> GetSectorCollection()
+        {
+            Random rnd = new Random();
+
+            return Enumerable.Range(1, 10).Select(i => new Sector
+            {
+                Name = $"Sector {i}",
+                Blocks = Enumerable.Range(1, rnd.Next(10)).Select(k => new Block
+                {
+                    Name = $"Block {k}",
+                    Sector = $"Sector {i}",
+                    Lines = Enumerable.Range(1, rnd.Next(10)).Select(l => $"Line {l}").ToList(),
+                }).ToList(),
+            }).ToList();
         }
     }
 }
