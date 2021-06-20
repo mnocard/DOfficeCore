@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using Serilog;
+using System.Collections.ObjectModel;
 
 namespace DOfficeCore.Services
 {
@@ -63,6 +64,33 @@ namespace DOfficeCore.Services
                     var jsonString = File.ReadAllText(path);
                     if (!string.IsNullOrEmpty(jsonString))
                         result.AddRange(JsonSerializer.Deserialize<List<Section>>(jsonString));
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Can't load data from file {0}. Error:\n{1}.", path, e.Message);
+                throw new Exception("Unexpected error", e);
+            }
+            return result;
+        }
+
+        public ObservableCollection<Sector> LoadSectorsFromFile(string path)
+        {
+            var result = new ObservableCollection<Sector>();
+            try
+            {
+                if (!File.Exists(path))
+                {
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(Path.GetDirectoryName(path));
+                    using FileStream fs = File.Create(path);
+                    Log.Verbose($"File {path} doesn't exist");
+                }
+                else
+                {
+                    var jsonString = File.ReadAllText(path);
+                    if (!string.IsNullOrEmpty(jsonString))
+                        result = JsonSerializer.Deserialize<ObservableCollection<Sector>>(jsonString);
                 }
             }
             catch (Exception e)

@@ -226,13 +226,12 @@ namespace DOfficeCore.ViewModels
             if (dlg.ShowDialog() is true)
             {
                 string path = dlg.FileName;
-                var newCollection = _DataProviderService.LoadDataFromFile(Path.Combine(_Folder, path));
+                var newCollection = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, path));
 
                 if (confirmDlg.Equals(MessageBoxResult.Yes))
-                    DataCollection.AddRange(newCollection);
-                else DataCollection = new List<Section>(newCollection);
-
-                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                    foreach (var item in newCollection)
+                        SectorCollection.Add(item);   
+                else SectorCollection = new ObservableCollection<Sector>(newCollection);
             }
             else Status = "Ну и не надо. Больно-то и хотелось.";
         }
