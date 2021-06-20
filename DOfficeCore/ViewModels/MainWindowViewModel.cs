@@ -20,17 +20,23 @@ namespace DOfficeCore.ViewModels
         public MainWindowViewModel(IDataProviderService DataProviderService, 
                                     IViewCollectionProvider ViewCollectionProvider, 
                                     IDiaryBoxProvider DiaryBoxProvider,
-                                    ILineEditorService LineEditorService
+                                    ILineEditorService LineEditorService,
+                                    ICollectionHandler CollectionHandler
                                     )
         {
+            _Folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DOffice");
+
             _DataProviderService = DataProviderService;
             _ViewCollectionProvider = ViewCollectionProvider;
             _DiaryBoxProvider = DiaryBoxProvider;
             _LineEditorService = LineEditorService;
+            _CollectionHandler = CollectionHandler;
 
             #region Команды окна дневника
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
             ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
+            
+            IndexUpCommand = new LambdaCommand(OnIndexUpCommandExecuted, CanIndexUpCommandExecute);
 
             SelectedDiagnosisCommand = new LambdaCommand(OnSelectedDiagnosisCommandExecuted, CanSelectedDiagnosisCommandExecute);
             SelectedBlockCommand = new LambdaCommand(OnSelectedBlockCommandExecuted, CanSelectedBlockCommandExecute);
@@ -43,15 +49,23 @@ namespace DOfficeCore.ViewModels
             EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
             ClearDiaryBoxCommand = new LambdaCommand(OnClearDiaryBoxCommandExecuted, CanClearDiaryBoxCommandExecute);
             ChangeTabCommand = new LambdaCommand(OnChangeTabCommandExecuted, CanChangeTabCommandExecute);
+            ReturnTextToLinesCommand = new LambdaCommand(OnReturnTextToLinesCommandExecuted, CanReturnTextToLinesCommandExecute);
 
             #endregion
 
             #region Команды окна редактирования строк
             OpenFileCommand = new LambdaCommand(OnOpenFileCommandExecuted, CanOpenFileCommandExecute);
             GetTextFromClipboardCommand = new LambdaCommand(OnGetTextFromClipboardCommandExecuted, CanGetTextFromClipboardCommandExecute); 
+
             SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
+            LoadDataFromFileCommand = new LambdaCommand(OnLoadDataFromFileCommandExecuted, CanLoadDataFromFileCommandExecute);
+
             ClearListBoxCommand = new LambdaCommand(OnClearListBoxCommandExecuted, CanClearListBoxCommandExecute);
-            TransferCommand = new LambdaCommand(OnTransferCommandExecuted, CanTransferCommandExecute);
+            
+            SelectedRawLineCommand = new LambdaCommand(OnSelectedRawLineCommandExecuted, CanSelectedRawLineCommandExecute);
+            SelectedDiagnosisELCommand = new LambdaCommand(OnSelectedDiagnosisELCommandExecuted, CanSelectedDiagnosisELCommandExecute);
+            SelectedBlockELCommand = new LambdaCommand(OnSelectedBlockELCommandExecuted, CanSelectedBlockELCommandExecute);
+            SelectedLinesELCommand = new LambdaCommand(OnSelectedLinesELCommandExecuted, CanSelectedLinesELCommandExecute);
 
             AddDiagnosisCommand = new LambdaCommand(OnAddDiagnosisCommandExecuted, CanAddDiagnosisCommandExecute);
             AddBlockCommand = new LambdaCommand(OnAddBlockCommandExecuted, CanAddBlockCommandExecute);
@@ -71,6 +85,9 @@ namespace DOfficeCore.ViewModels
         }
 
         #region Свойства
+
+        /// <summary>Путь к папке с базой данных</summary>
+        private readonly string _Folder;
 
         #region Заголовок окна
         /// <summary>Заголовок окна</summary>
@@ -237,7 +254,7 @@ namespace DOfficeCore.ViewModels
                 DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
 
                 // Реальные данные
-                //DataCollection = _DataProviderService.LoadDataFromFile("lines");
+                //DataCollection = _DataProviderService.LoadDataFromFile(Path.Combine(_Folder, "data.json"));
                 //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
             }
             catch (Exception e)
@@ -261,7 +278,6 @@ namespace DOfficeCore.ViewModels
         private bool CanClosingAppCommandExecute(object parameter) => true;
 
         #endregion
-
 
         #region Команда переключения вкладок между дневником и обработкой предложений
         /// <summary>Команда переключения вкладок между дневником и обработкой предложений</summary>
@@ -293,6 +309,27 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
+        #region Команда поднятия элемента в списке вверх
+        /// <summary>Команда поднятия элемента в списке вверх</summary>
+        public ICommand IndexUpCommand { get; }
+        /// <summary>Команда поднятия элемента в списке вверх</summary>
+        private void OnIndexUpCommandExecuted(object parameter)
+        {
+            if(CurrentSection is not null)
+            {
+                var newSection = Section.CloneSection(CurrentSection);
+                var index = DataCollection.IndexOf(CurrentSection);
+                DataCollection.Remove(CurrentSection);
+                DataCollection.Insert(index - 1, newSection);
+                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+            }
+        }
+
+        private bool CanIndexUpCommandExecute(object parameter) => true;
+
+        #endregion
+
+
         #endregion
 
         #region Сервисы
@@ -305,7 +342,7 @@ namespace DOfficeCore.ViewModels
         private readonly IDataProviderService _DataProviderService;
         #endregion
 
-        #region Сервис работы с данными
+        #region Сервис отображения данных
         private readonly IViewCollectionProvider _ViewCollectionProvider;
         #endregion
 
@@ -313,6 +350,9 @@ namespace DOfficeCore.ViewModels
         private readonly IDiaryBoxProvider _DiaryBoxProvider;
         #endregion
 
+        #region Сервис работы с коллекцией
+        private readonly ICollectionHandler _CollectionHandler;
+        #endregion
         #endregion
     }
 }

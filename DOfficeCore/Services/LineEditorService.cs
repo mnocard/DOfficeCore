@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -57,7 +58,12 @@ namespace DOfficeCore.Services
                     }
                     result = textBuilder.ToString();
                 }
-                catch (System.IO.InvalidDataException e)
+                catch(IOException e)
+                {
+                    Log.Error($"Ошибка! IOException: файл уже используется другой программой.\n{0}", e.Message);
+                    throw new Exception("Unexpected error", e);
+                }
+                catch (InvalidDataException e)
                 {
                     Log.Error($"Ошибка! InvalidDataException.\n{0}", e.Message);
                     throw new Exception($"Cannot open file \"{filepath}\"", e);
@@ -84,15 +90,17 @@ namespace DOfficeCore.Services
         }
 
         ///<inheritdoc/>
-        public List<string> TextToLines(string lines)
-        {
-            return TextToLinesAsync(lines).Result;
-        }
+        public List<string> TextToLines(string lines) => string.IsNullOrWhiteSpace(lines) ? null : TextToLinesAsync(lines).Result;
+        //{
+        //    if (!string.IsNullOrWhiteSpace(lines))
+        //        return TextToLinesAsync(lines).Result;
+        //    else return null;
+        //}
 
         ///<inheritdoc/>
         public async Task<List<string>> TextToLinesAsync(string lines, CancellationToken token = default)
         {
-            if (string.IsNullOrEmpty(lines)) throw new ArgumentNullException();
+            if (string.IsNullOrEmpty(lines)) throw new ArgumentNullException(nameof(lines));
 
             var task = await Task.Run(() =>
             {
@@ -121,7 +129,8 @@ namespace DOfficeCore.Services
                         token.ThrowIfCancellationRequested();
                     }
                 }
-                return words;
+
+                return words.Select(w => w).Distinct().ToList();
             }).ConfigureAwait(false);
 
             return task;

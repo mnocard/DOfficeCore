@@ -62,20 +62,24 @@
                 HorizontalAlignment="Right"
                 DockPanel.Dock="Right"
                 Orientation="Horizontal">
-                <Button
-                    Margin="10,0"
-                    Command="{Binding RandomCommand}"
-                    CommandParameter="{Binding ElementName=dgCodes}">
+                <Button Margin="10,0" Command="{Binding RandomCommand}">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
                         Kind="Dice5Outline" />
                 </Button>
                 <Button
-                    x:Name="Copy"
+                    Margin="5,0"
+                    Command="{Binding ReturnTextToLinesCommand}"
+                    ToolTip="Разобрать текст на строки">
+                    <materialDesign:PackIcon
+                        Width="24"
+                        Height="24"
+                        Kind="ArrowLeftBoldBoxOutline" />
+                </Button>
+                <Button
                     Margin="5,0"
                     Command="{Binding CopyTextCommand}"
-                    CommandParameter="{Binding Text, ElementName=tbDiary}"
                     ToolTip="Копировать текст">
                     <materialDesign:PackIcon
                         Width="24"
@@ -86,7 +90,6 @@
                     x:Name="Edit"
                     Margin="5,0"
                     Command="{Binding EditTextCommand}"
-                    CommandTarget="{Binding ElementName=tbDiary}"
                     ToolTip="Редактировать текст">
                     <materialDesign:PackIcon
                         Width="24"
@@ -97,7 +100,6 @@
                     x:Name="Clear"
                     Margin="5,0"
                     Command="{Binding ClearDiaryBoxCommand}"
-                    CommandParameter="{Binding ElementName=tbDiary}"
                     ToolTip="Очистить поле">
                     <materialDesign:PackIcon
                         Width="24"
@@ -140,7 +142,7 @@
                 FontSize="15"
                 FontWeight="Bold"
                 Foreground="Black"
-                Text="Диагноз:" />
+                Text="Основа:" />
             <ListBox
                 x:Name="dgCodes"
                 Grid.Row="1"
@@ -150,14 +152,12 @@
                 SelectionMode="Single">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding SelectedDiagnosisCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                        <i:InvokeCommandAction Command="{Binding SelectedDiagnosisCommand}" CommandParameter="{Binding ElementName=dgCodes, Path=SelectedItem}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <TextBlock Text="{Binding Path=Diagnosis}" TextWrapping="Wrap" />
-                        </Grid>
+                        <TextBlock Text="{Binding Path=Diagnosis}" TextWrapping="Wrap" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -190,14 +190,12 @@
                 SelectionMode="Single">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding SelectedBlockCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                        <i:InvokeCommandAction Command="{Binding SelectedBlockCommand}" CommandParameter="{Binding ElementName=dgBlocksNames, Path=SelectedItem}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <TextBlock Text="{Binding Path=Block}" TextWrapping="Wrap" />
-                        </Grid>
+                        <TextBlock Text="{Binding Path=Block}" TextWrapping="Wrap" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -229,17 +227,15 @@
                 SelectionMode="Single">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding SelectedLineCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                        <i:InvokeCommandAction Command="{Binding SelectedLineCommand}" CommandParameter="{Binding ElementName=dgLinesContent, Path=SelectedItem}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <TextBlock
-                                Grid.Row="1"
-                                Text="{Binding Path=Line}"
-                                TextWrapping="Wrap" />
-                        </Grid>
+                        <TextBlock
+                            Grid.Row="1"
+                            Text="{Binding Path=Line}"
+                            TextWrapping="Wrap" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -262,7 +258,7 @@
             AcceptsReturn="True"
             Foreground="Black"
             IsReadOnly="{Binding EnableDiaryBox}"
-            Text="{Binding DiaryBox}"
+            Text="{Binding DiaryBox, UpdateSourceTrigger=PropertyChanged}"
             TextWrapping="Wrap"
             VerticalScrollBarVisibility="Auto" />
     </Grid>

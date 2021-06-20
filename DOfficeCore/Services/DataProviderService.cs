@@ -18,17 +18,16 @@ namespace DOfficeCore.Services
         /// <param name="data">Собственно список сохраняемых данных</param>
         /// <param name="fileName">Имя в файла, который будет происходить запись данных</param>
         /// <returns></returns>
-        public bool SaveDataToFile<T>(IEnumerable<T> data, string fileName)
+        public bool SaveDataToFile<T>(IEnumerable<T> data, string path)
         {
             if (data is null) return false;
-            else if (string.IsNullOrEmpty(fileName)) return false;
+            else if (string.IsNullOrWhiteSpace(path)) return false;
 
             try
             {
                 var json = JsonSerializer.Serialize(data);
-                File.WriteAllText(fileName + ".json", json, Encoding.UTF8);
+                File.WriteAllText(path, json, Encoding.UTF8);
             }
-
             catch (Exception e)
             {
                 Log.Error($"Can't save file. Error:\n{0}", e.Message);
@@ -44,30 +43,31 @@ namespace DOfficeCore.Services
         /// </summary>
         /// <param name="fileName">Имя файла</param>
         /// <returns>Коллекция данных</returns>
-        public List<Section> LoadDataFromFile(string fileName)
+        public List<Section> LoadDataFromFile(string path)
         {
-            if (string.IsNullOrEmpty(fileName)) return new List<Section>();
+            if (string.IsNullOrWhiteSpace(path)) return new List<Section>();
 
             var result = new List<Section>();
             try
             {
-                if (!File.Exists(fileName + ".json"))
+                if (!File.Exists(path))
                 {
-                    using FileStream fs = File.Create(fileName + ".json");
-                    Log.Verbose($"File {fileName} doesn't exist");
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(Path.GetDirectoryName(path));
+                    using FileStream fs = File.Create(path);
+                    Log.Verbose($"File {path} doesn't exist");
                     return new List<Section>();
                 }
                 else
                 {
-                    var jsonString = File.ReadAllText(fileName + ".json");
-
+                    var jsonString = File.ReadAllText(path);
                     if (!string.IsNullOrEmpty(jsonString))
                         result.AddRange(JsonSerializer.Deserialize<List<Section>>(jsonString));
                 }
             }
             catch (Exception e)
             {
-                Log.Error($"Can't load data from file {0}.json. Error:\n{1}.", fileName, e.Message);
+                Log.Error($"Can't load data from file {0}. Error:\n{1}.", path, e.Message);
                 throw new Exception("Unexpected error", e);
             }
             return result;
