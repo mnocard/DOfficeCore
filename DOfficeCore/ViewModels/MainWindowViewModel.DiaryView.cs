@@ -105,6 +105,8 @@ namespace DOfficeCore.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(MultiBox) && MultiBox.Length >= 3)
             {
+                var sectors = _NewViewCollectionProvider.SearchDiagnosis(SectorsList, MultiBox);
+
                 DiagnosisList = _ViewCollectionProvider.SearchDiagnosis(DataCollection, MultiBox);
                 if (DiagnosisList.Count == 0) DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
                 BlocksList = _ViewCollectionProvider.SearchBlocks(DataCollection, MultiBox);

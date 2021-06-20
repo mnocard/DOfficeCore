@@ -25,10 +25,11 @@ namespace DOfficeCore.ViewModels
                                     )
         {
             _Folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DOffice");
+            
             _NewCollectionHandler = NewCollectionHandler;
+            _NewViewCollectionProvider = NewViewCollectionProvider;
 
             _DataProviderService = DataProviderService;
-            _NewViewCollectionProvider = NewViewCollectionProvider;
             _DiaryBoxProvider = DiaryBoxProvider;
             _LineEditorService = LineEditorService;
 
@@ -195,6 +196,18 @@ namespace DOfficeCore.ViewModels
 
         #region ModelChanging
 
+        #region SectorsCollection : List<Sector> - Основная коллекция данных
+        /// <summary>Основная коллекция данных</summary>
+        private List<Sector> _SectorsCollection;
+
+        /// <summary>Основная коллекция данных</summary>
+        public List<Sector> SectorsCollection
+        {
+            get => _SectorsCollection;
+            set => _SectorsCollection = value;
+        }
+        #endregion
+
         #region SectorsList : ObservableCollection<Sector> - Коллекция данных новой модели
 
         /// <summary>Коллекция данных новой модели</summary>
@@ -263,7 +276,8 @@ namespace DOfficeCore.ViewModels
                 Log.Information("INFO");
 
                 // Тестовые для новой модели данных Sector
-                SectorsList = new ObservableCollection<Sector>(TestData.GetSectorCollection());
+                SectorsCollection = TestData.GetSectorCollection();
+                SectorsList = new ObservableCollection<Sector>(SectorsCollection);
 
                 // Реальные данные
                 //SectorsList = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, "data.json"));
