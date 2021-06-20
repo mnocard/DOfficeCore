@@ -30,8 +30,8 @@ namespace DOfficeCore
             services.AddSingleton<IViewCollectionProvider, ViewCollectionProvider>();
             services.AddSingleton<IDiaryBoxProvider, DiaryBoxProvider>();
             services.AddSingleton<ILineEditorService, LineEditorService>();
-            services.AddSingleton<ICollectionHandler, CollectionHandler>();
 
+            services.AddSingleton<INewCollectionHandler, NewCollectionHandler>();
         }
 
         protected override void OnStartup(StartupEventArgs e)

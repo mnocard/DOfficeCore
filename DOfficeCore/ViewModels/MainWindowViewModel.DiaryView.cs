@@ -68,7 +68,6 @@ namespace DOfficeCore.ViewModels
 
         #region Команды вкладки дневника
 
-
         #region Щелчок по элементу списка диагнозов
         /// <summary>Щелчок по элементу списка диагнозов</summary>
         public ICommand SelectedDiagnosisCommand { get; }
