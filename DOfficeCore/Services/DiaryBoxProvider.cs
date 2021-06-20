@@ -10,6 +10,7 @@ namespace DOfficeCore.Services
     class DiaryBoxProvider : IDiaryBoxProvider
     {
         private readonly IViewCollectionProvider _ViewCollectionProvider;
+        private const int _ChanceMidofier = 20;
 
         public DiaryBoxProvider(IViewCollectionProvider ViewCollectionProvider)
         {
@@ -31,7 +32,8 @@ namespace DOfficeCore.Services
 
 
         /// <summary>
-        /// Создание дневника, по одной случайной строке из каждого раздела определенного диагноза
+        /// Создание дневника, по одной случайной строке из каждого раздела определенного диагноза 
+        /// с шансом попадания строки в дневник зависимости от количества строк в дневнике
         /// </summary>
         /// <param name="DataCollection">Коллекция элементов базы данных</param>
         /// <param name="CurrentSection">Выбранная секция базы данных</param>
@@ -46,7 +48,7 @@ namespace DOfficeCore.Services
             foreach (Section block in BlockList)
             {
                 var LineList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, block);
-                if (LineList.Count > 0)
+                if (LineList.Count > 0 && rnd.Next(100) <= LineList.Count * _ChanceMidofier)
                 {
                     var section = LineList[rnd.Next(LineList.Count)];
                     linesOfDiary.Add(section);
