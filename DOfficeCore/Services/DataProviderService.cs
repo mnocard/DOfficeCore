@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using Serilog;
-using System.Collections.ObjectModel;
 
 namespace DOfficeCore.Services
 {
@@ -75,9 +74,9 @@ namespace DOfficeCore.Services
             return result;
         }
 
-        public ObservableCollection<Sector> LoadSectorsFromFile(string path)
+        public List<Sector> LoadSectorsFromFile(string path)
         {
-            var result = new ObservableCollection<Sector>();
+            var result = new List<Sector>();
             try
             {
                 if (!File.Exists(path))
@@ -91,7 +90,7 @@ namespace DOfficeCore.Services
                 {
                     var jsonString = File.ReadAllText(path);
                     if (!string.IsNullOrEmpty(jsonString))
-                        result = JsonSerializer.Deserialize<ObservableCollection<Sector>>(jsonString);
+                        result = JsonSerializer.Deserialize<List<Sector>>(jsonString);
                 }
             }
             catch (Exception e)
