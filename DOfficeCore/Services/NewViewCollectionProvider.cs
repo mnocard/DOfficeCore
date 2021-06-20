@@ -9,10 +9,10 @@ namespace DOfficeCore.Services
 {
     public class NewViewCollectionProvider : INewViewCollectionProvider
     {
-        public Sector SearchDiagnosis(IEnumerable<Sector> SectorsList, string MultiBox) =>
-            SectorsList.FirstOrDefault(sector => 
+        public List<Sector> SearchSectors(IEnumerable<Sector> SectorsList, string MultiBox) =>
+            SectorsList.Where(sector => 
                 sector.Name.Equals(MultiBox, StringComparison.CurrentCultureIgnoreCase)
-            );
+            ).Select(sector => sector).ToList();
 
         public List<Block> SearchBlocks(IEnumerable<Sector> SectorsList, string MultiBox) =>
             SectorsList.SelectMany(sector => 
