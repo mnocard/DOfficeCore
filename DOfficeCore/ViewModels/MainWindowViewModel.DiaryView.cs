@@ -60,11 +60,10 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка диагнозов</summary>
         private void OnSelectedDiagnosisCommandExecuted(object parameter)
         {
-            if (parameter is Section CurrentItem)
+            if (parameter is Sector sector)
             {
-                CurrentSection = Section.CloneSection(CurrentItem);
-                BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
-                LinesList = new ObservableCollection<Section>();
+                BlocksList = new ObservableCollection<Block>(sector.Blocks);
+                LinesList = new ObservableCollection<string>();
             }
         }
         private bool CanSelectedDiagnosisCommandExecute(object parameter) => true;
@@ -77,11 +76,8 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка разделов</summary>
         private void OnSelectedBlockCommandExecuted(object parameter)
         {
-            if (parameter is Section CurrentItem)
-            {
-                CurrentSection = Section.CloneSection(CurrentItem);
-                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
-            }
+            if (parameter is Block block)
+                LinesList = new ObservableCollection<string>(block.Lines);
         }
         private bool CanSelectedBlockCommandExecute(object parameter) => true;
 
@@ -93,11 +89,8 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка строк</summary>
         private void OnSelectedLineCommandExecuted(object parameter)
         {
-            if (parameter is Section CurrentItem)
-            {
-                CurrentSection = Section.CloneSection(CurrentItem);
-                DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, CurrentSection.Line);
-            }
+            if (parameter is string line)
+                DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, line);
         }
 
         private bool CanSelectedLineCommandExecute(object parameter) => true;
@@ -203,8 +196,7 @@ namespace DOfficeCore.ViewModels
             if (!string.IsNullOrWhiteSpace(DiaryBox))
             {
                 var lines = _LineEditorService.TextToLines(DiaryBox);
-                var sections = DataCollection.Where(s => lines.Contains(s.Line)).Select(s => s);
-                LinesList = new ObservableCollection<Section>(sections);
+                LinesList = new ObservableCollection<string>(lines);
                 RawLines = new ObservableCollection<string>(lines);
             }
         }
