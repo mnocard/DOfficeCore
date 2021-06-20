@@ -7,7 +7,7 @@ namespace DOfficeCore.Models
     {
         public string Name { get; set; }
         public string Sector { get; set; }
-        List<string> Lines { get; set; } = new List<string>();
+        public List<string> Lines { get; set; } = new List<string>();
 
         public static Block CloneBlock(Block other) => other is null
             ? null

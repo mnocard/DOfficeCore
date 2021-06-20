@@ -6,7 +6,7 @@ namespace DOfficeCore.Models
     public class Sector
     {
         public string Name { get; set; }
-        List<Block> Blocks { get; set; } = new List<Block>();
+        public List<Block> Blocks { get; set; } = new List<Block>();
 
         public static Sector CloneSector(Sector other) => other is null
             ? null
