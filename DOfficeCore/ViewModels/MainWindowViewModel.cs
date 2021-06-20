@@ -226,6 +226,24 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
+        #region ModelChanging
+
+        #region SectorCollection : List<Sector> - Коллекция данных новой модели (замена для DataCollection)
+
+        /// <summary>Коллекция данных новой модели (замена для DataCollection)</summary>
+        private List<Sector> _SectorCollection;
+
+        /// <summary>Коллекция данных новой модели (замена для DataCollection)</summary>
+        public List<Sector> SectorCollection
+        {
+            get => _SectorCollection;
+            set => _SectorCollection = value;
+        }
+
+        #endregion
+
+        #endregion
+
         #endregion
 
         #region Команды
@@ -249,13 +267,21 @@ namespace DOfficeCore.ViewModels
             {
                 Log.Information("INFO");
 
-                // Тестовые данные
-                DataCollection = TestData.GetCollection();
-                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                // Тестовые данные (устаревшая версия)
+                //DataCollection = TestData.GetSectionCollection();
+
+                // Тестовые для новой модели данных Sector
+                SectorCollection = TestData.GetSectorCollection();
+
+                // Реальные данные (устаревшая версия)
+                //DataCollection = _DataProviderService.LoadDataFromFile(Path.Combine(_Folder, "data.json"));
 
                 // Реальные данные
-                //DataCollection = _DataProviderService.LoadDataFromFile(Path.Combine(_Folder, "data.json"));
-                //DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+                //SectorCollection = _DataProviderService.LoadDataFromFile(Path.Combine(_Folder, "data.json"));
+
+                // Заменить следующую строчку (устаревшая версия)
+                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
+
             }
             catch (Exception e)
             {

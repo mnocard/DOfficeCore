@@ -36,12 +36,12 @@ namespace DOfficeCore.Data
 
             return Enumerable.Range(1, 10).Select(i => new Sector
             {
-                Name = $"Sector {i}",
+                Name = $"Сектор {i}",
                 Blocks = Enumerable.Range(1, rnd.Next(10)).Select(k => new Block
                 {
-                    Name = $"Block {k}",
-                    Sector = $"Sector {i}",
-                    Lines = Enumerable.Range(1, rnd.Next(10)).Select(l => $"Line {l}").ToList(),
+                    Name = $"Блок {k}",
+                    Sector = $"Сектор {i}",
+                    Lines = Enumerable.Range(1, rnd.Next(10)).Select(l => $"Строка {l} в блоке {k} в секторе {i}").ToList(),
                 }).ToList(),
             }).ToList();
         }
