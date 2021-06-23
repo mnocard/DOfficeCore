@@ -202,6 +202,7 @@
                     Grid.Row="2"
                     Background="#FF9E9E9E"
                     DockPanel.Dock="Top"
+                    
                     ItemsSource="{Binding DiagnosisList}"
                     SelectionMode="Single">
                     <ListBox.ItemTemplate>

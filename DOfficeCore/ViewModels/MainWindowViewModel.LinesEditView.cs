@@ -9,6 +9,7 @@ using System;
 using System.Threading.Tasks;
 using Serilog;
 using System.IO;
+using System.Linq;
 
 namespace DOfficeCore.ViewModels
 {
@@ -90,6 +91,48 @@ namespace DOfficeCore.ViewModels
         {
             get => _LineMultiBox;
             set => Set(ref _LineMultiBox, value);
+        }
+
+        #endregion
+
+        #region SelectedSector : Sector - Выбранный сектор
+
+        /// <summary>Выбранный сектор</summary>
+        private Sector _SelectedSector;
+
+        /// <summary>Выбранный сектор</summary>
+        public Sector SelectedSector
+        {
+            get => _SelectedSector;
+            set => Set(ref _SelectedSector, value);
+        }
+
+        #endregion
+
+        #region SelectedBlock : Block - Выбранный блок
+
+        /// <summary>Выбранный блок</summary>
+        private Block _SelectedBlock;
+
+        /// <summary>Выбранный блок</summary>
+        public Block SelectedBlock
+        {
+            get => _SelectedBlock;
+            set => Set(ref _SelectedBlock, value);
+        }
+
+        #endregion
+
+        #region SelectedLine : string - Выбранная строка
+
+        /// <summary>Выбранная строка</summary>
+        private string _SelectedLine;
+
+        /// <summary>Выбранная строка</summary>
+        public string SelectedLine
+        {
+            get => _SelectedLine;
+            set => Set(ref _SelectedLine, value);
         }
 
         #endregion
@@ -176,25 +219,26 @@ namespace DOfficeCore.ViewModels
         /// <summary>Сохранение данных в файл</summary>
         private void OnSaveDataToFileCommandExecuted(object p)
         {
-            if (DataCollection != null)
+            if (!SectorsCollection.Any())
+                Status = "Нечего сохранять";
+
+            var dlg = new SaveFileDialog();
+            if (!Directory.Exists(_Folder))
+                Directory.CreateDirectory(_Folder);
+
+            dlg.InitialDirectory = _Folder;
+            dlg.FileName = dataFileName;
+            dlg.DefaultExt = dataFileFormat;
+            dlg.Filter = dataFileFilter;
+
+            if (dlg.ShowDialog() is true)
             {
-                var dlg = new SaveFileDialog();
-                if (!Directory.Exists(_Folder))
-                    Directory.CreateDirectory(_Folder);
-                dlg.InitialDirectory = _Folder;
-                dlg.FileName = dataFileName;
-                dlg.DefaultExt = dataFileFormat;
-                dlg.Filter = dataFileFilter;
-                if (dlg.ShowDialog() is true)
-                {
-                    string path = dlg.FileName;
-                    if (_DataProviderService.SaveDataToFile(DataCollection, path))
-                        Status = "Ваша коллекция сохраненая";
-                    else Status = "Непредвиденная ошибка! Сохранение не удалось";
-                }
-                else Status = "Ну и не надо. Больно-то и хотелось.";
+                string path = dlg.FileName;
+                if (_DataProviderService.SaveDataToFile(SectorsCollection, path))
+                    Status = "Ваша коллекция сохраненая";
+                else Status = "Непредвиденная ошибка! Сохранение не удалось";
             }
-            else Status = "Нечего сохранять";
+            else Status = "Ну и не надо. Больно-то и хотелось.";
         }
 
         private bool CanSaveDataToFileCommandExecute(object p) => true;
@@ -228,9 +272,12 @@ namespace DOfficeCore.ViewModels
                 string path = dlg.FileName;
                 var newCollection = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, path));
 
+
+                // проверить работоспособность Union'а
                 if (confirmDlg.Equals(MessageBoxResult.Yes))
-                    foreach (var item in newCollection)
-                        SectorsList.Add(item);   
+                    SectorsList.Union(newCollection);
+                //foreach (var item in newCollection)
+                //    SectorsList.Add(item);
                 else SectorsList = new ObservableCollection<Sector>(newCollection);
             }
             else Status = "Ну и не надо. Больно-то и хотелось.";
@@ -246,7 +293,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Очистка необработанной таблицы</summary>
         private void OnClearListBoxCommandExecuted(object parameter)
         {
-            RawLines = null;
+            RawLines = new ObservableCollection<string>();
             Status = "Таблица предложений очищена";
         }
 
@@ -262,10 +309,10 @@ namespace DOfficeCore.ViewModels
         {
             if (parameter is string rawLine
                 && !string.IsNullOrWhiteSpace(rawLine)
-                && CurrentSection != null)
+                && SelectedBlock != null)
             {
-                _CollectionHandler.AddLine(DataCollection, CurrentSection, rawLine);
-                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
+                _NewCollectionHandler.AddLine(SelectedBlock, rawLine);
+                LinesList = new ObservableCollection<string>(SelectedBlock.Lines);
                 RawLines.Remove(rawLine);
                 Status = "Выбранная строка перемещена в таблицу предложений";
             }
@@ -280,7 +327,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка диагнозов в окне редактирования строк</summary>
         private void OnSelectedDiagnosisELCommandExecuted(object parameter)
         {
-            if (parameter is Section CurrentItem)
+            if (parameter is Sector CurrentItem)
             {
                 CurrentSection = Section.CloneSection(CurrentItem);
                 BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
