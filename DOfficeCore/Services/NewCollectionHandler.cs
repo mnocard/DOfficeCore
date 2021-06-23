@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 using DOfficeCore.Models;
@@ -9,39 +10,51 @@ namespace DOfficeCore.Services
     public class NewCollectionHandler : INewCollectionHandler
     {
         #region Добавление элемента
-        public bool AddSector(ObservableCollection<Sector> SectorCollection, string MultiBox)
+        public bool AddSector(List<Sector> SectorList, string MultiBox)
         {
             if (string.IsNullOrWhiteSpace(MultiBox) ||
-                SectorCollection.Any(section => section.Name.Equals(MultiBox)))
+                SectorList.Any(section => 
+                    section.Name.Equals(MultiBox)))
                 return false;
 
-            SectorCollection.Add(new Sector { Name = MultiBox });
+            SectorList.Add(new Sector { Name = MultiBox });
             return true;
         }
 
-        public bool AddBlock(Sector Sector, string MultiBox)
+        public bool AddBlock(List<Sector> SectorList, Sector Sector, string MultiBox)
         {
             if (string.IsNullOrWhiteSpace(MultiBox) ||
-                Sector.Blocks.Any(block =>
-                    block.Name is not null &&
-                    block.Name.Equals(MultiBox)))
+                SectorList.Any(sector => 
+                    sector.Name.Equals(Sector.Name) && 
+                    sector.Blocks.Any(block =>
+                        block.Name is not null &&
+                        block.Name.Equals(MultiBox))))
                 return false;
 
-            Sector.Blocks.Add(new Block
-            {
-                Name = MultiBox,
-                Sector = Sector.Name,
-            });
+            SectorList.FirstOrDefault(sector => 
+                sector.Name.Equals(Sector.Name)).Blocks.Add(new Block
+                {
+                    Name = MultiBox,
+                    Sector = Sector.Name,
+                });
+
             return true;
         }
 
-        public bool AddLine(Block Block, string MultiBox)
+        public bool AddLine(List<Sector> SectorList, Block Block, string MultiBox)
         {
             if (string.IsNullOrWhiteSpace(MultiBox) ||
-                Block.Lines.Any(line => line.Equals(MultiBox)))
+                SectorList.Any(sector => 
+                    sector.Name.Equals(Block.Sector) &&
+                    sector.Blocks.Any(block => 
+                        block.Lines.Any(line => 
+                            line.Equals(MultiBox)))))
                 return false;
 
-            Block.Lines.Add(MultiBox);
+            SectorList.FirstOrDefault(sector =>
+                sector.Name.Equals(Block.Sector)).Blocks.FirstOrDefault(block =>
+                    block.Name.Equals(Block.Name)).Lines.Add(MultiBox);
+
             return true;
         }
 
@@ -49,66 +62,85 @@ namespace DOfficeCore.Services
 
         #region Удаление элемента
 
-        public bool RemoveSector(ObservableCollection<Sector> SectorCollection, Sector Sector)
+        public bool RemoveSector(List<Sector> SectorList, Sector Sector)
         {
             if (Sector is null)
                 return false;
-            SectorCollection.Remove(Sector);
-            return true;
+            return SectorList.Remove(Sector);
         }
 
-        public bool RemoveBlock(Sector Sector, Block Block)
+        public bool RemoveBlock(List<Sector> SectorList, Sector Sector, Block Block)
         {
-            if (Block is null)
+            if (SectorList is null ||
+                Sector is null ||
+                Block is null)
                 return false;
-            Sector.Blocks.Remove(Block);
-            return true;
+
+            return SectorList.FirstOrDefault(sector => 
+                sector.Name.Equals(Sector.Name)).Blocks.Remove(Block);
         }
 
-        public bool RemoveLine(Block Block, string Line)
+        public bool RemoveLine(List<Sector> SectorList, Block Block, string Line)
         {
-            if (string.IsNullOrWhiteSpace(Line))
+            if (SectorList is null ||
+                Block is null ||
+                string.IsNullOrWhiteSpace(Line))
                 return false;
-            Block.Lines.Remove(Line);
-            return true;
+
+            return SectorList.FirstOrDefault(sector =>
+                sector.Name.Equals(Block.Sector)).Blocks.FirstOrDefault(block =>
+                    block.Name.Equals(Block.Name)).Lines.Remove(Line);
         }
 
         #endregion
 
         #region Изменение элемента
 
-        public bool EditSector(Sector Sector, string MultiBox)
+        public bool EditSector(List<Sector> SectorList, Sector Sector, string MultiBox)
         {
-            if (string.IsNullOrWhiteSpace(MultiBox) ||
+            if (SectorList is null || 
+                string.IsNullOrWhiteSpace(MultiBox) ||
                 Sector is null ||
                 !Sector.Name.Equals(MultiBox))
                 return false;
 
-            Sector.Name = MultiBox;
+            SectorList.FirstOrDefault(sector =>
+                sector.Name.Equals(Sector.Name)).Name = MultiBox;
+
             return true;
         }
 
-        public bool EditBlock(Block Block, string MultiBox)
+        public bool EditBlock(List<Sector> SectorList, Block Block, string MultiBox)
         {
-            if (string.IsNullOrWhiteSpace(MultiBox) ||
+            if (SectorList is null || 
+                string.IsNullOrWhiteSpace(MultiBox) ||
                 Block is null ||
                 !Block.Name.Equals(MultiBox))
                 return false;
 
-            Block.Name = MultiBox;
+            SectorList.FirstOrDefault(sector =>
+                sector.Name.Equals(Block.Sector)).Blocks.FirstOrDefault(block =>
+                    block.Name.Equals(Block.Name)).Name = MultiBox;
             return true;
         }
 
-        public bool EditLine(Block Block, string Line, string MultiBox)
+        public bool EditLine(List<Sector> SectorList, Block Block, string Line, string MultiBox)
         {
-            if (string.IsNullOrWhiteSpace(MultiBox) ||
+            if (SectorList is null || 
+                string.IsNullOrWhiteSpace(MultiBox) ||
                 string.IsNullOrWhiteSpace(Line) ||
                 Block is null ||
                 !Block.Lines.Any(l => l.Equals(Line)))
                 return false;
 
-            Block.Lines.Remove(Line);
-            Block.Lines.Add(MultiBox);
+            SectorList.FirstOrDefault(sector =>
+                 sector.Name.Equals(Block.Sector)).Blocks.FirstOrDefault(block =>
+                     block.Name.Equals(Block.Name)).Lines.Remove(Line);
+
+            SectorList.FirstOrDefault(sector =>
+                sector.Name.Equals(Block.Sector)).Blocks.FirstOrDefault(block =>
+                    block.Name.Equals(Block.Name)).Lines.Add(MultiBox);
+
             return true;
         }
 

@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 
 using DOfficeCore.Models;
 
@@ -6,16 +6,16 @@ namespace DOfficeCore.Services.Interfaces
 {
     public interface INewCollectionHandler
     {
-        bool AddSector(ObservableCollection<Sector> SectorCollection, string MultiBox);
-        bool AddBlock(Sector Sector, string MultiBox);
-        bool AddLine(Block Block, string MultiBox);
+        bool AddSector(List<Sector> SectorList, string MultiBox);
+        bool AddBlock(List<Sector> SectorList, Sector Sector, string MultiBox);
+        bool AddLine(List<Sector> SectorList, Block Block, string MultiBox);
 
-        bool RemoveSector(ObservableCollection<Sector> SectorCollection, Sector Sector);
-        bool RemoveBlock(Sector Sector, Block Block);
-        bool RemoveLine(Block Block, string Line);
+        bool RemoveSector(List<Sector> SectorList, Sector Sector);
+        bool RemoveBlock(List<Sector> SectorList, Sector Sector, Block Block);
+        bool RemoveLine(List<Sector> SectorList, Block Block, string Line);
 
-        bool EditSector(Sector Sector, string MultiBox);
-        bool EditBlock(Block Block, string MultiBox);
-        bool EditLine(Block Block, string Line, string MultiBox);
+        bool EditSector(List<Sector> SectorList, Sector Sector, string MultiBox);
+        bool EditBlock(List<Sector> SectorList, Block Block, string MultiBox);
+        bool EditLine(List<Sector> SectorList, Block Block, string Line, string MultiBox);
     }
 }
