@@ -9,5 +9,7 @@ namespace DOfficeCore.Services.Interfaces
         List<Sector> SearchSectors(IEnumerable<Sector> SectorsList, string MultiBox);
         List<Block> SearchBlocks(IEnumerable<Sector> SectorsList, string MultiBox);
         List<string> SearchLines(IEnumerable<Sector> SectorsList, string MultiBox);
+        List<Block> GetBlocks(IEnumerable<Sector> SectorsList, Sector Sector);
+        List<string> GetLines(IEnumerable<Sector> SectorsList, Block Block);
     }
 }
