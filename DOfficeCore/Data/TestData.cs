@@ -37,7 +37,7 @@ namespace DOfficeCore.Data
             return Enumerable.Range(1, 10).Select(i => new Sector
             {
                 Name = $"Сектор {i}",
-                Blocks = Enumerable.Range(1, rnd.Next(10)).Select(k => new Block
+                Blocks = Enumerable.Range(1, rnd.Next(3, 10)).Select(k => new Block
                 {
                     Name = $"Блок {k}",
                     Sector = $"Сектор {i}",
