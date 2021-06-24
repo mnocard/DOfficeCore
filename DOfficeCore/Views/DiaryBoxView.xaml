@@ -148,11 +148,12 @@
                 Grid.Row="1"
                 Margin="0,0,5,0"
                 Background="#FF9E9E9E"
+                SelectedItem="{Binding SelectedSector}"
                 ItemsSource="{Binding SectorsList}"
                 SelectionMode="Single">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding SelectedDiagnosisCommand}" CommandParameter="{Binding ElementName=dgCodes, Path=SelectedItem}" />
+                        <i:InvokeCommandAction Command="{Binding SelectedDiagnosisCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
@@ -179,18 +180,19 @@
                 FontSize="15"
                 FontWeight="Bold"
                 Foreground="Black"
-                Text="{Binding BlocksList.Sector, StringFormat={}{0}:}" />
+                Text="{Binding SelectedSector.Name, UpdateSourceTrigger=PropertyChanged}" />
             <ListBox
                 x:Name="dgBlocksNames"
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="0,0,5,0"
                 Background="#FF9E9E9E"
+                SelectedItem="{Binding SelectedBlock}"
                 ItemsSource="{Binding BlocksList}"
                 SelectionMode="Single">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding SelectedBlockCommand}" CommandParameter="{Binding ElementName=dgBlocksNames, Path=SelectedItem}" />
+                        <i:InvokeCommandAction Command="{Binding SelectedBlockCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
@@ -217,12 +219,13 @@
                 FontSize="15"
                 FontWeight="Bold"
                 Foreground="Black"
-                Text="{Binding BlocksList.Name, StringFormat={}{0}:}" />
+                Text="{Binding SelectedBlock.Name}" />
             <ListBox
                 x:Name="dgLinesContent"
                 Grid.Row="1"
                 Grid.Column="2"
                 Background="#FF9E9E9E"
+                SelectedItem="{Binding SelectedLine}"
                 ItemsSource="{Binding LinesList}"
                 SelectionMode="Single">
                 <i:Interaction.Triggers>
