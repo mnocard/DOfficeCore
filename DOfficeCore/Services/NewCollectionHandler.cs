@@ -13,7 +13,7 @@ namespace DOfficeCore.Services
         public bool AddSector(List<Sector> SectorsCollection, string MultiBox)
         {
             if (string.IsNullOrWhiteSpace(MultiBox) ||
-                SectorsCollection.Any(section => 
+                SectorsCollection.Any(section =>
                     section.Name.Equals(MultiBox)))
                 return false;
 
@@ -24,14 +24,14 @@ namespace DOfficeCore.Services
         public bool AddBlock(List<Sector> SectorsCollection, Sector Sector, string MultiBox)
         {
             if (string.IsNullOrWhiteSpace(MultiBox) ||
-                SectorsCollection.Any(sector => 
-                    sector.Name.Equals(Sector.Name) && 
+                SectorsCollection.Any(sector =>
+                    sector.Name.Equals(Sector.Name) &&
                     sector.Blocks.Any(block =>
                         block.Name is not null &&
                         block.Name.Equals(MultiBox))))
                 return false;
 
-            SectorsCollection.FirstOrDefault(sector => 
+            SectorsCollection.FirstOrDefault(sector =>
                 sector.Name.Equals(Sector.Name)).Blocks.Add(new Block
                 {
                     Name = MultiBox,
@@ -44,10 +44,10 @@ namespace DOfficeCore.Services
         public bool AddLine(List<Sector> SectorsCollection, Block Block, string MultiBox)
         {
             if (string.IsNullOrWhiteSpace(MultiBox) ||
-                SectorsCollection.Any(sector => 
+                SectorsCollection.Any(sector =>
                     sector.Name.Equals(Block.Sector) &&
-                    sector.Blocks.Any(block => 
-                        block.Lines.Any(line => 
+                    sector.Blocks.Any(block =>
+                        block.Lines.Any(line =>
                             line.Equals(MultiBox)))))
                 return false;
 
@@ -76,7 +76,7 @@ namespace DOfficeCore.Services
                 Block is null)
                 return false;
 
-            return SectorsCollection.FirstOrDefault(sector => 
+            return SectorsCollection.FirstOrDefault(sector =>
                 sector.Name.Equals(Sector.Name)).Blocks.Remove(Block);
         }
 
@@ -98,24 +98,28 @@ namespace DOfficeCore.Services
 
         public bool EditSector(List<Sector> SectorsCollection, Sector Sector, string MultiBox)
         {
-            if (SectorsCollection is null || 
+            if (SectorsCollection is null ||
                 string.IsNullOrWhiteSpace(MultiBox) ||
                 Sector is null ||
-                !Sector.Name.Equals(MultiBox))
+                Sector.Name.Equals(MultiBox))
                 return false;
 
             SectorsCollection.FirstOrDefault(sector =>
                 sector.Name.Equals(Sector.Name)).Name = MultiBox;
+
+            SectorsCollection.FirstOrDefault(sector =>
+                 sector.Name.Equals(Sector.Name)).Blocks.ForEach(block =>
+                    block.Sector = MultiBox);
 
             return true;
         }
 
         public bool EditBlock(List<Sector> SectorsCollection, Block Block, string MultiBox)
         {
-            if (SectorsCollection is null || 
+            if (SectorsCollection is null ||
                 string.IsNullOrWhiteSpace(MultiBox) ||
                 Block is null ||
-                !Block.Name.Equals(MultiBox))
+                Block.Name.Equals(MultiBox))
                 return false;
 
             SectorsCollection.FirstOrDefault(sector =>
@@ -126,7 +130,7 @@ namespace DOfficeCore.Services
 
         public bool EditLine(List<Sector> SectorsCollection, Block Block, string Line, string MultiBox)
         {
-            if (SectorsCollection is null || 
+            if (SectorsCollection is null ||
                 string.IsNullOrWhiteSpace(MultiBox) ||
                 string.IsNullOrWhiteSpace(Line) ||
                 Block is null ||
