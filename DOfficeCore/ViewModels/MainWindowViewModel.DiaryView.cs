@@ -60,8 +60,9 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка диагнозов</summary>
         private void OnSelectedDiagnosisCommandExecuted(object parameter)
         {
+            if (SelectedSector is not null)
                 BlocksList = new ObservableCollection<Block>(SelectedSector.Blocks);
-                LinesList = new ObservableCollection<string>();
+            LinesList = new ObservableCollection<string>();
         }
         private bool CanSelectedDiagnosisCommandExecute(object parameter) => true;
 
@@ -73,6 +74,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка разделов</summary>
         private void OnSelectedBlockCommandExecuted(object parameter)
         {
+            if (SelectedBlock is not null)
                 LinesList = new ObservableCollection<string>(SelectedBlock.Lines);
         }
         private bool CanSelectedBlockCommandExecute(object parameter) => true;
@@ -85,7 +87,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка строк</summary>
         private void OnSelectedLineCommandExecuted(object parameter)
         {
-                DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, SelectedLine);
+            DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, SelectedLine);
         }
 
         private bool CanSelectedLineCommandExecute(object parameter) => true;

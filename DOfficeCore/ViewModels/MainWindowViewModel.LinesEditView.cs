@@ -190,20 +190,21 @@ namespace DOfficeCore.ViewModels
             if (Clipboard.ContainsText())
             {
                 TextForEditing = Clipboard.GetText();
-                if (RawLines == null) RawLines = new ObservableCollection<string>();
-                try
+                if (RawLines is null) RawLines = new ObservableCollection<string>();
+                if (!string.IsNullOrWhiteSpace(TextForEditing))
                 {
-                    foreach (var item in _LineEditorService.TextToLines(TextForEditing))
+                    try
                     {
-                        RawLines.Add(item);
+                        var resultLines = _LineEditorService.TextToLines(TextForEditing);
+                        RawLines = new ObservableCollection<string>(RawLines.Concat(resultLines));
+                        Status = "Готово";
                     }
-                    Status = "Готово";
-                }
-                catch (ArgumentNullException e)
-                {
-                    Log.Error("Ошибка копирования текста из буфера обмена. ArgumentNullException." + e.Message);
-                    Status = "Что-то пошло не так!";
-                    MessageBox.Show("Что-то пошло не так!\n" + e.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    catch (ArgumentNullException e)
+                    {
+                        Log.Error("Ошибка копирования текста из буфера обмена. ArgumentNullException." + e.Message);
+                        Status = "Что-то пошло не так!";
+                        MessageBox.Show("Что-то пошло не так!\n" + e.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
             else Status = "Буфер обмена пуст";
@@ -246,7 +247,6 @@ namespace DOfficeCore.ViewModels
         private bool CanSaveDataToFileCommandExecute(object p) => true;
         #endregion
 
-
         #region Загрузка бд из файла
         /// <summary>Загрузка бд из файла</summary>
         public ICommand LoadDataFromFileCommand { get; }
@@ -277,7 +277,7 @@ namespace DOfficeCore.ViewModels
                 var newCollection = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, path));
 
                 if (confirmDlg.Equals(MessageBoxResult.Yes))
-                    SectorsList = new ObservableCollection<Sector>(SectorsList.Union(newCollection));
+                    SectorsList = new ObservableCollection<Sector>(SectorsList.Concat(newCollection));
                 else SectorsList = new ObservableCollection<Sector>(newCollection);
             }
             else Status = "Ну и не надо. Больно-то и хотелось.";
@@ -310,7 +310,7 @@ namespace DOfficeCore.ViewModels
             if (!string.IsNullOrWhiteSpace(SelectedLine)
                 && SelectedBlock != null)
             {
-                if(_NewCollectionHandler.AddLine(SectorsCollection, SelectedBlock, SelectedLine))
+                if (_NewCollectionHandler.AddLine(SectorsCollection, SelectedBlock, SelectedLine))
                 {
                     LinesList = new ObservableCollection<string>(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
                     RawLines.Remove(SelectedLine);
@@ -465,7 +465,7 @@ namespace DOfficeCore.ViewModels
                 SelectedSector is not null &&
                !string.IsNullOrWhiteSpace(SectorsMultiBox))
             {
-                if(_NewCollectionHandler.EditSector(SectorsCollection, SelectedSector, SectorsMultiBox))
+                if (_NewCollectionHandler.EditSector(SectorsCollection, SelectedSector, SectorsMultiBox))
                 {
                     SectorsList = new ObservableCollection<Sector>(SectorsCollection);
                     SelectedSector = SectorsCollection.FirstOrDefault(sector => sector.Name.Equals(SectorsMultiBox));
@@ -492,7 +492,7 @@ namespace DOfficeCore.ViewModels
                 SelectedBlock is not null &&
                 !string.IsNullOrWhiteSpace(BlockMultiBox))
             {
-                if(_NewCollectionHandler.EditBlock(SectorsCollection, SelectedBlock, BlockMultiBox))
+                if (_NewCollectionHandler.EditBlock(SectorsCollection, SelectedBlock, BlockMultiBox))
                 {
                     BlocksList = new ObservableCollection<Block>(_NewViewCollectionProvider.GetBlocks(SectorsCollection, SelectedSector));
 
@@ -552,7 +552,7 @@ namespace DOfficeCore.ViewModels
                     $"Все элементы, относящиеся к этому диагнозу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
-                   if( _NewCollectionHandler.RemoveSector(SectorsCollection, SelectedSector))
+                    if (_NewCollectionHandler.RemoveSector(SectorsCollection, SelectedSector))
                     {
                         SectorsList = new ObservableCollection<Sector>(SectorsCollection);
                         BlocksList = new ObservableCollection<Block>();
@@ -584,7 +584,7 @@ namespace DOfficeCore.ViewModels
                     $"Все элементы также относящиеся к этому разделу также будут удалены!", "Внимание!", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if(_NewCollectionHandler.RemoveBlock(SectorsCollection, SelectedSector, SelectedBlock))
+                    if (_NewCollectionHandler.RemoveBlock(SectorsCollection, SelectedSector, SelectedBlock))
                     {
                         BlocksList = new ObservableCollection<Block>(_NewViewCollectionProvider.GetBlocks(SectorsCollection, SelectedSector));
                         LinesList = new ObservableCollection<string>();
@@ -615,7 +615,7 @@ namespace DOfficeCore.ViewModels
 
                 if (result == MessageBoxResult.Yes)
                 {
-                   if(_NewCollectionHandler.RemoveLine(SectorsCollection, SelectedBlock, SelectedLine))
+                    if (_NewCollectionHandler.RemoveLine(SectorsCollection, SelectedBlock, SelectedLine))
                     {
                         LinesList = new ObservableCollection<string>(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
 
@@ -644,7 +644,7 @@ namespace DOfficeCore.ViewModels
             if (!string.IsNullOrWhiteSpace(SelectedLine))
             {
                 RawLines.Add(SelectedLine);
-                if(_NewCollectionHandler.RemoveLine(SectorsCollection, SelectedBlock, SelectedLine))
+                if (_NewCollectionHandler.RemoveLine(SectorsCollection, SelectedBlock, SelectedLine))
                 {
                     LinesList = new ObservableCollection<string>(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
 
