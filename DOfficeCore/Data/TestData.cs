@@ -32,7 +32,7 @@ namespace DOfficeCore.Data
 
         public static List<Sector> GetSectorCollection()
         {
-            Random rnd = new Random();
+            Random rnd = new();
 
             return Enumerable.Range(1, 10).Select(i => new Sector
             {

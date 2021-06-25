@@ -48,7 +48,7 @@ namespace DOfficeCore.Services
             //var rnd = new Random();
 
             //var BlockList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
-            //var linesOfDiary = new ObservableCollection<Section>();
+            //var linesOfDiary = new();
             //foreach (Section block in BlockList)
             //{
             //    var LineList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, block);

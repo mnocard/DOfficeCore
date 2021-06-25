@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Serilog;
 using System.IO;
 using System.Linq;
+using System.Windows.Media;
 
 namespace DOfficeCore.ViewModels
 {
@@ -25,20 +26,6 @@ namespace DOfficeCore.ViewModels
 
         #region Свойства окна обработчика строк
 
-        #region TextForEditing : string - Текст, который необходимо обработать
-
-        /// <summary>Текст, который необходимо обработать</summary>
-        private string _TextForEditing;
-
-        /// <summary>Текст, который необходимо обработать</summary>
-        public string TextForEditing
-        {
-            get => _TextForEditing;
-            set => Set(ref _TextForEditing, value);
-        }
-
-        #endregion
-
         #region RawLines : ObservableCollection<string> - Необработанная коллекция строк
 
         /// <summary>Необработанная коллекция строк</summary>
@@ -53,7 +40,7 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
-        #region DiagnosisMultiBox : string - Поле ввода диагноза
+        #region SectorsMultiBox : string - Поле ввода диагноза
 
         /// <summary>Поле ввода диагноза</summary>
         private string _SectorsMultiBox;
@@ -154,15 +141,12 @@ namespace DOfficeCore.ViewModels
                 Filter = dlgFilter
             };
 
-            var result = dlg.ShowDialog();
-
-            if (result == true)
+            if (dlg.ShowDialog() is true)
             {
                 var task = Task.Run(() =>
                 {
-                    TextForEditing = _LineEditorService.OpenDocument(dlg.FileName);
-                    var resultLines = _LineEditorService.TextToLines(TextForEditing);
-                    RawLines = new ObservableCollection<string>(resultLines);
+                    var resultLines = _LineEditorService.OpenAndConvert(dlg.FileName);
+                    RawLines = new(resultLines);
                 }).ContinueWith(task =>
                 {
                     if (task.IsFaulted)
@@ -189,14 +173,14 @@ namespace DOfficeCore.ViewModels
 
             if (Clipboard.ContainsText())
             {
-                TextForEditing = Clipboard.GetText();
-                if (RawLines is null) RawLines = new ObservableCollection<string>();
-                if (!string.IsNullOrWhiteSpace(TextForEditing))
+                var textForEditing = Clipboard.GetText();
+
+                if (!string.IsNullOrWhiteSpace(textForEditing))
                 {
                     try
                     {
-                        var resultLines = _LineEditorService.TextToLines(TextForEditing);
-                        RawLines = new ObservableCollection<string>(RawLines.Concat(resultLines));
+                        var resultLines = _LineEditorService.TextToLines(textForEditing);
+                        RawLines = new(RawLines.Concat(resultLines));
                         Status = "Готово";
                     }
                     catch (ArgumentNullException e)
@@ -236,8 +220,7 @@ namespace DOfficeCore.ViewModels
 
             if (dlg.ShowDialog() is true)
             {
-                string path = dlg.FileName;
-                if (_DataProviderService.SaveDataToFile(SectorsCollection, path))
+                if (_DataProviderService.SaveDataToFile(SectorsCollection, dlg.FileName))
                     Status = "Ваша коллекция сохраненая";
                 else Status = "Непредвиденная ошибка! Сохранение не удалось";
             }
@@ -273,12 +256,11 @@ namespace DOfficeCore.ViewModels
 
             if (dlg.ShowDialog() is true)
             {
-                string path = dlg.FileName;
-                var newCollection = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, path));
+                var newCollection = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, dlg.FileName));
 
                 if (confirmDlg.Equals(MessageBoxResult.Yes))
-                    SectorsList = new ObservableCollection<Sector>(SectorsList.Concat(newCollection));
-                else SectorsList = new ObservableCollection<Sector>(newCollection);
+                    SectorsList = new(SectorsList.Concat(newCollection));
+                else SectorsList = new(newCollection);
             }
             else Status = "Ну и не надо. Больно-то и хотелось.";
         }
@@ -293,7 +275,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Очистка необработанной таблицы</summary>
         private void OnClearListBoxCommandExecuted(object parameter)
         {
-            RawLines = new ObservableCollection<string>();
+            RawLines = new();
             Status = "Таблица предложений очищена";
         }
 
@@ -312,7 +294,7 @@ namespace DOfficeCore.ViewModels
             {
                 if (_NewCollectionHandler.AddLine(SectorsCollection, SelectedBlock, SelectedLine))
                 {
-                    LinesList = new ObservableCollection<string>(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
+                    RefreshLines();
                     RawLines.Remove(SelectedLine);
                     Status = "Выбранная строка перемещена в таблицу предложений";
                 }
@@ -328,8 +310,8 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка диагнозов в окне редактирования строк</summary>
         private void OnSelectedDiagnosisELCommandExecuted(object parameter)
         {
-            BlocksList = new ObservableCollection<Block>(_NewViewCollectionProvider.GetBlocks(SectorsCollection, SelectedSector));
-            LinesList = new ObservableCollection<string>();
+            RefreshBlocks();
+            LinesList = new();
 
             SectorsMultiBox = SelectedSector.Name;
             BlockMultiBox = null;
@@ -345,8 +327,7 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка блоков в окне редактирования строк</summary>
         private void OnSelectedBlockELCommandExecuted(object parameter)
         {
-            LinesList = new ObservableCollection<string>(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
-
+            RefreshLines();
             BlockMultiBox = SelectedBlock.Name;
             LineMultiBox = null;
         }
@@ -374,17 +355,16 @@ namespace DOfficeCore.ViewModels
         /// <summary>Добавление нового диагноза в коллекцию</summary>
         private void OnAddDiagnosisCommandExecuted(object parameter)
         {
-            if (SectorsCollection is null) SectorsCollection = new List<Sector>();
+            if (SectorsCollection is null) SectorsCollection = new();
 
             if (!string.IsNullOrWhiteSpace(SectorsMultiBox))
             {
                 if (_NewCollectionHandler.AddSector(SectorsCollection, SectorsMultiBox))
                 {
-                    SelectedSector = SectorsCollection.FirstOrDefault(sector => sector.Name.Equals(SectorsMultiBox));
-
-                    SectorsList = new ObservableCollection<Sector>(SectorsCollection);
-                    BlocksList = new ObservableCollection<Block>(_NewViewCollectionProvider.GetBlocks(SectorsCollection, SelectedSector));
-                    LinesList = new ObservableCollection<string>();
+                    RefreshSelectedSector();
+                    RefreshSectors();
+                    RefreshBlocks();
+                    LinesList = new();
 
                     Status = "Добавлен элемент " + SectorsMultiBox;
                 }
@@ -392,7 +372,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Нечего добавлять";
         }
-
         private bool CanAddDiagnosisCommandExecute(object parameter) => true;
 
         #endregion
@@ -409,19 +388,15 @@ namespace DOfficeCore.ViewModels
             {
                 if (_NewCollectionHandler.AddBlock(SectorsCollection, SelectedSector, BlockMultiBox))
                 {
-                    SelectedBlock = SectorsCollection.FirstOrDefault(sector =>
-                        sector.Name.Equals(SelectedSector.Name)).Blocks.FirstOrDefault(block =>
-                            block.Name.Equals(BlockMultiBox));
-
-                    BlocksList = new ObservableCollection<Block>(_NewViewCollectionProvider.GetBlocks(SectorsCollection, SelectedSector));
-                    LinesList = new ObservableCollection<string>(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
+                    RefreshSelectedBlock();
+                    RefreshBlocks();
+                    RefreshLines();
                     Status = "Добавлен элемент " + SectorsMultiBox;
                 }
                 else Status = "Такой элемент уже существует.";
             }
             else Status = "Нечего добавлять";
         }
-
         private bool CanAddBlockCommandExecute(object parameter) => true;
 
         #endregion
@@ -440,13 +415,12 @@ namespace DOfficeCore.ViewModels
                 {
                     SelectedLine = LineMultiBox;
                     Status = "Добавлен элемент " + SectorsMultiBox;
-                    LinesList = new ObservableCollection<string>(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
+                    RefreshLines();
                 }
                 else Status = "Такой элемент уже существует.";
             }
             else Status = "Нечего добавлять";
         }
-
         private bool CanAddLineCommandExecute(object parameter) => true;
 
         #endregion
@@ -467,17 +441,16 @@ namespace DOfficeCore.ViewModels
             {
                 if (_NewCollectionHandler.EditSector(SectorsCollection, SelectedSector, SectorsMultiBox))
                 {
-                    SectorsList = new ObservableCollection<Sector>(SectorsCollection);
-                    SelectedSector = SectorsCollection.FirstOrDefault(sector => sector.Name.Equals(SectorsMultiBox));
-                    BlocksList = new ObservableCollection<Block>(_NewViewCollectionProvider.GetBlocks(SectorsCollection, SelectedSector));
-                    LinesList = new ObservableCollection<string>();
+                    RefreshSelectedSector();
+                    RefreshSectors();
+                    RefreshBlocks();
+                    LinesList = new();
 
                     Status = "Сектор переименован в " + SectorsMultiBox;
                 }
             }
             else Status = "Нечего редактировать";
         }
-
         private bool CanEditDiagnosisCommandExecute(object parameter) => true;
 
         #endregion
@@ -494,20 +467,15 @@ namespace DOfficeCore.ViewModels
             {
                 if (_NewCollectionHandler.EditBlock(SectorsCollection, SelectedBlock, BlockMultiBox))
                 {
-                    BlocksList = new ObservableCollection<Block>(_NewViewCollectionProvider.GetBlocks(SectorsCollection, SelectedSector));
-
-                    SelectedBlock = SectorsCollection.FirstOrDefault(sector =>
-                            sector.Name.Equals(SelectedSector.Name)).Blocks.FirstOrDefault(block =>
-                                block.Name.Equals(BlockMultiBox));
-
-                    LinesList = new ObservableCollection<string>(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
+                    RefreshSelectedBlock();
+                    RefreshBlocks();
+                    RefreshLines();
 
                     Status = "Раздел переименован в " + BlockMultiBox;
                 }
             }
             else Status = "Нечего редактировать";
         }
-
         private bool CanEditBlockCommandExecute(object parameter) => true;
 
         #endregion
@@ -524,13 +492,12 @@ namespace DOfficeCore.ViewModels
             {
                 if (_NewCollectionHandler.EditLine(SectorsCollection, SelectedBlock, SelectedLine, LineMultiBox))
                 {
-                    LinesList = new ObservableCollection<string>(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
+                    RefreshLines();
                     Status = "Предложение изменено";
                 }
             }
             else Status = "Нечего редактировать";
         }
-
         private bool CanEditLineCommandExecute(object parameter) => true;
 
         #endregion
@@ -554,9 +521,9 @@ namespace DOfficeCore.ViewModels
                 {
                     if (_NewCollectionHandler.RemoveSector(SectorsCollection, SelectedSector))
                     {
-                        SectorsList = new ObservableCollection<Sector>(SectorsCollection);
-                        BlocksList = new ObservableCollection<Block>();
-                        LinesList = new ObservableCollection<string>();
+                        RefreshSectors();
+                        BlocksList = new();
+                        LinesList = new();
 
                         Status = "Удален сектор " + SectorsMultiBox;
                         SectorsMultiBox = null;
@@ -586,8 +553,8 @@ namespace DOfficeCore.ViewModels
                 {
                     if (_NewCollectionHandler.RemoveBlock(SectorsCollection, SelectedSector, SelectedBlock))
                     {
-                        BlocksList = new ObservableCollection<Block>(_NewViewCollectionProvider.GetBlocks(SectorsCollection, SelectedSector));
-                        LinesList = new ObservableCollection<string>();
+                        RefreshBlocks();
+                        LinesList = new();
 
                         Status = "Удален раздел " + BlockMultiBox;
                         BlockMultiBox = null;
@@ -614,20 +581,16 @@ namespace DOfficeCore.ViewModels
                 var result = MessageBox.Show($"Вы уверены, что хотите удалить строку \"{LineMultiBox}\"?", "Внимание!", MessageBoxButton.YesNo);
 
                 if (result == MessageBoxResult.Yes)
-                {
                     if (_NewCollectionHandler.RemoveLine(SectorsCollection, SelectedBlock, SelectedLine))
                     {
-                        LinesList = new ObservableCollection<string>(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
-
+                        RefreshLines();
                         Status = "Удалено предложение";
                         LineMultiBox = null;
                     }
-                }
                 else Status = "Удаление отменено";
             }
             else Status = "Выберите элемент, который хотите удалить";
         }
-
         private bool CanRemoveLineCommandExecute(object parameter) => true;
 
         #endregion
@@ -640,14 +603,14 @@ namespace DOfficeCore.ViewModels
         /// <summary>Возврат строки в необработанную коллекцию</summary>
         private void OnReturnLineCommandExecuted(object parameter)
         {
-            if (RawLines is null) RawLines = new ObservableCollection<string>();
+            if (RawLines is null) RawLines = new();
             if (!string.IsNullOrWhiteSpace(SelectedLine))
             {
                 RawLines.Add(SelectedLine);
+
                 if (_NewCollectionHandler.RemoveLine(SectorsCollection, SelectedBlock, SelectedLine))
                 {
-                    LinesList = new ObservableCollection<string>(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
-
+                    RefreshLines();
                     SelectedLine = null;
                     Status = "Выбранное предложение было возвращено в таблицу предложений";
                 }
@@ -658,6 +621,17 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
+        #endregion
+
+        #region Приватные методы
+        private void RefreshSectors() => SectorsList = new(SectorsCollection);
+        private void RefreshBlocks() => BlocksList = new(_NewViewCollectionProvider.GetBlocks(SectorsCollection, SelectedSector));
+        private void RefreshLines() => LinesList = new(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
+        private void RefreshSelectedSector() => SelectedSector = SectorsCollection.FirstOrDefault(sector =>
+                                        sector.Name.Equals(SectorsMultiBox));
+        private void RefreshSelectedBlock() => SelectedBlock = SectorsCollection.FirstOrDefault(sector =>
+                                        sector.Name.Equals(SelectedSector.Name)).Blocks.FirstOrDefault(block =>
+                                            block.Name.Equals(BlockMultiBox));
         #endregion
     }
 }

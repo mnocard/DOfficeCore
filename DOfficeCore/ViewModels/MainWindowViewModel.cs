@@ -37,8 +37,6 @@ namespace DOfficeCore.ViewModels
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
             ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
             
-            //IndexUpCommand = new LambdaCommand(OnIndexUpCommandExecuted, CanIndexUpCommandExecute);
-
             SelectedDiagnosisCommand = new LambdaCommand(OnSelectedDiagnosisCommandExecuted, CanSelectedDiagnosisCommandExecute);
             SelectedBlockCommand = new LambdaCommand(OnSelectedBlockCommandExecuted, CanSelectedBlockCommandExecute);
             SelectedLineCommand = new LambdaCommand(OnSelectedLineCommandExecuted, CanSelectedLineCommandExecute);
@@ -198,7 +196,7 @@ namespace DOfficeCore.ViewModels
 
         #region SectorsCollection : List<Sector> - Основная коллекция данных
         /// <summary>Основная коллекция данных</summary>
-        private List<Sector> _SectorsCollection = new List<Sector>();
+        private List<Sector> _SectorsCollection = new();
 
         /// <summary>Основная коллекция данных</summary>
         public List<Sector> SectorsCollection
@@ -211,7 +209,7 @@ namespace DOfficeCore.ViewModels
         #region SectorsList : ObservableCollection<Sector> - Коллекция данных новой модели
 
         /// <summary>Коллекция данных новой модели</summary>
-        private ObservableCollection<Sector> _SectorsList = new ObservableCollection<Sector>();
+        private ObservableCollection<Sector> _SectorsList = new();
 
         /// <summary>Коллекция данных новой модели</summary>
         public ObservableCollection<Sector> SectorsList
@@ -225,7 +223,7 @@ namespace DOfficeCore.ViewModels
         #region BlocksList : ObservableCollection<Block> - Коллекция блоков
 
         /// <summary>Коллекция названий блоков</summary>
-        private ObservableCollection<Block> _BlocksList = new ObservableCollection<Block>();
+        private ObservableCollection<Block> _BlocksList = new();
 
         /// <summary>Коллекция названий блоков</summary>
         public ObservableCollection<Block> BlocksList
@@ -239,7 +237,7 @@ namespace DOfficeCore.ViewModels
         #region LinesList : ObservableCollection<string> - Коллекция строк
 
         /// <summary>Коллекция содержимого строк</summary>
-        private ObservableCollection<string> _LinesList = new ObservableCollection<string>();
+        private ObservableCollection<string> _LinesList = new();
 
         /// <summary>Коллекция содержимого строк</summary>
         public ObservableCollection<string> LinesList
@@ -281,7 +279,7 @@ namespace DOfficeCore.ViewModels
                 // Реальные данные
                 //SectorsCollection = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, "data.json"));
 
-                SectorsList = new ObservableCollection<Sector>(SectorsCollection);
+                RefreshSectors();
             }
             catch (Exception e)
             {
