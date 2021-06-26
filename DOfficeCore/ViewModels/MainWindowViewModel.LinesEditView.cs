@@ -204,27 +204,28 @@ namespace DOfficeCore.ViewModels
         /// <summary>Сохранение данных в файл</summary>
         private void OnSaveDataToFileCommandExecuted(object p)
         {
-            if (!SectorsCollection.Any())
-                Status = "Нечего сохранять";
-
-            if (!Directory.Exists(_Folder))
-                Directory.CreateDirectory(_Folder);
-
-            var dlg = new SaveFileDialog
+            if (SectorsCollection.Any())
             {
-                InitialDirectory = _Folder,
-                FileName = dataFileName,
-                DefaultExt = dataFileFormat,
-                Filter = dataFileFilter
-            };
+                if (!Directory.Exists(_Folder))
+                    Directory.CreateDirectory(_Folder);
 
-            if (dlg.ShowDialog() is true)
-            {
-                if (_DataProviderService.SaveDataToFile(SectorsCollection, dlg.FileName))
-                    Status = "Ваша коллекция сохраненая";
-                else Status = "Непредвиденная ошибка! Сохранение не удалось";
+                var dlg = new SaveFileDialog
+                {
+                    InitialDirectory = _Folder,
+                    FileName = dataFileName,
+                    DefaultExt = dataFileFormat,
+                    Filter = dataFileFilter
+                };
+
+                if (dlg.ShowDialog() is true)
+                {
+                    if (_DataProviderService.SaveDataToFile(SectorsCollection, dlg.FileName))
+                        Status = "Ваша коллекция сохраненая";
+                    else Status = "Непредвиденная ошибка! Сохранение не удалось";
+                }
+                else Status = "Ну и не надо. Больно-то и хотелось.";
             }
-            else Status = "Ну и не надо. Больно-то и хотелось.";
+            else Status = "Нечего сохранять";
         }
 
         private bool CanSaveDataToFileCommandExecute(object p) => true;
@@ -259,8 +260,9 @@ namespace DOfficeCore.ViewModels
                 var newCollection = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, dlg.FileName));
 
                 if (confirmDlg.Equals(MessageBoxResult.Yes))
-                    SectorsList = new(SectorsList.Concat(newCollection));
-                else SectorsList = new(newCollection);
+                    SectorsCollection = new(SectorsCollection.Concat(newCollection));
+                else SectorsCollection = new(newCollection);
+                RefreshSectors();
             }
             else Status = "Ну и не надо. Больно-то и хотелось.";
         }
@@ -780,7 +782,7 @@ namespace DOfficeCore.ViewModels
                                             sector.Name.Equals(SelectedBlock.Sector)).Blocks.Count;
         private void InsertBlock(int index) => SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SelectedBlock.Sector)).Blocks.Insert(index, SelectedBlock);
-        private void RemoveBlock(int index) => SectorsCollection.FirstOrDefault(sector => 
+        private void RemoveBlock(int index) => SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SelectedBlock.Sector)).Blocks.RemoveAt(index);
         private int GetIndexOfLine() => SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SelectedBlock.Sector)).Blocks.FirstOrDefault(block =>

@@ -33,8 +33,6 @@ namespace DOfficeCore.ViewModels
             _DiaryBoxProvider = DiaryBoxProvider;
             _LineEditorService = LineEditorService;
 
-
-
             #region Команды окна дневника
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
             ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);

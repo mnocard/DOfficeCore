@@ -64,7 +64,7 @@ namespace DOfficeCore.ViewModels
                 BlocksList = new(SelectedSector.Blocks);
             LinesList = new();
         }
-        private bool CanSelectedDiagnosisCommandExecute(object parameter) => true;
+        private bool CanSelectedDiagnosisCommandExecute(object parameter) => SectorsList is not null;
 
         #endregion
 
@@ -77,7 +77,7 @@ namespace DOfficeCore.ViewModels
             if (SelectedBlock is not null)
                 LinesList = new(SelectedBlock.Lines);
         }
-        private bool CanSelectedBlockCommandExecute(object parameter) => true;
+        private bool CanSelectedBlockCommandExecute(object parameter) => BlocksList is not null;
 
         #endregion
 
@@ -90,7 +90,7 @@ namespace DOfficeCore.ViewModels
             DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, SelectedLine);
         }
 
-        private bool CanSelectedLineCommandExecute(object parameter) => true;
+        private bool CanSelectedLineCommandExecute(object parameter) => LinesList is not null;
 
         #endregion
 
@@ -110,8 +110,7 @@ namespace DOfficeCore.ViewModels
                     RefreshSectors();
                 Status = "Вот, что мы нашли по вашему запросу";
             }
-            else
-                Status = "Введите не менее трёх символов для поиска";
+            else Status = "Введите не менее трёх символов для поиска";
         }
 
         private bool CanSearchElementCommandExecute(object parameter) => true;
