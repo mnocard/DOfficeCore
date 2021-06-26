@@ -86,14 +86,18 @@
             Grid.Column="0"
             Margin="0,0,5,0"
             Background="#FF9E9E9E">
-            <Button
-                Grid.Row="1"
-                Grid.Column="0"
-                Margin="10,5"
-                Command="{Binding ClearListBoxCommand}"
-                Content="Очистить таблицу"
-                DockPanel.Dock="Bottom"
-                ToolTip="Удалить все элементы из первой таблицы" />
+            <UniformGrid DockPanel.Dock="Bottom" Rows="1">
+                <Button
+                    Margin="10,5"
+                    Command="{Binding ClearListBoxCommand}"
+                    Content="Очистить список"
+                    ToolTip="Удалить все элементы из этого списка" />
+                <Button
+                    Margin="10,5"
+                    Command="{Binding RemoveElementFromRawCommand}"
+                    Content="Удалить элемент"
+                    ToolTip="Удалить выбранный элемент из этого списка" />
+            </UniformGrid>
             <ListBox
                 x:Name="lbRawLines"
                 Background="#FF9E9E9E"
@@ -106,7 +110,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseUp">
+                    <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding SelectedRawLineCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
