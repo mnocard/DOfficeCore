@@ -8,6 +8,18 @@
     StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            <Style BasedOn="{StaticResource MaterialDesignListBoxItem}" TargetType="ListBoxItem">
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="Background" Value="Gainsboro" />
+                        <Setter Property="Foreground" Value="#FF585858" />
+                    </Trigger>
+                </Style.Triggers>
+                <Style.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                </Style.Resources>
+            </Style>
             <vm:ViewModelLocator x:Key="Locator" />
             <Style TargetType="Window">
                 <Setter Property="FontSize" Value="18" />

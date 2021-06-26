@@ -631,14 +631,11 @@ namespace DOfficeCore.ViewModels
         {
             if (SelectedSector is not null)
             {
-                var sectorIndex = SectorsCollection.IndexOf(SelectedSector);
-                if (sectorIndex > 0)
+                var index = SectorsCollection.IndexOf(SelectedSector);
+                if (index > 0)
                 {
-                    SectorsCollection.Insert(sectorIndex - 1, SelectedSector);
-
-                    if (sectorIndex == SectorsCollection.Count) sectorIndex = SectorsCollection.Count - 1;
-                    SectorsCollection.RemoveAt(sectorIndex + 1);
-
+                    SectorsCollection.Insert(index - 1, SelectedSector);
+                    SectorsCollection.RemoveAt(index + 1);
                     RefreshSectors();
                 }
             }
@@ -655,13 +652,11 @@ namespace DOfficeCore.ViewModels
         {
             if (SelectedSector is not null)
             {
-                var sectorIndex = SectorsCollection.IndexOf(SelectedSector);
-                if (sectorIndex < SectorsCollection.Count - 1)
+                var index = SectorsCollection.IndexOf(SelectedSector);
+                if (index < SectorsCollection.Count - 1)
                 {
-                    SectorsCollection.Insert(sectorIndex + 2, SelectedSector);
-
-                    SectorsCollection.RemoveAt(sectorIndex);
-
+                    SectorsCollection.Insert(index + 2, SelectedSector);
+                    SectorsCollection.RemoveAt(index);
                     RefreshSectors();
                 }
             }
@@ -671,6 +666,87 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
+        #region Смещение блока в списке вверх
+        /// <summary>Смещение блока в списке вверх</summary>
+        public ICommand BlockIndexUpCommand { get; }
+        /// <summary>Смещение блока в списке вверх</summary>
+        private void OnBlockIndexUpCommandExecuted(object parameter)
+        {
+            if (SelectedBlock is not null)
+            {
+                var index = GetIndexOfBlock();
+                if (index > 0)
+                {
+                    InsertBlock(index - 1);
+                    RemoveBlock(index + 1);
+                    RefreshBlocks();
+                }
+            }
+        }
+        private bool CanBlockIndexUpCommandExecute(object parameter) => true;
+        #endregion
+
+        #region Смещение блока в списке вниз
+        /// <summary>Смещение блока в списке вниз</summary>
+        public ICommand BlockIndexDownCommand { get; }
+        /// <summary>Смещение блока в списке вниз</summary>
+        private void OnBlockIndexDownCommandExecuted(object parameter)
+        {
+            if (SelectedBlock is not null)
+            {
+                var index = GetIndexOfBlock();
+                if (index < GetBlocksCount() - 1)
+                {
+                    InsertBlock(index + 2);
+                    RemoveBlock(index);
+                    RefreshBlocks();
+                }
+            }
+        }
+        private bool CanBlockIndexDownCommandExecute(object parameter) => true;
+        #endregion
+
+        #region Смещение строки в списке вверх
+        /// <summary>Смещение строки в списке вверх</summary>
+        public ICommand LineIndexUpCommand { get; }
+        /// <summary>Смещение строки в списке вверх</summary>
+        private void OnLineIndexUpCommandExecuted(object parameter)
+        {
+            if (SelectedBlock is not null &&
+                SelectedLine is not null)
+            {
+                var index = GetIndexOfLine();
+                if (index > 0)
+                {
+                    InsertLine(index - 1);
+                    RemoveLine(index + 1);
+                    RefreshLines();
+                }
+            }
+        }
+        private bool CanLineIndexUpCommandExecute(object parameter) => true;
+        #endregion
+
+        #region Смещение строки в списке вниз
+        /// <summary>Смещение строки в списке вниз</summary>
+        public ICommand LineIndexDownCommand { get; }
+        /// <summary>Смещение строки в списке вниз</summary>
+        private void OnLineIndexDownCommandExecuted(object parameter)
+        {
+            if (SelectedBlock is not null &&
+                SelectedLine is not null)
+            {
+                var index = GetIndexOfLine();
+                if (index < GetLinesCount() - 1)
+                {
+                    InsertLine(index + 2);
+                    RemoveLine(index);
+                    RefreshLines();
+                }
+            }
+        }
+        private bool CanLineIndexDownCommandExecute(object parameter) => true;
+        #endregion
         #endregion
 
         #endregion
@@ -680,10 +756,30 @@ namespace DOfficeCore.ViewModels
         private void RefreshBlocks() => BlocksList = new(_NewViewCollectionProvider.GetBlocks(SectorsCollection, SelectedSector));
         private void RefreshLines() => LinesList = new(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
         private void RefreshSelectedSector() => SelectedSector = SectorsCollection.FirstOrDefault(sector =>
-                                        sector.Name.Equals(SectorsMultiBox));
+                                            sector.Name.Equals(SectorsMultiBox));
         private void RefreshSelectedBlock() => SelectedBlock = SectorsCollection.FirstOrDefault(sector =>
-                                        sector.Name.Equals(SelectedSector.Name)).Blocks.FirstOrDefault(block =>
-                                            block.Name.Equals(BlockMultiBox));
+                                            sector.Name.Equals(SelectedSector.Name)).Blocks.FirstOrDefault(block =>
+                                                block.Name.Equals(BlockMultiBox));
+        private int GetIndexOfBlock() => SectorsCollection.FirstOrDefault(sector =>
+                                            sector.Name.Equals(SelectedBlock.Sector)).Blocks.IndexOf(SelectedBlock);
+        private int GetBlocksCount() => SectorsCollection.FirstOrDefault(sector =>
+                                            sector.Name.Equals(SelectedBlock.Sector)).Blocks.Count;
+        private void InsertBlock(int index) => SectorsCollection.FirstOrDefault(sector =>
+                                            sector.Name.Equals(SelectedBlock.Sector)).Blocks.Insert(index, SelectedBlock);
+        private void RemoveBlock(int index) => SectorsCollection.FirstOrDefault(sector => 
+                                            sector.Name.Equals(SelectedBlock.Sector)).Blocks.RemoveAt(index);
+        private int GetIndexOfLine() => SectorsCollection.FirstOrDefault(sector =>
+                                            sector.Name.Equals(SelectedBlock.Sector)).Blocks.FirstOrDefault(block =>
+                                                block.Name.Equals(SelectedBlock.Name)).Lines.IndexOf(SelectedLine);
+        private int GetLinesCount() => SectorsCollection.FirstOrDefault(sector =>
+                                            sector.Name.Equals(SelectedBlock.Sector)).Blocks.FirstOrDefault(block =>
+                                                block.Name.Equals(SelectedBlock.Name)).Lines.Count;
+        private void InsertLine(int index) => SectorsCollection.FirstOrDefault(sector =>
+                                            sector.Name.Equals(SelectedBlock.Sector)).Blocks.FirstOrDefault(block =>
+                                                block.Name.Equals(SelectedBlock.Name)).Lines.Insert(index, SelectedLine);
+        private void RemoveLine(int index) => SectorsCollection.FirstOrDefault(sector =>
+                                            sector.Name.Equals(SelectedBlock.Sector)).Blocks.FirstOrDefault(block =>
+                                                block.Name.Equals(SelectedBlock.Name)).Lines.RemoveAt(index);
         #endregion
     }
 }

@@ -182,7 +182,7 @@
                     <Button
                         Margin="3,0"
                         Command="{Binding SectorIndexUpCommand}"
-                        ToolTip="Поднять выбранный элемент">
+                        ToolTip="Сместить вверх выбранный элемент">
                         <materialDesign:PackIcon
                             Width="24"
                             Height="24"
@@ -191,7 +191,7 @@
                     <Button
                         Margin="3,0"
                         Command="{Binding SectorIndexDownCommand}"
-                        ToolTip="Опустить выбранный элемент">
+                        ToolTip="Сместить вниз выбранный элемент">
                         <materialDesign:PackIcon
                             Width="24"
                             Height="24"
@@ -274,8 +274,8 @@
                     </Button>
                     <Button
                         Margin="3,0"
-                        Command="{Binding}"
-                        ToolTip="Поднять выбранный раздел">
+                        Command="{Binding BlockIndexUpCommand}"
+                        ToolTip="Сместить вверх выбранный раздел">
                         <materialDesign:PackIcon
                             Width="24"
                             Height="24"
@@ -283,8 +283,8 @@
                     </Button>
                     <Button
                         Margin="3,0"
-                        Command="{Binding}"
-                        ToolTip="Опустить выбранный раздел">
+                        Command="{Binding BlockIndexDownCommand}"
+                        ToolTip="Сместить вниз выбранный раздел">
                         <materialDesign:PackIcon
                             Width="24"
                             Height="24"
@@ -382,8 +382,8 @@
                 </Button>
                 <Button
                     Margin="3,0"
-                    Command="{Binding}"
-                    ToolTip="Поднять выбранное предложение">
+                    Command="{Binding LineIndexUpCommand}"
+                    ToolTip="Сместить вверх выбранное предложение">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
@@ -391,8 +391,8 @@
                 </Button>
                 <Button
                     Margin="3,0"
-                    Command="{Binding}"
-                    ToolTip="Опустить выбранное предложение">
+                    Command="{Binding LineIndexDownCommand}"
+                    ToolTip="Сместить вниз выбранное предложение">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"

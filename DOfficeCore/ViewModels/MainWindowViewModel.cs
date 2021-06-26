@@ -84,7 +84,10 @@ namespace DOfficeCore.ViewModels
 
             SectorIndexUpCommand = new LambdaCommand(OnSectorIndexUpCommandExecuted, CanSectorIndexUpCommandExecute);
             SectorIndexDownCommand = new LambdaCommand(OnSectorIndexDownCommandExecuted, CanSectorIndexDownCommandExecute);
-
+            BlockIndexUpCommand = new LambdaCommand(OnBlockIndexUpCommandExecuted, CanBlockIndexUpCommandExecute);
+            BlockIndexDownCommand = new LambdaCommand(OnBlockIndexDownCommandExecuted, CanBlockIndexDownCommandExecute);
+            LineIndexUpCommand = new LambdaCommand(OnLineIndexUpCommandExecuted, CanLineIndexUpCommandExecute);
+            LineIndexDownCommand = new LambdaCommand(OnLineIndexDownCommandExecuted, CanLineIndexDownCommandExecute);
 
             #endregion
         }
