@@ -279,8 +279,22 @@ namespace DOfficeCore.ViewModels
             Status = "Таблица предложений очищена";
         }
 
-        private bool CanClearListBoxCommandExecute(object parameter) => RawLines != null;
+        private bool CanClearListBoxCommandExecute(object parameter) => RawLines is not null;
 
+        #endregion
+
+        #region Удалить элемент из таблицы
+        /// <summary>Удалить элемент из таблицы</summary>
+        public ICommand RemoveElementFromRawCommand { get; }
+        /// <summary>Удалить элемент из таблицы</summary>
+        private void OnRemoveElementFromRawCommandExecuted(object parameter)
+        {
+            if (SelectedLine is not null &&
+                RawLines is not null)
+                RawLines.Remove(SelectedLine);
+        }
+
+        private bool CanRemoveElementFromRawCommandExecute(object parameter) => SelectedLine is not null && RawLines is not null;
         #endregion
 
         #region Щелчок по элементу списка необработанных строк

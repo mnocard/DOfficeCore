@@ -62,7 +62,8 @@ namespace DOfficeCore.ViewModels
             LoadDataFromFileCommand = new LambdaCommand(OnLoadDataFromFileCommandExecuted, CanLoadDataFromFileCommandExecute);
 
             ClearListBoxCommand = new LambdaCommand(OnClearListBoxCommandExecuted, CanClearListBoxCommandExecute);
-            
+            RemoveElementFromRawCommand = new LambdaCommand(OnRemoveElementFromRawCommandExecuted, CanRemoveElementFromRawCommandExecute);
+
             SelectedRawLineCommand = new LambdaCommand(OnSelectedRawLineCommandExecuted, CanSelectedRawLineCommandExecute);
             SelectedDiagnosisELCommand = new LambdaCommand(OnSelectedDiagnosisELCommandExecuted, CanSelectedDiagnosisELCommandExecute);
             SelectedBlockELCommand = new LambdaCommand(OnSelectedBlockELCommandExecuted, CanSelectedBlockELCommandExecute);
@@ -342,8 +343,6 @@ namespace DOfficeCore.ViewModels
         private bool CanChangeTabCommandExecute(object parameter) => true;
 
         #endregion
-
-
 
         #endregion
     }
