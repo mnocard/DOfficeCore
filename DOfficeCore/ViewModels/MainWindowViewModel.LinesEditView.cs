@@ -587,7 +587,7 @@ namespace DOfficeCore.ViewModels
                         Status = "Удалено предложение";
                         LineMultiBox = null;
                     }
-                else Status = "Удаление отменено";
+                    else Status = "Удаление отменено";
             }
             else Status = "Выберите элемент, который хотите удалить";
         }
@@ -618,6 +618,58 @@ namespace DOfficeCore.ViewModels
         }
 
         private bool CanReturnLineCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Изменение индекса элемента
+
+        #region Смещение сектора в списке вверх
+        /// <summary>Смещение сектора в списке вверх</summary>
+        public ICommand SectorIndexUpCommand { get; }
+        /// <summary>Смещение сектора в списке вверх</summary>
+        private void OnSectorIndexUpCommandExecuted(object parameter)
+        {
+            if (SelectedSector is not null)
+            {
+                var sectorIndex = SectorsCollection.IndexOf(SelectedSector);
+                if (sectorIndex > 0)
+                {
+                    SectorsCollection.Insert(sectorIndex - 1, SelectedSector);
+
+                    if (sectorIndex == SectorsCollection.Count) sectorIndex = SectorsCollection.Count - 1;
+                    SectorsCollection.RemoveAt(sectorIndex + 1);
+
+                    RefreshSectors();
+                }
+            }
+        }
+        private bool CanSectorIndexUpCommandExecute(object parameter) => true;
+
+        #endregion
+
+        #region Смещение сектора в списке вниз
+        /// <summary>Смещение сектора в списке вниз</summary>
+        public ICommand SectorIndexDownCommand { get; }
+        /// <summary>Смещение сектора в списке вниз</summary>
+        private void OnSectorIndexDownCommandExecuted(object parameter)
+        {
+            if (SelectedSector is not null)
+            {
+                var sectorIndex = SectorsCollection.IndexOf(SelectedSector);
+                if (sectorIndex < SectorsCollection.Count - 1)
+                {
+                    SectorsCollection.Insert(sectorIndex + 2, SelectedSector);
+
+                    SectorsCollection.RemoveAt(sectorIndex);
+
+                    RefreshSectors();
+                }
+            }
+        }
+
+        private bool CanSectorIndexDownCommandExecute(object parameter) => true;
+
+        #endregion
 
         #endregion
 

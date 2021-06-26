@@ -33,6 +33,8 @@ namespace DOfficeCore.ViewModels
             _DiaryBoxProvider = DiaryBoxProvider;
             _LineEditorService = LineEditorService;
 
+
+
             #region Команды окна дневника
             LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
             ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
@@ -79,6 +81,11 @@ namespace DOfficeCore.ViewModels
             RemoveLineCommand = new LambdaCommand(OnRemoveLineCommandExecuted, CanRemoveLineCommandExecute);
 
             ReturnLineCommand = new LambdaCommand(OnReturnLineCommandExecuted, CanReturnLineCommandExecute);
+
+            SectorIndexUpCommand = new LambdaCommand(OnSectorIndexUpCommandExecuted, CanSectorIndexUpCommandExecute);
+            SectorIndexDownCommand = new LambdaCommand(OnSectorIndexDownCommandExecuted, CanSectorIndexDownCommandExecute);
+
+
             #endregion
         }
 
@@ -333,25 +340,7 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
-        #region Команда поднятия элемента в списке вверх
-        /// <summary>Команда поднятия элемента в списке вверх</summary>
-        //public ICommand IndexUpCommand { get; }
-        /// <summary>Команда поднятия элемента в списке вверх</summary>
-        //private void OnIndexUpCommandExecuted(object parameter)
-        //{
-        //    if(CurrentSection is not null)
-        //    {
-        //        var newSection = Section.CloneSection(CurrentSection);
-        //        var index = DataCollection.IndexOf(CurrentSection);
-        //        DataCollection.Remove(CurrentSection);
-        //        DataCollection.Insert(index - 1, newSection);
-        //        DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
-        //    }
-        //}
 
-        //private bool CanIndexUpCommandExecute(object parameter) => true;
-
-        #endregion
 
         #endregion
     }

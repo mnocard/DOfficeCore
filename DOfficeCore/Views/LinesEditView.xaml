@@ -181,7 +181,7 @@
                     </Button>
                     <Button
                         Margin="3,0"
-                        Command="{Binding RaiseDiagnosisCommand}"
+                        Command="{Binding SectorIndexUpCommand}"
                         ToolTip="Поднять выбранный элемент">
                         <materialDesign:PackIcon
                             Width="24"
@@ -190,7 +190,7 @@
                     </Button>
                     <Button
                         Margin="3,0"
-                        Command="{Binding}"
+                        Command="{Binding SectorIndexDownCommand}"
                         ToolTip="Опустить выбранный элемент">
                         <materialDesign:PackIcon
                             Width="24"
