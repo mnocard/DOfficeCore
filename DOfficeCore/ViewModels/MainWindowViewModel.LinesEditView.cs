@@ -729,6 +729,8 @@ namespace DOfficeCore.ViewModels
         /// <summary>Обновление списка строк модели представления</summary>
         private void RefreshLines() => LinesList = new(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
         /// <summary>Изменение выбранногого сектора модели представления по строке поиска</summary>
+
+
         private void RefreshSelectedSector() => SelectedSector = SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SectorsMultiBox));
         /// <summary>Изменение выбранногого блока модели представления по строке поиска</summary>
