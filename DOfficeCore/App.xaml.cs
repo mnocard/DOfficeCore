@@ -27,11 +27,11 @@ namespace DOfficeCore
         {
             services.AddSingleton<MainWindowViewModel>();
             services.AddTransient<IDataProviderService, DataProviderService>();
-            services.AddSingleton<IViewCollectionProvider, ViewCollectionProvider>();
             services.AddSingleton<IDiaryBoxProvider, DiaryBoxProvider>();
             services.AddSingleton<ILineEditorService, LineEditorService>();
-            services.AddSingleton<ICollectionHandler, CollectionHandler>();
 
+            services.AddSingleton<INewCollectionHandler, NewCollectionHandler>();
+            services.AddSingleton<INewViewCollectionProvider, NewViewCollectionProvider>();
         }
 
         protected override void OnStartup(StartupEventArgs e)

@@ -30,5 +30,7 @@ namespace DOfficeCore.Services
         /// <param name="token">Токен отмены</param>
         /// <returns>Список предложений, полученных из текста</returns>
         Task<List<string>> TextToLinesAsync(string lines, CancellationToken token = default);
+
+        List<string> OpenAndConvert(string filepath);
     }
 }

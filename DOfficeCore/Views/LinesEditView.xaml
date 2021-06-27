@@ -86,18 +86,23 @@
             Grid.Column="0"
             Margin="0,0,5,0"
             Background="#FF9E9E9E">
-            <Button
-                Grid.Row="1"
-                Grid.Column="0"
-                Margin="10,5"
-                Command="{Binding ClearListBoxCommand}"
-                Content="Очистить таблицу"
-                DockPanel.Dock="Bottom"
-                ToolTip="Удалить все элементы из первой таблицы" />
+            <UniformGrid DockPanel.Dock="Bottom" Rows="1">
+                <Button
+                    Margin="10,5"
+                    Command="{Binding ClearListBoxCommand}"
+                    Content="Очистить список"
+                    ToolTip="Удалить все элементы из этого списка" />
+                <Button
+                    Margin="10,5"
+                    Command="{Binding RemoveElementFromRawCommand}"
+                    Content="Удалить элемент"
+                    ToolTip="Удалить выбранный элемент из этого списка" />
+            </UniformGrid>
             <ListBox
                 x:Name="lbRawLines"
                 Background="#FF9E9E9E"
                 ItemsSource="{Binding RawLines, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding SelectedLine}"
                 SelectionMode="Single">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -105,8 +110,8 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding SelectedRawLineCommand}" CommandParameter="{Binding ElementName=lbRawLines, Path=SelectedItem}" />
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding SelectedRawLineCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListBox>
@@ -145,7 +150,7 @@
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     CaretBrush="White"
                     DockPanel.Dock="Bottom"
-                    Text="{Binding DiagnosisMultiBox, UpdateSourceTrigger=PropertyChanged}">
+                    Text="{Binding SectorsMultiBox, UpdateSourceTrigger=PropertyChanged}">
                     <TextBox.InputBindings>
                         <KeyBinding Key="Enter" Command="{Binding AddDiagnosisCommand}" />
                     </TextBox.InputBindings>
@@ -180,8 +185,8 @@
                     </Button>
                     <Button
                         Margin="3,0"
-                        Command="{Binding RaiseDiagnosisCommand}"
-                        ToolTip="Поднять выбранный элемент">
+                        Command="{Binding SectorIndexUpCommand}"
+                        ToolTip="Сместить вверх выбранный элемент">
                         <materialDesign:PackIcon
                             Width="24"
                             Height="24"
@@ -189,8 +194,8 @@
                     </Button>
                     <Button
                         Margin="3,0"
-                        Command="{Binding}"
-                        ToolTip="Опустить выбранный элемент">
+                        Command="{Binding SectorIndexDownCommand}"
+                        ToolTip="Сместить вниз выбранный элемент">
                         <materialDesign:PackIcon
                             Width="24"
                             Height="24"
@@ -202,16 +207,17 @@
                     Grid.Row="2"
                     Background="#FF9E9E9E"
                     DockPanel.Dock="Top"
-                    ItemsSource="{Binding DiagnosisList}"
+                    ItemsSource="{Binding SectorsList}"
+                    SelectedItem="{Binding SelectedSector}"
                     SelectionMode="Single">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Diagnosis}" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Path=Name}" TextWrapping="Wrap" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseUp">
-                            <i:InvokeCommandAction Command="{Binding SelectedDiagnosisELCommand}" CommandParameter="{Binding ElementName=dgDiagnosisLineEditView, Path=SelectedItem}" />
+                            <i:InvokeCommandAction Command="{Binding SelectedDiagnosisELCommand}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ListBox>
@@ -272,8 +278,8 @@
                     </Button>
                     <Button
                         Margin="3,0"
-                        Command="{Binding}"
-                        ToolTip="Поднять выбранный раздел">
+                        Command="{Binding BlockIndexUpCommand}"
+                        ToolTip="Сместить вверх выбранный раздел">
                         <materialDesign:PackIcon
                             Width="24"
                             Height="24"
@@ -281,8 +287,8 @@
                     </Button>
                     <Button
                         Margin="3,0"
-                        Command="{Binding}"
-                        ToolTip="Опустить выбранный раздел">
+                        Command="{Binding BlockIndexDownCommand}"
+                        ToolTip="Сместить вниз выбранный раздел">
                         <materialDesign:PackIcon
                             Width="24"
                             Height="24"
@@ -295,15 +301,16 @@
                     Margin="0,5,0,0"
                     Background="#FF9E9E9E"
                     ItemsSource="{Binding BlocksList}"
+                    SelectedItem="{Binding SelectedBlock}"
                     SelectionMode="Single">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Block}" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Path=Name}" TextWrapping="Wrap" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseUp">
-                            <i:InvokeCommandAction Command="{Binding SelectedBlockELCommand}" CommandParameter="{Binding ElementName=dgBlocksLineEditView, Path=SelectedItem}" />
+                            <i:InvokeCommandAction Command="{Binding SelectedBlockELCommand}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ListBox>
@@ -379,8 +386,8 @@
                 </Button>
                 <Button
                     Margin="3,0"
-                    Command="{Binding}"
-                    ToolTip="Поднять выбранное предложение">
+                    Command="{Binding LineIndexUpCommand}"
+                    ToolTip="Сместить вверх выбранное предложение">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
@@ -388,8 +395,8 @@
                 </Button>
                 <Button
                     Margin="3,0"
-                    Command="{Binding}"
-                    ToolTip="Опустить выбранное предложение">
+                    Command="{Binding LineIndexDownCommand}"
+                    ToolTip="Сместить вниз выбранное предложение">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
@@ -401,17 +408,18 @@
                 Grid.Row="2"
                 Background="#FF9E9E9E"
                 ItemsSource="{Binding LinesList}"
+                SelectedItem="{Binding SelectedLine}"
                 SelectionMode="Single">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
-                            <TextBlock Text="{Binding Path=Line}" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Path=.}" TextWrapping="Wrap" />
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding SelectedLinesELCommand}" CommandParameter="{Binding ElementName=dgLinesLineEditView, Path=SelectedItem}" />
+                        <i:InvokeCommandAction Command="{Binding SelectedLinesELCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListBox>

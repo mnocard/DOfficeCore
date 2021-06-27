@@ -28,9 +28,9 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <DockPanel Background="#FF686868" LastChildFill="True">
-        <StatusBar Background="#FF686868" DockPanel.Dock="Bottom" >
-                <StatusBarItem>
-                <TextBlock Foreground="Black" Text="{Binding CurrentSection}" />
+        <StatusBar Background="#FF686868" DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Foreground="Black" Text="{Binding SelectedLine}" />
             </StatusBarItem>
         </StatusBar>
         <StatusBar Background="#FF686868" DockPanel.Dock="Bottom">

@@ -8,6 +8,7 @@ using System.Linq;
 namespace DOfficeCore.Services
 {
     /// <summary>Класс для обеспечения взаимодействия между ViewCollection и коллекцией диагнозов</summary>
+    [Obsolete("Класс устарел. Используй NewViewCollectionProvider", true)]
     class ViewCollectionProvider : IViewCollectionProvider
     {
         #region Получение списков

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using DOfficeCore.Models;
 
 namespace DOfficeCore.Services.Interfaces
 {
+    [Obsolete("Класс устарел. Используй INewCollectionHandler", true)]
     public interface ICollectionHandler
     {
         bool RemoveDiagnosis(List<Section> DataCollection, Section CurrentSection);

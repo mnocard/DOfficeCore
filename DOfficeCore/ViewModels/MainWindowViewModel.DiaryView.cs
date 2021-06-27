@@ -50,24 +50,9 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
-        #region CurrentSection : Section - Выбранная в датагриде секция
-
-        /// <summary>Выбранная в датагриде секция</summary>
-        private Section _CurrentSection;
-
-        /// <summary>Выбранная в датагриде секция</summary>
-        public Section CurrentSection
-        {
-            get => _CurrentSection;
-            set => Set(ref _CurrentSection, value);
-        }
-
-        #endregion
-
         #endregion
 
         #region Команды вкладки дневника
-
 
         #region Щелчок по элементу списка диагнозов
         /// <summary>Щелчок по элементу списка диагнозов</summary>
@@ -75,14 +60,11 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка диагнозов</summary>
         private void OnSelectedDiagnosisCommandExecuted(object parameter)
         {
-            if (parameter is Section CurrentItem)
-            {
-                CurrentSection = Section.CloneSection(CurrentItem);
-                BlocksList = _ViewCollectionProvider.BlocksFromDataToView(DataCollection, CurrentSection);
-                LinesList = new ObservableCollection<Section>();
-            }
+            if (SelectedSector is not null)
+                BlocksList = new(SelectedSector.Blocks);
+            LinesList = new();
         }
-        private bool CanSelectedDiagnosisCommandExecute(object parameter) => true;
+        private bool CanSelectedDiagnosisCommandExecute(object parameter) => SectorsList is not null;
 
         #endregion
 
@@ -92,13 +74,10 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка разделов</summary>
         private void OnSelectedBlockCommandExecuted(object parameter)
         {
-            if (parameter is Section CurrentItem)
-            {
-                CurrentSection = Section.CloneSection(CurrentItem);
-                LinesList = _ViewCollectionProvider.LinesFromDataToView(DataCollection, CurrentSection);
-            }
+            if (SelectedBlock is not null)
+                LinesList = new(SelectedBlock.Lines);
         }
-        private bool CanSelectedBlockCommandExecute(object parameter) => true;
+        private bool CanSelectedBlockCommandExecute(object parameter) => BlocksList is not null;
 
         #endregion
 
@@ -108,14 +87,10 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка строк</summary>
         private void OnSelectedLineCommandExecuted(object parameter)
         {
-            if (parameter is Section CurrentItem)
-            {
-                CurrentSection = Section.CloneSection(CurrentItem);
-                DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, CurrentSection.Line);
-            }
+            DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, SelectedLine);
         }
 
-        private bool CanSelectedLineCommandExecute(object parameter) => true;
+        private bool CanSelectedLineCommandExecute(object parameter) => LinesList is not null;
 
         #endregion
 
@@ -127,17 +102,15 @@ namespace DOfficeCore.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(MultiBox) && MultiBox.Length >= 3)
             {
-                DiagnosisList = _ViewCollectionProvider.SearchDiagnosis(DataCollection, MultiBox);
-                if (DiagnosisList.Count == 0) DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
-                BlocksList = _ViewCollectionProvider.SearchBlocks(DataCollection, MultiBox);
-                LinesList = _ViewCollectionProvider.SearchLines(DataCollection, MultiBox);
+                SectorsList = new(_NewViewCollectionProvider.SearchSectors(SectorsCollection, MultiBox));
+                BlocksList = new(_NewViewCollectionProvider.SearchBlocks(SectorsCollection, MultiBox));
+                LinesList = new(_NewViewCollectionProvider.SearchLines(SectorsCollection, MultiBox));
+
+                if (!SectorsList.Any())
+                    RefreshSectors();
                 Status = "Вот, что мы нашли по вашему запросу";
             }
-            else
-            {
-                Status = "Введите не менее трёх символов для поиска";
-                DiagnosisList = _ViewCollectionProvider.DiagnosisFromDataToView(DataCollection);
-            }
+            else Status = "Введите не менее трёх символов для поиска";
         }
 
         private bool CanSearchElementCommandExecute(object parameter) => true;
@@ -150,10 +123,10 @@ namespace DOfficeCore.ViewModels
         /// <summary>Создание случайного дневника</summary>
         private void OnRandomCommandExecuted(object parameter)
         {
-            if (CurrentSection != null)
+            if (BlocksList.Any())
             {
-                (DiaryBox, LinesList) = _DiaryBoxProvider.RandomDiary(DataCollection, CurrentSection);
-                Status = "Случайный дневник создан согласно записям: " + CurrentSection.Diagnosis;
+                (DiaryBox, LinesList) = _DiaryBoxProvider.RandomDiaryWithNewModel(BlocksList);
+                Status = "Случайный дневник создан согласно записям: " + BlocksList[0].Sector;
             }
         }
 
@@ -167,15 +140,15 @@ namespace DOfficeCore.ViewModels
         /// <summary>Команда копирования текста</summary>
         private void OnCopyTextCommandExecuted(object parameter)
         {
-            if (parameter is string temp && !string.IsNullOrWhiteSpace(DiaryBox))
+            if (!string.IsNullOrWhiteSpace(DiaryBox))
             {
-                Clipboard.SetText(temp);
+                Clipboard.SetText(DiaryBox);
                 EnableDiaryBox = true;
                 Status = "Дневник скопирован в буфер обмена";
             }
             else Status = "Что-то пошло не так";
         }
-        private bool CanCopyTextCommandExecute(object parameter) => parameter is string temp && temp != string.Empty && temp != "";
+        private bool CanCopyTextCommandExecute(object parameter) => true;
         #endregion
 
         #region Команда редактирования текста в окне дневника
@@ -218,12 +191,10 @@ namespace DOfficeCore.ViewModels
             if (!string.IsNullOrWhiteSpace(DiaryBox))
             {
                 var lines = _LineEditorService.TextToLines(DiaryBox);
-                var sections = DataCollection.Where(s => lines.Contains(s.Line)).Select(s => s);
-                LinesList = new ObservableCollection<Section>(sections);
-                RawLines = new ObservableCollection<string>(lines);
+                LinesList = new (lines);
+                RawLines = new (lines);
             }
         }
-
         private bool CanReturnTextToLinesCommandExecute(object parameter) => true;
 
         #endregion
