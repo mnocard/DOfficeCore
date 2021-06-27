@@ -248,7 +248,7 @@ namespace DOfficeCore.ViewModels
 
             if (dlg.ShowDialog() is true)
             {
-                var newCollection = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, dlg.FileName));
+                var newCollection = _DataProviderService.LoadSectorsFromJson(Path.Combine(_Folder, dlg.FileName));
 
                 if (confirmDlg.Equals(MessageBoxResult.Yes))
                     SectorsCollection = new(SectorsCollection.Concat(newCollection));
@@ -722,31 +722,48 @@ namespace DOfficeCore.ViewModels
         #endregion
 
         #region Приватные методы
+        /// <summary>Обновление списка секторов модели представления</summary>
         private void RefreshSectors() => SectorsList = new(SectorsCollection);
+        /// <summary>Обновление списка блоков модели представления</summary>
         private void RefreshBlocks() => BlocksList = new(_NewViewCollectionProvider.GetBlocks(SectorsCollection, SelectedSector));
+        /// <summary>Обновление списка строк модели представления</summary>
         private void RefreshLines() => LinesList = new(_NewViewCollectionProvider.GetLines(SectorsCollection, SelectedBlock));
+        /// <summary>Изменение выбранногого сектора модели представления по строке поиска</summary>
         private void RefreshSelectedSector() => SelectedSector = SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SectorsMultiBox));
+        /// <summary>Изменение выбранногого блока модели представления по строке поиска</summary>
         private void RefreshSelectedBlock() => SelectedBlock = SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SelectedSector.Name)).Blocks.FirstOrDefault(block =>
                                                 block.Name.Equals(BlockMultiBox));
+        /// <summary>Получение индекса выбранного блока модели представления</summary>
         private int GetIndexOfBlock() => SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SelectedBlock.Sector)).Blocks.IndexOf(SelectedBlock);
+        /// <summary>Получение количества блоков в секторе по выбранному блоку модели представления</summary>
         private int GetBlocksCount() => SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SelectedBlock.Sector)).Blocks.Count;
+        /// <summary>Вставка выбранного блока в определенный индекс</summary>
+        /// <param name="index">Индекс в который происходит вставка</param>
         private void InsertBlock(int index) => SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SelectedBlock.Sector)).Blocks.Insert(index, SelectedBlock);
+        /// <summary>Удаление блока из коллекции данных по индексу</summary>
+        /// <param name="index">Индекс удаляемого блока</param>
         private void RemoveBlock(int index) => SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SelectedBlock.Sector)).Blocks.RemoveAt(index);
+        /// <summary>Получение индекса выбранной строки модели представления по выбранному блоку модели представления</summary>
         private int GetIndexOfLine() => SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SelectedBlock.Sector)).Blocks.FirstOrDefault(block =>
                                                 block.Name.Equals(SelectedBlock.Name)).Lines.IndexOf(SelectedLine);
+        /// <summary>Получение количества строк в блоке по выбранному блоку модели представления</summary>
         private int GetLinesCount() => SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SelectedBlock.Sector)).Blocks.FirstOrDefault(block =>
                                                 block.Name.Equals(SelectedBlock.Name)).Lines.Count;
+        /// <summary>Вставка выбранной строки в определенный индекс выбранного блока модели представления</summary>
+        /// <param name="index">Индекс в который происходит вставка</param>
         private void InsertLine(int index) => SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SelectedBlock.Sector)).Blocks.FirstOrDefault(block =>
                                                 block.Name.Equals(SelectedBlock.Name)).Lines.Insert(index, SelectedLine);
+        /// <summary>Удаление строки из коллекции данных по индексу</summary>
+        /// <param name="index">Индекс удаляемоой строки</param>
         private void RemoveLine(int index) => SectorsCollection.FirstOrDefault(sector =>
                                             sector.Name.Equals(SelectedBlock.Sector)).Blocks.FirstOrDefault(block =>
                                                 block.Name.Equals(SelectedBlock.Name)).Lines.RemoveAt(index);

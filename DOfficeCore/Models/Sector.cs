@@ -3,11 +3,18 @@ using System.Linq;
 
 namespace DOfficeCore.Models
 {
+    /// <summary>Сектор, корневой элемент базы данных</summary>
     public class Sector
     {
+        /// <summary>Название сектора</summary>
         public string Name { get; set; }
+
+        /// <summary>Список разделов сектора</summary>
         public List<Block> Blocks { get; set; } = new List<Block>();
 
+        /// <summary>Клонирование секторов</summary>
+        /// <param name="other">Клонируемый сектор</param>
+        /// <returns>Клонированный сектор</returns>
         public static Sector CloneSector(Sector other) => other is null
             ? null
             : new Sector
@@ -16,6 +23,9 @@ namespace DOfficeCore.Models
                 Blocks = new List<Block>(other.Blocks),
             };
 
+        /// <summary>Сравнение секторов</summary>
+        /// <param name="other">Сектор, с которым происходит сравнение</param>
+        /// <returns>True - если секторы идентичны</returns>
         public bool Equals(Sector other)
         {
             if (this is null || other is null)
@@ -39,7 +49,9 @@ namespace DOfficeCore.Models
 
             return false;
         }
-
+        /// <summary>Сравнение сектора с object</summary>
+        /// <param name="other">Объект, с которым происходит сравнение</param>
+        /// <returns>True - если секторы идентичны</returns>
         public override bool Equals(object other)
         {
             if (this == null && other == null) return true;

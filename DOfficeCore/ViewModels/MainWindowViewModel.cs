@@ -282,7 +282,7 @@ namespace DOfficeCore.ViewModels
                 //SectorsCollection = TestData.GetSectorCollection();
 
                 // Реальные данные
-                SectorsCollection = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, "data.json"));
+                SectorsCollection = _DataProviderService.LoadSectorsFromJson(Path.Combine(_Folder, "data.json"));
 
                 RefreshSectors();
             }

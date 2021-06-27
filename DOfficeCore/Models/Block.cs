@@ -3,12 +3,19 @@ using System.Linq;
 
 namespace DOfficeCore.Models
 {
+    /// <summary>Раздел, содержащий имя сектора, которому он принадлежит и список строк</summary>
     public class Block
     {
+        /// <summary>Название раздела</summary>
         public string Name { get; set; }
+        /// <summary>Название сектора, которому принадлежит раздел</summary>
         public string Sector { get; set; }
+        /// <summary>Список строк раздела</summary>
         public List<string> Lines { get; set; } = new List<string>();
 
+        /// <summary>Клонирование раздела</summary>
+        /// <param name="other">Клонируемый раздел</param>
+        /// <returns>Клонированный раздел</returns>
         public static Block CloneBlock(Block other) => other is null
             ? null
             : new Block
@@ -18,6 +25,9 @@ namespace DOfficeCore.Models
                 Lines = new List<string>(other.Lines),
             };
 
+        /// <summary>Сравнение разделов</summary>
+        /// <param name="other">Раздел, с которым происходит сравнение</param>
+        /// <returns>True - если разделы идентичны</returns>
         public bool Equals(Block other)
         {
             if (this is null || other is null)
@@ -48,6 +58,9 @@ namespace DOfficeCore.Models
             return false;
         }
 
+        /// <summary>Сравнение раздела с object</summary>
+        /// <param name="other">Объект, с которым происходит сравнение</param>
+        /// <returns>True - если разделы идентичны</returns>
         public override bool Equals(object other)
         {
             if (this == null && other == null) return true;

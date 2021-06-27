@@ -8,16 +8,11 @@ using Serilog;
 
 namespace DOfficeCore.Services
 {
-    /// <summary>Класс, реализующий сохранение данных в файл и загрузки данных из файла</summary>
-    internal class DataProviderService : IDataProviderService
+    ///<inheritdoc cref="IDataProviderService"/>
+    class DataProviderService : IDataProviderService
     {
-        /// <summary>
-        /// Сохранение данных в файл
-        /// </summary>
-        /// <typeparam name="T">Тип сохраняемого списки</typeparam>
-        /// <param name="data">Собственно список сохраняемых данных</param>
-        /// <param name="fileName">Имя в файла, который будет происходить запись данных</param>
-        /// <returns></returns>
+
+        ///<inheritdoc/>
         public bool SaveDataToFile<T>(IEnumerable<T> data, string path)
         {
             if (data is null) return false;
@@ -38,7 +33,8 @@ namespace DOfficeCore.Services
             return true;
         }
 
-        public List<Sector> LoadSectorsFromFile(string path)
+        ///<inheritdoc/>
+        public List<Sector> LoadSectorsFromJson(string path)
         {
             var result = new List<Sector>();
             try

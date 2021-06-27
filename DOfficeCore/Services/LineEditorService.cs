@@ -131,6 +131,7 @@ namespace DOfficeCore.Services
             return task;
         }
 
+        ///<inheritdoc/>
         public List<string> OpenAndConvert(string filepath) => TextToLines(OpenDocument(filepath));
     }
 }

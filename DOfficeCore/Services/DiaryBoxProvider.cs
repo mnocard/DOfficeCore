@@ -7,22 +7,10 @@ using DOfficeCore.Models;
 
 namespace DOfficeCore.Services
 {
+    ///<inheritdoc cref="IDiaryBoxProvider"/>
     class DiaryBoxProvider : IDiaryBoxProvider
     {
-        private const int _ChanceMidofier = 20;
-
-        //private readonly IViewCollectionProvider _ViewCollectionProvider;
-        //public DiaryBoxProvider(IViewCollectionProvider ViewCollectionProvider)
-        //{
-        //    _ViewCollectionProvider = ViewCollectionProvider;
-        //}
-
-        /// <summary>
-        /// Добавлением строки в дневник с возможностью удаления вместо повторного добавления
-        /// </summary>
-        /// <param name="DiaryBox">Дневник</param>
-        /// <param name="Line">Добавляемая строка</param>
-        /// <returns>Измененный дневник</returns>
+        ///<inheritdoc/>
         public string LineToDiaryBox(string DiaryBox, string Line)
         {
             if (DiaryBox == null) DiaryBox = "";
@@ -31,24 +19,27 @@ namespace DOfficeCore.Services
             else return DiaryBox + Line + " ";
         }
 
-        public (string, ObservableCollection<string>) RandomDiaryWithNewModel(IEnumerable<Block> Blocks)
+        ///<inheritdoc/>
+        public (string Diary, ObservableCollection<string> Lines) RandomDiaryWithNewModel(
+            IEnumerable<Block> Blocks, 
+            int ChanceMidofier = 20)
         {
-            string result = "";
+            string Diary = "";
             var rnd = new Random();
 
-            var linesOfDiary = new ObservableCollection<string>();
+            var Lines = new ObservableCollection<string>();
             foreach (Block block in Blocks)
             {
                 var LineList = block.Lines;
-                if (LineList.Count > 0 && rnd.Next(100) <= LineList.Count * _ChanceMidofier)
+                if (LineList.Count > 0 && rnd.Next(100) <= LineList.Count * ChanceMidofier)
                 {
                     var line = LineList[rnd.Next(LineList.Count)];
-                    linesOfDiary.Add(line);
-                    result += line + " ";
+                    Lines.Add(line);
+                    Diary += line + " ";
                 }
             }
 
-            return (result, linesOfDiary);
+            return (Diary, Lines);
         }
     }
 }

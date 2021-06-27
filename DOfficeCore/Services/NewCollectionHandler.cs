@@ -6,9 +6,11 @@ using DOfficeCore.Services.Interfaces;
 
 namespace DOfficeCore.Services
 {
-    public class NewCollectionHandler : INewCollectionHandler
+    ///<inheritdoc cref="INewCollectionHandler"/>
+    class NewCollectionHandler : INewCollectionHandler
     {
         #region Добавление элемента
+        ///<inheritdoc/>
         public bool AddSector(List<Sector> SectorsCollection, string MultiBox)
         {
             if (string.IsNullOrWhiteSpace(MultiBox) ||
@@ -20,6 +22,7 @@ namespace DOfficeCore.Services
             return true;
         }
 
+        ///<inheritdoc/>
         public bool AddBlock(List<Sector> SectorsCollection, Sector Sector, string MultiBox)
         {
             if (string.IsNullOrWhiteSpace(MultiBox) ||
@@ -40,6 +43,7 @@ namespace DOfficeCore.Services
             return true;
         }
 
+        ///<inheritdoc/>
         public bool AddLine(List<Sector> SectorsCollection, Block Block, string MultiBox)
         {
             if (string.IsNullOrWhiteSpace(MultiBox) ||
@@ -61,6 +65,7 @@ namespace DOfficeCore.Services
 
         #region Удаление элемента
 
+        ///<inheritdoc/>
         public bool RemoveSector(List<Sector> SectorsCollection, Sector Sector)
         {
             if (Sector is null)
@@ -68,6 +73,7 @@ namespace DOfficeCore.Services
             return SectorsCollection.Remove(Sector);
         }
 
+        ///<inheritdoc/>
         public bool RemoveBlock(List<Sector> SectorsCollection, Sector Sector, Block Block)
         {
             if (SectorsCollection is null ||
@@ -79,6 +85,7 @@ namespace DOfficeCore.Services
                 sector.Name.Equals(Sector.Name)).Blocks.Remove(Block);
         }
 
+        ///<inheritdoc/>
         public bool RemoveLine(List<Sector> SectorsCollection, Block Block, string Line)
         {
             if (SectorsCollection is null ||
@@ -95,6 +102,7 @@ namespace DOfficeCore.Services
 
         #region Изменение элемента
 
+        ///<inheritdoc/>
         public bool EditSector(List<Sector> SectorsCollection, Sector Sector, string MultiBox)
         {
             if (SectorsCollection is null ||
@@ -113,6 +121,7 @@ namespace DOfficeCore.Services
             return true;
         }
 
+        ///<inheritdoc/>
         public bool EditBlock(List<Sector> SectorsCollection, Block Block, string MultiBox)
         {
             if (SectorsCollection is null ||
@@ -127,6 +136,7 @@ namespace DOfficeCore.Services
             return true;
         }
 
+        ///<inheritdoc/>
         public bool EditLine(List<Sector> SectorsCollection, Block Block, string Line, string MultiBox)
         {
             if (SectorsCollection is null ||

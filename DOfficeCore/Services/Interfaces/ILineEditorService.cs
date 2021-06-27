@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace DOfficeCore.Services
 {
+    /// <summary>Сервис открытия и обработки файлов</summary>
     interface ILineEditorService
     {
         /// <summary>
@@ -30,7 +31,11 @@ namespace DOfficeCore.Services
         /// <param name="token">Токен отмены</param>
         /// <returns>Список предложений, полученных из текста</returns>
         Task<List<string>> TextToLinesAsync(string lines, CancellationToken token = default);
-
+        /// <summary>
+        /// Объединение методов открытия и обработки строк
+        /// </summary>
+        /// <param name="filepath">Путь к файлу</param>
+        /// <returns>Список предложений, полученных из текста</returns>
         List<string> OpenAndConvert(string filepath);
     }
 }

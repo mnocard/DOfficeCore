@@ -6,13 +6,20 @@ using DOfficeCore.Models;
 
 namespace DOfficeCore.Data
 {
-    class TestData
+    /// <summary>
+    /// Класс для создания тестовых данных
+    /// </summary>
+    static class TestData
     {
+        /// <summary>
+        /// Создание тестовых данных для приложения
+        /// </summary>
+        /// <returns>Список созданных секторов</returns>
         public static List<Sector> GetSectorCollection()
         {
             Random rnd = new();
 
-            return Enumerable.Range(1, 10).Select(i => new Sector
+            return Enumerable.Range(1, 7).Select(i => new Sector
             {
                 Name = $"Сектор {i}",
                 Blocks = Enumerable.Range(1, rnd.Next(3, 10)).Select(k => new Block
