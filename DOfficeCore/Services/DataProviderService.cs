@@ -38,42 +38,6 @@ namespace DOfficeCore.Services
             return true;
         }
 
-        /// <summary>
-        /// Загрузка данных из файла
-        /// </summary>
-        /// <param name="fileName">Имя файла</param>
-        /// <returns>Коллекция данных</returns>
-        [Obsolete("Метод устарел. Используй LoadSectorsFromFile", true)]
-        public List<Section> LoadDataFromFile(string path)
-        {
-            if (string.IsNullOrWhiteSpace(path)) return new List<Section>();
-
-            var result = new List<Section>();
-            try
-            {
-                if (!File.Exists(path))
-                {
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(Path.GetDirectoryName(path));
-                    using FileStream fs = File.Create(path);
-                    Log.Verbose($"File {path} doesn't exist");
-                    return new List<Section>();
-                }
-                else
-                {
-                    var jsonString = File.ReadAllText(path);
-                    if (!string.IsNullOrEmpty(jsonString))
-                        result.AddRange(JsonSerializer.Deserialize<List<Section>>(jsonString));
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Can't load data from file {0}. Error:\n{1}.", path, e.Message);
-                throw new Exception("Unexpected error", e);
-            }
-            return result;
-        }
-
         public List<Sector> LoadSectorsFromFile(string path)
         {
             var result = new List<Sector>();

@@ -34,59 +34,59 @@ namespace DOfficeCore.ViewModels
             _LineEditorService = LineEditorService;
 
             #region Команды окна дневника
-            LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted, CanLoadDataCommandExecute);
-            ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted, CanClosingAppCommandExecute);
+            LoadDataCommand = new LambdaCommand(OnLoadDataCommandExecuted);
+            ClosingAppCommand = new LambdaCommand(OnClosingAppCommandExecuted);
             
-            SelectedDiagnosisCommand = new LambdaCommand(OnSelectedDiagnosisCommandExecuted, CanSelectedDiagnosisCommandExecute);
-            SelectedBlockCommand = new LambdaCommand(OnSelectedBlockCommandExecuted, CanSelectedBlockCommandExecute);
-            SelectedLineCommand = new LambdaCommand(OnSelectedLineCommandExecuted, CanSelectedLineCommandExecute);
+            SelectedDiagnosisCommand = new LambdaCommand(OnSelectedDiagnosisCommandExecuted);
+            SelectedBlockCommand = new LambdaCommand(OnSelectedBlockCommandExecuted);
+            SelectedLineCommand = new LambdaCommand(OnSelectedLineCommandExecuted);
 
-            SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted, CanSearchElementCommandExecute);
+            SearchElementCommand = new LambdaCommand(OnSearchElementCommandExecuted);
             
-            RandomCommand = new LambdaCommand(OnRandomCommandExecuted, CanRandomCommandExecute);
-            CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted, CanCopyTextCommandExecute);
-            EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted, CanEditTextCommandExecute);
-            ClearDiaryBoxCommand = new LambdaCommand(OnClearDiaryBoxCommandExecuted, CanClearDiaryBoxCommandExecute);
-            ChangeTabCommand = new LambdaCommand(OnChangeTabCommandExecuted, CanChangeTabCommandExecute);
-            ReturnTextToLinesCommand = new LambdaCommand(OnReturnTextToLinesCommandExecuted, CanReturnTextToLinesCommandExecute);
+            RandomCommand = new LambdaCommand(OnRandomCommandExecuted);
+            CopyTextCommand = new LambdaCommand(OnCopyTextCommandExecuted);
+            EditTextCommand = new LambdaCommand(OnEditTextCommandExecuted);
+            ClearDiaryBoxCommand = new LambdaCommand(OnClearDiaryBoxCommandExecuted);
+            ChangeTabCommand = new LambdaCommand(OnChangeTabCommandExecuted);
+            ReturnTextToLinesCommand = new LambdaCommand(OnReturnTextToLinesCommandExecuted);
 
             #endregion
 
             #region Команды окна редактирования строк
-            OpenFileCommand = new LambdaCommand(OnOpenFileCommandExecuted, CanOpenFileCommandExecute);
-            GetTextFromClipboardCommand = new LambdaCommand(OnGetTextFromClipboardCommandExecuted, CanGetTextFromClipboardCommandExecute); 
+            OpenFileCommand = new LambdaCommand(OnOpenFileCommandExecuted);
+            GetTextFromClipboardCommand = new LambdaCommand(OnGetTextFromClipboardCommandExecuted); 
 
-            SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted, CanSaveDataToFileCommandExecute);
-            LoadDataFromFileCommand = new LambdaCommand(OnLoadDataFromFileCommandExecuted, CanLoadDataFromFileCommandExecute);
+            SaveDataToFileCommand = new LambdaCommand(OnSaveDataToFileCommandExecuted);
+            LoadDataFromFileCommand = new LambdaCommand(OnLoadDataFromFileCommandExecuted);
 
-            ClearListBoxCommand = new LambdaCommand(OnClearListBoxCommandExecuted, CanClearListBoxCommandExecute);
-            RemoveElementFromRawCommand = new LambdaCommand(OnRemoveElementFromRawCommandExecuted, CanRemoveElementFromRawCommandExecute);
+            ClearListBoxCommand = new LambdaCommand(OnClearListBoxCommandExecuted);
+            RemoveElementFromRawCommand = new LambdaCommand(OnRemoveElementFromRawCommandExecuted);
 
-            SelectedRawLineCommand = new LambdaCommand(OnSelectedRawLineCommandExecuted, CanSelectedRawLineCommandExecute);
-            SelectedDiagnosisELCommand = new LambdaCommand(OnSelectedDiagnosisELCommandExecuted, CanSelectedDiagnosisELCommandExecute);
-            SelectedBlockELCommand = new LambdaCommand(OnSelectedBlockELCommandExecuted, CanSelectedBlockELCommandExecute);
-            SelectedLinesELCommand = new LambdaCommand(OnSelectedLinesELCommandExecuted, CanSelectedLinesELCommandExecute);
+            SelectedRawLineCommand = new LambdaCommand(OnSelectedRawLineCommandExecuted);
+            SelectedDiagnosisELCommand = new LambdaCommand(OnSelectedDiagnosisELCommandExecuted);
+            SelectedBlockELCommand = new LambdaCommand(OnSelectedBlockELCommandExecuted);
+            SelectedLinesELCommand = new LambdaCommand(OnSelectedLinesELCommandExecuted);
 
-            AddDiagnosisCommand = new LambdaCommand(OnAddDiagnosisCommandExecuted, CanAddDiagnosisCommandExecute);
-            AddBlockCommand = new LambdaCommand(OnAddBlockCommandExecuted, CanAddBlockCommandExecute);
-            AddLineCommand = new LambdaCommand(OnAddLineCommandExecuted, CanAddLineCommandExecute);
-            
-            EditDiagnosisCommand = new LambdaCommand(OnEditDiagnosisCommandExecuted, CanEditDiagnosisCommandExecute);
-            EditBlockCommand = new LambdaCommand(OnEditBlockCommandExecuted, CanEditBlockCommandExecute);
-            EditLineCommand = new LambdaCommand(OnEditLineCommandExecuted, CanEditLineCommandExecute);
+            AddDiagnosisCommand = new LambdaCommand(OnAddDiagnosisCommandExecuted);
+            AddBlockCommand = new LambdaCommand(OnAddBlockCommandExecuted);
+            AddLineCommand = new LambdaCommand(OnAddLineCommandExecuted);
 
-            RemoveDiagnosisCommand = new LambdaCommand(OnRemoveDiagnosisCommandExecuted, CanRemoveDiagnosisCommandExecute);
-            RemoveBlockCommand = new LambdaCommand(OnRemoveBlockCommandExecuted, CanRemoveBlockCommandExecute);
-            RemoveLineCommand = new LambdaCommand(OnRemoveLineCommandExecuted, CanRemoveLineCommandExecute);
+            EditDiagnosisCommand = new LambdaCommand(OnEditDiagnosisCommandExecuted);
+            EditBlockCommand = new LambdaCommand(OnEditBlockCommandExecuted);
+            EditLineCommand = new LambdaCommand(OnEditLineCommandExecuted);
 
-            ReturnLineCommand = new LambdaCommand(OnReturnLineCommandExecuted, CanReturnLineCommandExecute);
+            RemoveDiagnosisCommand = new LambdaCommand(OnRemoveDiagnosisCommandExecuted);
+            RemoveBlockCommand = new LambdaCommand(OnRemoveBlockCommandExecuted);
+            RemoveLineCommand = new LambdaCommand(OnRemoveLineCommandExecuted);
 
-            SectorIndexUpCommand = new LambdaCommand(OnSectorIndexUpCommandExecuted, CanSectorIndexUpCommandExecute);
-            SectorIndexDownCommand = new LambdaCommand(OnSectorIndexDownCommandExecuted, CanSectorIndexDownCommandExecute);
-            BlockIndexUpCommand = new LambdaCommand(OnBlockIndexUpCommandExecuted, CanBlockIndexUpCommandExecute);
-            BlockIndexDownCommand = new LambdaCommand(OnBlockIndexDownCommandExecuted, CanBlockIndexDownCommandExecute);
-            LineIndexUpCommand = new LambdaCommand(OnLineIndexUpCommandExecuted, CanLineIndexUpCommandExecute);
-            LineIndexDownCommand = new LambdaCommand(OnLineIndexDownCommandExecuted, CanLineIndexDownCommandExecute);
+            ReturnLineCommand = new LambdaCommand(OnReturnLineCommandExecuted);
+
+            SectorIndexUpCommand = new LambdaCommand(OnSectorIndexUpCommandExecuted);
+            SectorIndexDownCommand = new LambdaCommand(OnSectorIndexDownCommandExecuted);
+            BlockIndexUpCommand = new LambdaCommand(OnBlockIndexUpCommandExecuted);
+            BlockIndexDownCommand = new LambdaCommand(OnBlockIndexDownCommandExecuted);
+            LineIndexUpCommand = new LambdaCommand(OnLineIndexUpCommandExecuted);
+            LineIndexDownCommand = new LambdaCommand(OnLineIndexDownCommandExecuted);
 
             #endregion
         }
@@ -122,7 +122,7 @@ namespace DOfficeCore.ViewModels
 
         #region Заголовок окна
         /// <summary>Заголовок окна</summary>
-        private string _Title = "Кабинет врача";
+        private string _Title = "Попон";
         /// <summary>Заголовок окна</summary>
         public string Title
         {
@@ -201,8 +201,6 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
-        #region ModelChanging
-
         #region SectorsCollection : List<Sector> - Основная коллекция данных
         /// <summary>Основная коллекция данных</summary>
         private List<Sector> _SectorsCollection = new();
@@ -259,8 +257,6 @@ namespace DOfficeCore.ViewModels
 
         #endregion
 
-        #endregion
-
         #region Команды
 
         #region Команда загрузки данных
@@ -283,10 +279,10 @@ namespace DOfficeCore.ViewModels
                 Log.Information("INFO");
 
                 // Тестовые для новой модели данных Sector
-                SectorsCollection = TestData.GetSectorCollection();
+                //SectorsCollection = TestData.GetSectorCollection();
 
                 // Реальные данные
-                //SectorsCollection = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, "data.json"));
+                SectorsCollection = _DataProviderService.LoadSectorsFromFile(Path.Combine(_Folder, "data.json"));
 
                 RefreshSectors();
             }
@@ -298,8 +294,6 @@ namespace DOfficeCore.ViewModels
 
             Log.Information("DONE");
         }
-
-        private bool CanLoadDataCommandExecute(object parameter) => true;
         #endregion
         
         #region Команда закрытия программы
@@ -307,8 +301,6 @@ namespace DOfficeCore.ViewModels
         public ICommand ClosingAppCommand { get; }
         /// <summary>Команда закрытия программы</summary>
         private void OnClosingAppCommandExecuted(object parameter) => Log.CloseAndFlush();
-
-        private bool CanClosingAppCommandExecute(object parameter) => true;
 
         #endregion
 
@@ -337,9 +329,6 @@ namespace DOfficeCore.ViewModels
                 MessageBox.Show("Непредвиденная ошибка! Не удаётся переключиться между окнами.", "Ошибка!", MessageBoxButton.OK);
             }
         }
-
-        private bool CanChangeTabCommandExecute(object parameter) => true;
-
         #endregion
 
         #endregion

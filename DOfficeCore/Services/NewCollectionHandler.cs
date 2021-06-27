@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 using DOfficeCore.Models;
@@ -137,15 +136,16 @@ namespace DOfficeCore.Services
                 !Block.Lines.Any(l => l.Equals(Line)))
                 return false;
 
-            SectorsCollection.FirstOrDefault(sector =>
+            if (SectorsCollection.FirstOrDefault(sector =>
                  sector.Name.Equals(Block.Sector)).Blocks.FirstOrDefault(block =>
-                     block.Name.Equals(Block.Name)).Lines.Remove(Line);
-
-            SectorsCollection.FirstOrDefault(sector =>
-                sector.Name.Equals(Block.Sector)).Blocks.FirstOrDefault(block =>
-                    block.Name.Equals(Block.Name)).Lines.Add(MultiBox);
-
-            return true;
+                     block.Name.Equals(Block.Name)).Lines.Remove(Line))
+            {
+                SectorsCollection.FirstOrDefault(sector =>
+                    sector.Name.Equals(Block.Sector)).Blocks.FirstOrDefault(block =>
+                        block.Name.Equals(Block.Name)).Lines.Add(MultiBox);
+                return true;
+            }
+            return false;
         }
 
         #endregion

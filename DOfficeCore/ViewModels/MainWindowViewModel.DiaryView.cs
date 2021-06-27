@@ -1,9 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-
-using DOfficeCore.Models;
 
 namespace DOfficeCore.ViewModels
 {
@@ -60,12 +57,11 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка диагнозов</summary>
         private void OnSelectedDiagnosisCommandExecuted(object parameter)
         {
-            if (SelectedSector is not null)
+            if (SectorsList.Any() &&
+                SelectedSector is not null)
                 BlocksList = new(SelectedSector.Blocks);
             LinesList = new();
         }
-        private bool CanSelectedDiagnosisCommandExecute(object parameter) => SectorsList is not null;
-
         #endregion
 
         #region Щелчок по элементу списка разделов
@@ -74,11 +70,11 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка разделов</summary>
         private void OnSelectedBlockCommandExecuted(object parameter)
         {
-            if (SelectedBlock is not null)
+            if (SectorsList.Any() && 
+                BlocksList.Any() &&
+                SelectedBlock is not null)
                 LinesList = new(SelectedBlock.Lines);
         }
-        private bool CanSelectedBlockCommandExecute(object parameter) => BlocksList is not null;
-
         #endregion
 
         #region Щелчок по элементу списка строк
@@ -87,11 +83,11 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка строк</summary>
         private void OnSelectedLineCommandExecuted(object parameter)
         {
-            DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, SelectedLine);
+            if(SectorsList.Any() &&
+                BlocksList.Any() &&
+                LinesList.Any())
+                DiaryBox = _DiaryBoxProvider.LineToDiaryBox(DiaryBox, SelectedLine);
         }
-
-        private bool CanSelectedLineCommandExecute(object parameter) => LinesList is not null;
-
         #endregion
 
         #region Команда поиска элементов
@@ -112,9 +108,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Введите не менее трёх символов для поиска";
         }
-
-        private bool CanSearchElementCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Создание случайного дневника
@@ -129,9 +122,6 @@ namespace DOfficeCore.ViewModels
                 Status = "Случайный дневник создан согласно записям: " + BlocksList[0].Sector;
             }
         }
-
-        private bool CanRandomCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Команда копирования текста
@@ -148,7 +138,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Что-то пошло не так";
         }
-        private bool CanCopyTextCommandExecute(object parameter) => true;
         #endregion
 
         #region Команда редактирования текста в окне дневника
@@ -163,8 +152,6 @@ namespace DOfficeCore.ViewModels
                 Status = "Теперь вы можете сами отредактировать дневник";
             }
         }
-
-        private bool CanEditTextCommandExecute(object p) => EnableDiaryBox;
         #endregion
 
         #region Команда очистки дневника
@@ -177,9 +164,6 @@ namespace DOfficeCore.ViewModels
             EnableDiaryBox = true;
             Status = "Начинаем с чистого листа";
         }
-
-        private bool CanClearDiaryBoxCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Команда переноса текста из дневника в коллекцию
@@ -195,8 +179,6 @@ namespace DOfficeCore.ViewModels
                 RawLines = new (lines);
             }
         }
-        private bool CanReturnTextToLinesCommandExecute(object parameter) => true;
-
         #endregion
 
         #endregion

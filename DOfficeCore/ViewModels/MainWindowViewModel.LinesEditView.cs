@@ -1,5 +1,4 @@
 ﻿using DOfficeCore.Models;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
@@ -10,7 +9,6 @@ using System.Threading.Tasks;
 using Serilog;
 using System.IO;
 using System.Linq;
-using System.Windows.Media;
 
 namespace DOfficeCore.ViewModels
 {
@@ -159,8 +157,6 @@ namespace DOfficeCore.ViewModels
             }
         }
 
-        private bool CanOpenFileCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Получение текста из буфера обмена
@@ -193,9 +189,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Буфер обмена пуст";
         }
-
-        private bool CanGetTextFromClipboardCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Сохранение данных в файл
@@ -227,8 +220,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Нечего сохранять";
         }
-
-        private bool CanSaveDataToFileCommandExecute(object p) => true;
         #endregion
 
         #region Загрузка бд из файла
@@ -266,9 +257,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Ну и не надо. Больно-то и хотелось.";
         }
-
-        private bool CanLoadDataFromFileCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Очистка необработанной таблицы
@@ -280,9 +268,6 @@ namespace DOfficeCore.ViewModels
             RawLines = new();
             Status = "Таблица предложений очищена";
         }
-
-        private bool CanClearListBoxCommandExecute(object parameter) => RawLines is not null;
-
         #endregion
 
         #region Удалить элемент из таблицы
@@ -295,8 +280,6 @@ namespace DOfficeCore.ViewModels
                 RawLines is not null)
                 RawLines.Remove(SelectedLine);
         }
-
-        private bool CanRemoveElementFromRawCommandExecute(object parameter) => SelectedLine is not null && RawLines is not null;
         #endregion
 
         #region Щелчок по элементу списка необработанных строк
@@ -316,8 +299,6 @@ namespace DOfficeCore.ViewModels
                 }
             }
         }
-        private bool CanSelectedRawLineCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Щелчок по элементу списка диагнозов в окне редактирования строк
@@ -326,15 +307,16 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка диагнозов в окне редактирования строк</summary>
         private void OnSelectedDiagnosisELCommandExecuted(object parameter)
         {
-            RefreshBlocks();
-            LinesList = new();
+            if (SectorsList.Any())
+            {
+                RefreshBlocks();
+                LinesList = new();
 
-            SectorsMultiBox = SelectedSector.Name;
-            BlockMultiBox = null;
-            LineMultiBox = null;
+                SectorsMultiBox = SelectedSector.Name;
+                BlockMultiBox = null;
+                LineMultiBox = null;
+            }
         }
-        private bool CanSelectedDiagnosisELCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Щелчок по элементу списка блоков в окне редактирования строк
@@ -343,12 +325,14 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка блоков в окне редактирования строк</summary>
         private void OnSelectedBlockELCommandExecuted(object parameter)
         {
-            RefreshLines();
-            BlockMultiBox = SelectedBlock.Name;
-            LineMultiBox = null;
+            if (SectorsList.Any() &&
+                BlocksList.Any())
+            {
+                RefreshLines();
+                BlockMultiBox = SelectedBlock.Name;
+                LineMultiBox = null;
+            }
         }
-        private bool CanSelectedBlockELCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Щелчок по элементу списка строк в окне редактирования строк
@@ -357,10 +341,11 @@ namespace DOfficeCore.ViewModels
         /// <summary>Щелчок по элементу списка строк в окне редактирования строк</summary>
         private void OnSelectedLinesELCommandExecuted(object parameter)
         {
+            if(SectorsList.Any() &&
+                BlocksList.Any() &&
+                LinesList.Any())
             LineMultiBox = SelectedLine;
         }
-        private bool CanSelectedLinesELCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Добавление
@@ -371,10 +356,10 @@ namespace DOfficeCore.ViewModels
         /// <summary>Добавление нового диагноза в коллекцию</summary>
         private void OnAddDiagnosisCommandExecuted(object parameter)
         {
-            if (SectorsCollection is null) SectorsCollection = new();
-
             if (!string.IsNullOrWhiteSpace(SectorsMultiBox))
             {
+                if (SectorsCollection is null) SectorsCollection = new();
+                
                 if (_NewCollectionHandler.AddSector(SectorsCollection, SectorsMultiBox))
                 {
                     RefreshSelectedSector();
@@ -388,8 +373,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Нечего добавлять";
         }
-        private bool CanAddDiagnosisCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Добавление раздела в коллекцию
@@ -413,8 +396,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Нечего добавлять";
         }
-        private bool CanAddBlockCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Добавление нового предложения в коллекцию
@@ -437,8 +418,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Нечего добавлять";
         }
-        private bool CanAddLineCommandExecute(object parameter) => true;
-
         #endregion
 
         #endregion
@@ -467,8 +446,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Нечего редактировать";
         }
-        private bool CanEditDiagnosisCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Редактирование названия раздела
@@ -492,8 +469,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Нечего редактировать";
         }
-        private bool CanEditBlockCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Редактирование строки
@@ -514,8 +489,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Нечего редактировать";
         }
-        private bool CanEditLineCommandExecute(object parameter) => true;
-
         #endregion
 
         #endregion
@@ -549,9 +522,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Выберите элемент, который хотите удалить";
         }
-
-        private bool CanRemoveDiagnosisCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Удаление раздела
@@ -580,9 +550,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Выберите элемент, который хотите удалить";
         }
-
-        private bool CanRemoveBlockCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Удаление строки
@@ -607,8 +574,6 @@ namespace DOfficeCore.ViewModels
             }
             else Status = "Выберите элемент, который хотите удалить";
         }
-        private bool CanRemoveLineCommandExecute(object parameter) => true;
-
         #endregion
 
         #endregion
@@ -632,9 +597,6 @@ namespace DOfficeCore.ViewModels
                 }
             }
         }
-
-        private bool CanReturnLineCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Изменение индекса элемента
@@ -656,8 +618,6 @@ namespace DOfficeCore.ViewModels
                 }
             }
         }
-        private bool CanSectorIndexUpCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Смещение сектора в списке вниз
@@ -677,9 +637,6 @@ namespace DOfficeCore.ViewModels
                 }
             }
         }
-
-        private bool CanSectorIndexDownCommandExecute(object parameter) => true;
-
         #endregion
 
         #region Смещение блока в списке вверх
@@ -699,7 +656,6 @@ namespace DOfficeCore.ViewModels
                 }
             }
         }
-        private bool CanBlockIndexUpCommandExecute(object parameter) => true;
         #endregion
 
         #region Смещение блока в списке вниз
@@ -719,7 +675,6 @@ namespace DOfficeCore.ViewModels
                 }
             }
         }
-        private bool CanBlockIndexDownCommandExecute(object parameter) => true;
         #endregion
 
         #region Смещение строки в списке вверх
@@ -740,7 +695,6 @@ namespace DOfficeCore.ViewModels
                 }
             }
         }
-        private bool CanLineIndexUpCommandExecute(object parameter) => true;
         #endregion
 
         #region Смещение строки в списке вниз
@@ -761,8 +715,8 @@ namespace DOfficeCore.ViewModels
                 }
             }
         }
-        private bool CanLineIndexDownCommandExecute(object parameter) => true;
         #endregion
+
         #endregion
 
         #endregion
